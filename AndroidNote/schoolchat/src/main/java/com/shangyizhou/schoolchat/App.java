@@ -1,6 +1,7 @@
 package com.shangyizhou.schoolchat;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
@@ -24,6 +25,10 @@ public class App extends Application {
     }
     public Handler getMainHandler() {
         return MainHandler;
+    }
+
+    public Context getContext() {
+        return app.getApplicationContext();
     }
 
 }

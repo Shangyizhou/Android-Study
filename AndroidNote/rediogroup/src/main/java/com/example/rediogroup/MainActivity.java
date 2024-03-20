@@ -1,9 +1,12 @@
 package com.example.rediogroup;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -26,6 +29,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.male) {
+                    showMan();
+                } else if (checkedId == R.id.female) {
+                    showWoman();
+                }
+            }
+        });
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    AlertDialog.Builder builder;
     @SuppressLint("WrongViewCast")
     private void initView() {
         radioGroup = findViewById(R.id.radioGroup);
@@ -66,4 +80,44 @@ public class MainActivity extends AppCompatActivity {
         checkBox4 = findViewById(R.id.checkBox4);
         checkBoxes = new CheckBox[] {checkBox1, checkBox2, checkBox3, checkBox4};
     }
+
+    private void showMan() {
+        builder = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("男女选择对话框")
+                .setMessage("选择了男")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(MainActivity.this, "您单机了确定", Toast.LENGTH_SHORT);
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(MainActivity.this, "您单机了取消", Toast.LENGTH_SHORT);
+                    }
+                });
+        builder.show();
+    }
+
+    private void showWoman() {
+        builder = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("男女选择对话框")
+                .setMessage("选择了女")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(MainActivity.this, "您单机了确定", Toast.LENGTH_SHORT);
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(MainActivity.this, "您单机了取消", Toast.LENGTH_SHORT);
+                    }
+                });
+        builder.show();
+    }
+
+
 }

@@ -12,13 +12,11 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.shangyizhou.schoolchat.R;
-import com.shangyizhou.schoolchat.activity.TopTopicActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +66,7 @@ public class FirstFragment extends BaseFragment {
         manager = getChildFragmentManager();
         fragments = new ArrayList<>();
         fragments.add(new FirstFragment());
-        fragments.add(new SecondFragment());
+        fragments.add(new ChatFragment());
         fragments.add(new ThirdFragment());
         viewpager = view.findViewById(R.id.view_pager);
         MyAdapter adapter = new MyAdapter(manager, getLifecycle(), fragments);

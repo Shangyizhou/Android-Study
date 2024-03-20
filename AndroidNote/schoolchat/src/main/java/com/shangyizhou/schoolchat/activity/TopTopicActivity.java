@@ -18,7 +18,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.shangyizhou.schoolchat.R;
 import com.shangyizhou.schoolchat.fragment.FirstFragment;
-import com.shangyizhou.schoolchat.fragment.SecondFragment;
+import com.shangyizhou.schoolchat.fragment.ChatFragment;
 import com.shangyizhou.schoolchat.fragment.ThirdFragment;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class TopTopicActivity extends BaseActivity {
 
         fragments = new ArrayList<>();
         fragments.add(new FirstFragment());
-        fragments.add(new SecondFragment());
+        fragments.add(new ChatFragment());
         fragments.add(new ThirdFragment());
 
         //设置viewpager的适配器

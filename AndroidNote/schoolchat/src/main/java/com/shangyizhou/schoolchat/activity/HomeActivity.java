@@ -1,11 +1,9 @@
 package com.shangyizhou.schoolchat.activity;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -14,7 +12,7 @@ import android.os.Bundle;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.shangyizhou.schoolchat.R;
 import com.shangyizhou.schoolchat.fragment.FirstFragment;
-import com.shangyizhou.schoolchat.fragment.SecondFragment;
+import com.shangyizhou.schoolchat.fragment.ChatFragment;
 import com.shangyizhou.schoolchat.fragment.ThirdFragment;
 
 import java.util.ArrayList;
@@ -38,7 +36,7 @@ public class HomeActivity extends BaseActivity {
         viewPager = findViewById(R.id.viewpager);
         fragments = new ArrayList<>();
         fragments.add(new FirstFragment());
-        fragments.add(new SecondFragment());
+        fragments.add(new ChatFragment());
         fragments.add(new ThirdFragment());
         manager = getSupportFragmentManager();
         MyAdapter adapter = new MyAdapter(manager, getLifecycle(), fragments);
