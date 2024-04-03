@@ -45,7 +45,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 viewHolder.rightMsg.setText(msg.getContent());
             }
         }
-
     }
 
     @Override
