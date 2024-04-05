@@ -1,0 +1,216 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="mm_pass_key_num">158mm</dimen>
+    <dimen name="mm_pass_key_num_long">358mm</dimen>
+
+    <dimen name="mm_0">0mm</dimen>
+    <dimen name="mm_1">1mm</dimen>
+    <dimen name="mm_2">2mm</dimen>
+    <dimen name="mm_3">3mm</dimen>
+    <dimen name="mm_4">4mm</dimen>
+    <dimen name="mm_5">5mm</dimen>
+    <dimen name="mm_6">6mm</dimen>
+    <dimen name="mm_7">7mm</dimen>
+    <dimen name="mm_8">8mm</dimen>
+    <dimen name="mm_9">9mm</dimen>
+    <dimen name="mm_10">10mm</dimen>
+    <dimen name="mm_11">11mm</dimen>
+    <dimen name="mm_12">12mm</dimen>
+    <dimen name="mm_13">13mm</dimen>
+    <dimen name="mm_13.8">13.8mm</dimen>
+    <dimen name="mm_14">14mm</dimen>
+    <dimen name="mm_15">15mm</dimen>
+    <dimen name="mm_16">16mm</dimen>
+    <dimen name="mm_17">17mm</dimen>
+    <dimen name="mm_18">18mm</dimen>
+    <dimen name="mm_19">19mm</dimen>
+    <dimen name="mm_20">20mm</dimen>
+    <dimen name="mm_21">21mm</dimen>
+    <dimen name="mm_22">22mm</dimen>
+    <dimen name="mm_23">23mm</dimen>
+    <dimen name="mm_24">24mm</dimen>
+    <dimen name="mm_25">25mm</dimen>
+    <dimen name="mm_27">27mm</dimen>
+    <dimen name="mm_28">28mm</dimen>
+    <dimen name="mm_30">30mm</dimen>
+    <dimen name="mm_35">35mm</dimen>
+    <dimen name="mm_36">36mm</dimen>
+    <dimen name="mm_38">38mm</dimen>
+    <dimen name="mm_40">40mm</dimen>
+    <dimen name="mm_44">44mm</dimen>
+    <dimen name="mm_45">45mm</dimen>
+    <dimen name="mm_46">46mm</dimen>
+    <dimen name="mm_48">48mm</dimen>
+    <dimen name="mm_50">50mm</dimen>
+    <dimen name="mm_55">55mm</dimen>
+    <dimen name="mm_56">56mm</dimen>
+    <dimen name="mm_58">58mm</dimen>
+    <dimen name="mm_60">60mm</dimen>
+    <dimen name="mm_63">63mm</dimen>
+    <dimen name="mm_64">64mm</dimen>
+    <dimen name="mm_65">65mm</dimen>
+    <dimen name="mm_68">68mm</dimen>
+    <dimen name="mm_69">69mm</dimen>
+    <dimen name="mm_70">70mm</dimen>
+    <dimen name="mm_72">72mm</dimen>
+    <dimen name="mm_75">75mm</dimen>
+    <dimen name="mm_78">78mm</dimen>
+    <dimen name="mm_80">80mm</dimen>
+    <dimen name="mm_84">84mm</dimen>
+    <dimen name="mm_88">88mm</dimen>
+    <dimen name="mm_90">90mm</dimen>
+    <dimen name="mm_100">100mm</dimen>
+    <dimen name="mm_105">105mm</dimen>
+    <dimen name="mm_108">108mm</dimen>
+    <dimen name="mm_110">110mm</dimen>
+    <dimen name="mm_114">114mm</dimen>
+
+    <dimen name="mm_120">120mm</dimen>
+    <dimen name="mm_122">122mm</dimen>
+    <dimen name="mm_130">130mm</dimen>
+    <dimen name="mm_135">135mm</dimen>
+
+    <dimen name="mm_140">140mm</dimen>
+    <dimen name="mm_148">148mm</dimen>
+    <dimen name="mm_150">150mm</dimen>
+    <dimen name="mm_151">151mm</dimen>
+    <dimen name="mm_152">152mm</dimen>
+    <dimen name="mm_153">153mm</dimen>
+    <dimen name="mm_158">158mm</dimen>
+    <dimen name="mm_160">160mm</dimen>
+    <dimen name="mm_164">164mm</dimen>
+    <dimen name="mm_170">170mm</dimen>
+    <dimen name="mm_180">180mm</dimen>
+
+    <dimen name="mm_1190">1190mm</dimen>
+    <dimen name="mm_190">190mm</dimen>
+    <dimen name="mm_200">200mm</dimen>
+    <dimen name="mm_210">210mm</dimen>
+    <dimen name="mm_215">215mm</dimen>
+    <dimen name="mm_220">220mm</dimen>
+    <dimen name="mm_225">225mm</dimen>
+    <dimen name="mm_227">227mm</dimen>
+
+    <dimen name="mm_230">230mm</dimen>
+    <dimen name="mm_234">234mm</dimen>
+    <dimen name="mm_240">240mm</dimen>
+    <dimen name="mm_248">248mm</dimen>
+    <dimen name="mm_250">250mm</dimen>
+    <dimen name="mm_252">252mm</dimen>
+    <dimen name="mm_255">255mm</dimen>
+    <dimen name="mm_256">256mm</dimen>
+    <dimen name="mm_258">258mm</dimen>
+
+    <dimen name="mm_260">260mm</dimen>
+    <dimen name="mm_270">270mm</dimen>
+    <dimen name="mm_275">275mm</dimen>
+    <dimen name="mm_280">280mm</dimen>
+    <dimen name="mm_204">204mm</dimen>
+    <dimen name="mm_212">212mm</dimen>
+    <dimen name="mm_218">218mm</dimen>
+    <dimen name="mm_228">228mm</dimen>
+
+    <dimen name="mm_288">288mm</dimen>
+    <dimen name="mm_286">286mm</dimen>
+    <dimen name="mm_290">290mm</dimen>
+    <dimen name="mm_294">294mm</dimen>
+    <dimen name="mm_298">298mm</dimen>
+
+    <dimen name="mm_300">300mm</dimen>
+    <dimen name="mm_306">306mm</dimen>
+    <dimen name="mm_315">315mm</dimen>
+    <dimen name="mm_380">380mm</dimen>
+    <dimen name="mm_386">386mm</dimen>
+
+    <dimen name="mm_420">420mm</dimen>
+    <dimen name="mm_500">500mm</dimen>
+    <dimen name="mm_600">600mm</dimen>
+    <dimen name="mm_700">700mm</dimen>
+    <dimen name="mm_800">800mm</dimen>
+
+    <dimen name="mm_336">336mm</dimen>
+    <dimen name="mm_338">338mm</dimen>
+    <dimen name="mm_340">340mm</dimen>
+    <dimen name="mm_344">344mm</dimen>
+    <dimen name="mm_358">358mm</dimen>
+    <dimen name="mm_360">360mm</dimen>
+    <dimen name="mm_369">369mm</dimen>
+    <dimen name="mm_370">370mm</dimen>
+    <dimen name="mm_397">397mm</dimen>
+    <dimen name="mm_400">400mm</dimen>
+    <dimen name="mm_440">440mm</dimen>
+    <dimen name="mm_468">468mm</dimen>
+    <dimen name="mm_480">480mm</dimen>
+    <dimen name="mm_486">486mm</dimen>
+    <dimen name="mm_520">520mm</dimen>
+    <dimen name="mm_532">532mm</dimen>
+    <dimen name="mm_536">536mm</dimen>
+    <dimen name="mm_546">546mm</dimen>
+
+    <dimen name="mm_624">624mm</dimen>
+    <dimen name="mm_630">630mm</dimen>
+    <dimen name="mm_633">633mm</dimen>
+    <dimen name="mm_640">640mm</dimen>
+    <dimen name="mm_650">650mm</dimen>
+    <dimen name="mm_718">718mm</dimen>
+    <dimen name="mm_720">720mm</dimen>
+    <dimen name="mm_732">732mm</dimen>
+    <dimen name="mm_756">756mm</dimen>
+    <dimen name="mm_768">768mm</dimen>
+
+    <dimen name="mm_780">780mm</dimen>
+
+    <dimen name="mm_810">810mm</dimen>
+    <dimen name="mm_840">840mm</dimen>
+    <dimen name="mm_855">855mm</dimen>
+    <dimen name="mm_873">873mm</dimen>
+    <dimen name="mm_915">915mm</dimen>
+    <dimen name="mm_936">936mm</dimen>
+    <dimen name="mm_975">975mm</dimen>
+
+    <dimen name="mm_1000">1000mm</dimen>
+    <dimen name="mm_1200">1200mm</dimen>
+    <dimen name="mm_1202">1202mm</dimen>
+    <dimen name="mm_1245">1245mm</dimen>
+
+
+    <!--    文字大小-->
+    <dimen name="mm_text_13">13mm</dimen>
+    <dimen name="mm_text_14">14mm</dimen>
+    <dimen name="mm_text_16">16mm</dimen>
+    <dimen name="mm_text_18">18mm</dimen>
+
+    <dimen name="mm_text_20">20mm</dimen>
+    <dimen name="mm_text_22">22mm</dimen>
+    <dimen name="mm_text_24">24mm</dimen>
+    <dimen name="mm_text_27">27mm</dimen>
+    <dimen name="mm_text_28">28mm</dimen>
+    <dimen name="mm_text_30">30mm</dimen>
+    <dimen name="mm_text_32">32mm</dimen>
+    <dimen name="mm_text_33">33mm</dimen>
+    <dimen name="mm_text_34">34mm</dimen>
+    <dimen name="mm_text_36">36mm</dimen>
+    <dimen name="mm_text_38">38mm</dimen>
+
+    <dimen name="mm_text_42">42mm</dimen>
+    <dimen name="mm_text_45">45mm</dimen>
+    <dimen name="mm_text_48">48mm</dimen>
+    <dimen name="mm_text_54">54mm</dimen>
+    <dimen name="mm_text_59">59mm</dimen>
+    <dimen name="mm_text_60">60mm</dimen>
+    <dimen name="mm_text_64">64mm</dimen>
+    <dimen name="mm_text_68">68mm</dimen>
+    <dimen name="mm_text_69">69mm</dimen>
+    <dimen name="mm_text_70">70mm</dimen>
+    <dimen name="mm_text_72">72mm</dimen>
+    <dimen name="mm_text_74">74mm</dimen>
+    <dimen name="mm_text_76">76mm</dimen>
+    <dimen name="mm_text_78">78mm</dimen>
+    <dimen name="mm_text_84">84mm</dimen>
+    <dimen name="mm_text_108">108mm</dimen>
+    <dimen name="mm_text_114">114mm</dimen>
+    <dimen name="mm_text_116">116mm</dimen>
+    <dimen name="mm_text_150">150mm</dimen>
+
+</resources>

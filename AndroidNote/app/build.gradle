@@ -1,10 +1,11 @@
 plugins {
     id 'com.android.application'
+    id 'org.greenrobot.greendao' // apply plugin
 }
 
 android {
     namespace 'com.example.androidnote'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.androidnote"
@@ -28,11 +29,20 @@ android {
     }
 }
 
+//greendao_step5:
+//GreenDao 3.0+采用注解的方式来定义实体类，通过gradle插件生成相应的代码
+greendao {
+    schemaVersion 1
+    daoPackage 'com.example.androidnote.db'//建议同一包名下
+    targetGenDir 'src/main/java'
+}
+
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation project(path: ':develop')
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
