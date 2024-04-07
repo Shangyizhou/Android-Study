@@ -17,6 +17,7 @@ import com.shangyizhou.develop.base.BaseActivity;
 import com.shangyizhou.develop.log.SLog;
 import com.shangyizhou.develop.model.EventIdCenter;
 import com.shangyizhou.develop.model.MessageEvent;
+import com.shangyizhou.develop.net.IResponse;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -61,6 +62,22 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             }
             addText(1, inputText);
             editText.setText("");
+            DirectToServer.callYiYan(inputText, new IResponse() {
+                @Override
+                public void onSuccess(String originJson) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            addText(0, originJson);
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailure(String errorMsg) {
+                    SLog.e(TAG, "DirectToServer error");
+                }
+            });
         }
     }
 
@@ -90,5 +107,10 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         mChatAdapter.updateDataList(mList);
         //滑动到底部
         recyclerView.scrollToPosition(mList.size() - 1);
+
+
+
     }
+
+
 }

@@ -1,10 +1,18 @@
-package com.shangyizhou.develop.net;
+package com.example.androidnote;
+
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
+import com.example.androidnote.model.ResponseToken;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.shangyizhou.develop.AppHolder;
 import com.shangyizhou.develop.log.SLog;
+import com.shangyizhou.develop.net.IResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -14,6 +22,7 @@ import java.io.IOException;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -126,6 +135,108 @@ public class DirectToServer {
 
         request(request, callback);
     }
+
+
+    private static String CLIENT_ID = "27fhgYXGXRFg0KRv1zehNPYI";
+    private static String CLIENT_SECRET = "6vLQhMbzNOqXfoRcVnNB33iynoHktvE6";
+    private static String TOKEN;
+
+    /**
+     * 获取token
+     */
+    public static String getAccessToken() {
+        if (!TextUtils.isEmpty(TOKEN)) {
+            return TOKEN;
+        }
+
+        MediaType mediaType = MediaType.parse("application/json");
+        String url = "https://aip.baidubce.com/oauth/2.0/token?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&grant_type=client_credentials";
+        RequestBody body = RequestBody.create(mediaType, "");
+        Request.Builder request = new Request.Builder()
+                .url(url)
+                .method("POST", body)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
+        client.newCall(request.build()).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                SLog.i(TAG, "[getToken] onFailure");
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                SLog.i(TAG, response.body().toString());
+                if (response != null && response.body() != null) {
+                    String originJson = response.body().string(); // 缓冲区读取
+                    SLog.i(TAG, "[getToken] onResponse body: " + originJson);
+                    ResponseToken responseToken = new Gson().fromJson(originJson, ResponseToken.class);
+                    String token = responseToken.getAccessToken();
+                    if (!TextUtils.isEmpty(token)) {
+                        TOKEN = token;
+                    }
+                }
+            }
+        });
+
+        return TOKEN;
+    }
+
+    public static void callYiYan(String message, IResponse callback) {
+        MediaType mediaType = MediaType.parse("application/json");
+
+        // 创建消息部分的JSON对象
+        JsonObject msg = new JsonObject();
+        msg.addProperty("role", "user");
+        msg.addProperty("content", message);
+
+        // 将消息放入JSON数组中
+        JsonArray msgArray = new JsonArray();
+        msgArray.add(msg);
+
+        // 创建最外层的JSON对象并添加属性
+        JsonObject root = new JsonObject();
+        root.add("messages", msgArray);
+        root.addProperty("disable_search", false);
+        root.addProperty("enable_citation", false);
+
+        // 将JSON对象转换为字符串
+        String jsonString = root.toString();
+        SLog.i(TAG, "callYiYan json: " + jsonString);
+        RequestBody body = RequestBody.create(mediaType, jsonString);
+
+        Request request = new Request.Builder()
+                .url("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions?access_token=" + getAccessToken())
+                .method("POST", body)
+                .addHeader("Content-Type", "application/json")
+                .build();
+       client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response != null && response.body() != null) {
+                    SLog.i(TAG, "onResponse : " + response.toString());
+                    String originJson = response.body().string(); // response.body().string(）仅可以执行一次
+                    SLog.i(TAG, "onResponse body: " + originJson);
+                    try {
+                        JSONObject jsonObject = new JSONObject(originJson);
+                        String msg = jsonObject.optString("result");
+                        if (callback != null) {
+                            callback.onSuccess(msg);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+
 
     /**
      * 发送JSON数据
