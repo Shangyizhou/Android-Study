@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">AndroidNote</string>
+    <string name="app_name">学生程序课程设计聊天机器人</string>
+    <string name="text_login_name">请输入用户名</string>
+    <string name="text_login_code">请输入密码</string>
+    <string name="text_login_code_again">请重复输入密码</string>
+
 </resources>

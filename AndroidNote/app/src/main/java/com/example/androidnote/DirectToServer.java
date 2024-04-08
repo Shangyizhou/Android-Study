@@ -206,7 +206,8 @@ public class DirectToServer {
         RequestBody body = RequestBody.create(mediaType, jsonString);
 
         Request request = new Request.Builder()
-                .url("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions?access_token=" + getAccessToken())
+                .url("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro?access_token=" + getAccessToken())
+                // .url("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions?access_token=" + getAccessToken())
                 .method("POST", body)
                 .addHeader("Content-Type", "application/json")
                 .build();
@@ -235,6 +236,8 @@ public class DirectToServer {
             }
         });
     }
+
+
 
 
 

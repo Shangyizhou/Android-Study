@@ -26,12 +26,12 @@ apply from: "config.gradle"
 // 迁移到新版本的 allprojects 部分
 allprojects {
     repositories {
-//        maven { url rootProject.ext.maven["bmobUrl"] }
         google()
         mavenCentral()
         maven { url rootProject.ext.maven["jitpack"] }
         maven { url rootProject.ext.maven["aliyun_jcenter"] }
         maven { url rootProject.ext.maven["aliyun_google"] }
         maven { url rootProject.ext.maven["aliyun_public"] }
+        maven { url rootProject.ext.maven["bmobUrl"] }
     }
 }

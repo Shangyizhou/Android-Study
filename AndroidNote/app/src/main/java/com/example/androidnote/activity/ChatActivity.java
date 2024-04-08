@@ -1,9 +1,11 @@
-package com.example.androidnote;
+package com.example.androidnote.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -11,6 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.androidnote.CommonAdapter;
+import com.example.androidnote.DirectToServer;
+import com.example.androidnote.R;
 import com.example.androidnote.model.ChatModel;
 import com.shangyizhou.develop.adapter.example.BaseViewHolder;
 import com.shangyizhou.develop.base.BaseActivity;
@@ -32,6 +37,12 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
     private RecyclerView recyclerView;
     private Button sendBtn;
     private EditText editText;
+
+    public static void startUp(Context context) {
+        SLog.i(TAG, "[ChatActivity] startUp");
+        Intent intent = new Intent(context, ChatActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreateChildren(Bundle bundle) {
@@ -107,9 +118,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         mChatAdapter.updateDataList(mList);
         //滑动到底部
         recyclerView.scrollToPosition(mList.size() - 1);
-
-
-
     }
 
 

@@ -16,8 +16,8 @@ ext {
             "logback-classic"  : 'ch.qos.logback:logback-classic:1.2.3',
 //            "httpclient"     : 'org.apache.http.legacy',
 //            "appcompat"      : 'androidx.appcompat:appcompat:1.0.2',
-////            "bmobsdk"        : 'cn.bmob.android:bmob-sdk:3.7.3-rc1',
-//            "bmobsdk"        : 'io.github.bmob:android-sdk:3.9.4',
+//            "bmobsdk"        : 'cn.bmob.android:bmob-sdk:3.7.3-rc1',
+            "bmobsdk"        : 'io.github.bmob:android-sdk:3.9.4',
             "rxjava2"        : "io.reactivex.rxjava2:rxjava:2.2.2",
             "rxandroid2"     : 'io.reactivex.rxjava2:rxandroid:2.1.0',
             "okio"           : 'com.squareup.okio:okio:2.1.0',
@@ -43,7 +43,7 @@ ext {
     ]
     //仓库
     maven = [
-//            "bmobUrl": "https://raw.github.com/bmob/bmob-android-sdk/master",
+            "bmobUrl": "https://raw.github.com/bmob/bmob-android-sdk/master",
             "jitpack": "https://jitpack.io",
             "aliyun_public": "https://maven.aliyun.com/nexus/content/groups/public/",
             "aliyun_jcenter": "https://maven.aliyun.com/nexus/content/repositories/jcenter",

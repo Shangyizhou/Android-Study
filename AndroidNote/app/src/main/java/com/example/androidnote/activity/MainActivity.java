@@ -1,8 +1,9 @@
-package com.example.androidnote;
+package com.example.androidnote.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.androidnote.R;
 import com.example.androidnote.db.helper.UserHelper;
 import com.example.androidnote.model.User;
 import com.shangyizhou.develop.base.BaseActivity;
