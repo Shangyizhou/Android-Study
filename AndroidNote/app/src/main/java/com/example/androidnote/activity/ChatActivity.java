@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.androidnote.adapter.CommonAdapter;
+import com.example.androidnote.adapter.ChatAdapter;
 import com.example.androidnote.DirectToServer;
 import com.example.androidnote.R;
 import com.example.androidnote.model.ChatModel;
@@ -29,7 +29,7 @@ import java.util.List;
 
 public class ChatActivity extends BaseActivity implements View.OnClickListener {
     private List<ChatModel> mList = new ArrayList<>();
-    CommonAdapter mChatAdapter = new CommonAdapter();
+    ChatAdapter mChatAdapter = new ChatAdapter();
     private static final String TAG = "ChatActivity";
     private RecyclerView recyclerView;
     private Button sendBtn;
@@ -48,7 +48,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void initView() {
-        mChatAdapter = new CommonAdapter();
+        mChatAdapter = new ChatAdapter();
         recyclerView = findViewById(R.id.mChatView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         sendBtn = findViewById(R.id.btn_send_msg);

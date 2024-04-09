@@ -21,7 +21,10 @@
         android:theme="@style/Theme.AndroidNote"
         tools:targetApi="31">
         <activity
-            android:name=".activity.NewsActivity"
+            android:name=".activity.ContentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.DataActivity"
             android:exported="false" />
         <activity
             android:name=".activity.LoginActivity"
@@ -39,7 +42,7 @@
             android:name=".activity.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.DataActivity"
+            android:name=".activity.NewsActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

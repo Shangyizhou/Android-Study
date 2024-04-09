@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
+import com.example.androidnote.model.NewsList;
 import com.example.androidnote.model.ResponseToken;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -240,7 +241,48 @@ public class DirectToServer {
     /**
      * 新闻接口
      */
+    public interface INewsResponse {
+        void onSuccess(NewsList list);
+        void onFailure(String errorMsg);
+    }
+    private static String API_KEY = "7c55a959ad3b1f1d78d455d48519aec7";
+    public static void getNewsList(IResponse callback) {
+        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        Request request = new Request.Builder()
+                .url("https://apis.tianapi.com/keji/index?key=" + API_KEY + "&num=10")
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
 
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response != null && response.body() != null) {
+                    SLog.i(TAG, "[getNewsList] onResponse : " + response.toString());
+                    String originJson = response.body().string(); // response.body().string(）仅可以执行一次
+                    SLog.i(TAG, "[getNewsList] onResponse body: " + originJson);
+
+                    try {
+                        // NewsList newsList = new Gson().fromJson(originJson, NewsList.class);
+                        JSONObject jsonObject = new JSONObject(originJson);
+                        if (jsonObject.optInt("code", 0) == 200
+                                && jsonObject.optString("msg").equals("success")) {
+                            if (callback != null) {
+                                callback.onSuccess(jsonObject.optString("result"));
+                            }
+                        } else {
+                            SLog.i(TAG, "[getNewsList] code or msg is invalid: " + originJson);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
 
 
 

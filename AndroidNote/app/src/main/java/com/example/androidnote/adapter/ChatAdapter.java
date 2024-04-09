@@ -14,7 +14,7 @@ import com.example.androidnote.model.ChatModel;
 
 import java.util.List;
 
-public class CommonAdapter extends RecyclerView.Adapter {
+public class ChatAdapter extends RecyclerView.Adapter {
     private List<ChatModel> mData;
     private int NORMAL_TYPE = 0;
     private int HEADER_TYPE = 1;
