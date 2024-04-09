@@ -1,7 +1,8 @@
 package com.example.androidnote.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.GridLayout;
@@ -22,11 +23,19 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.shangyizhou.develop.base.BaseActivity;
 import com.shangyizhou.develop.helper.MPChartUtil;
 import com.shangyizhou.develop.helper.ToastUtil;
+import com.shangyizhou.develop.log.SLog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DataActivity extends BaseActivity {
+    private static final String TAG = DataActivity.class.getSimpleName();
+
+    public static void startUp(Context context) {
+        SLog.i(TAG, "[DataActivity] startUp");
+        Intent intent = new Intent(context, DataActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreateChildren(Bundle bundle) {
@@ -51,14 +60,14 @@ public class DataActivity extends BaseActivity {
         chartBottomLeft = findViewById(R.id.chartBottomLeft);
         chartBottomRight = findViewById(R.id.chartBottomRight);
 
-        initLeftTop();
+        initLineChart();
         initRightTop();
         initLeftBottom();
         initRightBottom();
 
     }
 
-    private void initLeftTop() {
+    private void initLineChart() {
         // 准备数据. 比如我们创建一个有10个数据点的图表
         ArrayList<Entry> values = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -80,14 +89,16 @@ public class DataActivity extends BaseActivity {
 
         // 创建一个数据对象，与图表对象关联
         LineData lineData = new LineData(dataSets);
+        topLeftlineChart.setDrawGridBackground(false);
         topLeftlineChart.setData(lineData);
-        topLeftlineChart.setScaleEnabled(true);
-        topLeftlineChart.setScaleXEnabled(true);
-        topLeftlineChart.setScaleYEnabled(true);
+        topLeftlineChart.setDragEnabled(false);
+        topLeftlineChart.setScaleEnabled(false);
+        topLeftlineChart.setScaleXEnabled(false);
+        topLeftlineChart.setScaleYEnabled(false);
         //是否可以双指缩放--是
-        topLeftlineChart.setPinchZoom(true);
+        topLeftlineChart.setPinchZoom(false);
         //是否可以双击放大--是
-        topLeftlineChart.setDoubleTapToZoomEnabled(true);
+        topLeftlineChart.setDoubleTapToZoomEnabled(false);
         topLeftlineChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
@@ -110,6 +121,9 @@ public class DataActivity extends BaseActivity {
 
     private void initRightTop() {
         ArrayList<BarEntry> entries = new ArrayList<>();
+        /**
+         * x轴位置和y轴高度
+         */
         entries.add(new BarEntry(0f, 30f));
         entries.add(new BarEntry(1f, 80f));
         entries.add(new BarEntry(2f, 60f));
