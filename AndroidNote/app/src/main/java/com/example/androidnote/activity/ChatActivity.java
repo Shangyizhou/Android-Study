@@ -1,6 +1,5 @@
 package com.example.androidnote.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,13 +10,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.example.androidnote.CommonAdapter;
+import com.example.androidnote.adapter.CommonAdapter;
 import com.example.androidnote.DirectToServer;
 import com.example.androidnote.R;
 import com.example.androidnote.model.ChatModel;
-import com.shangyizhou.develop.adapter.example.BaseViewHolder;
 import com.shangyizhou.develop.base.BaseActivity;
 import com.shangyizhou.develop.log.SLog;
 import com.shangyizhou.develop.model.EventIdCenter;

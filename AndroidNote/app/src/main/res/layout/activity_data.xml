@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.DataActivity">
+
+    <GridLayout
+        android:id="@+id/grid_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="35dp"
+        android:columnCount="2"
+        android:rowCount="2">
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chartTopLeft"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1" />
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/chartTopRight"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chartBottomLeft"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chartBottomRight"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1" >
+
+        </com.github.mikephil.charting.charts.LineChart>
+
+    </GridLayout>
+
+</RelativeLayout>

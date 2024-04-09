@@ -1,4 +1,4 @@
-package com.example.androidnote;
+package com.example.androidnote.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,30 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidnote.R;
 import com.example.androidnote.model.ChatModel;
+import com.example.androidnote.model.Title;
 
 import java.util.List;
+import java.util.Timer;
 
-public class CommonAdapter extends RecyclerView.Adapter {
-    private List<ChatModel> mData;
+public class NewsAdapter {
+    private List<Title> mData;
     private int NORMAL_TYPE = 0;
     private int HEADER_TYPE = 1;
     private int FOOTER_TYPE = 2;
-    private int ROBOT_TYPE = 3;
-    private int PERSON_TYPE = 4;
 
-    @Override
-    public int getItemViewType(int position) {
-        if (mData == null) {
-            return -1;
-        }
-        ChatModel chatModel = mData.get(position);
-        if (chatModel.getType() == 0) {
-            return ROBOT_TYPE;
-        } else if (chatModel.getType() == 1) {
-            return PERSON_TYPE;
-        }
-        return -1;
-    }
 
     @NonNull
     @Override
@@ -42,21 +29,21 @@ public class CommonAdapter extends RecyclerView.Adapter {
         View view;
         if (viewType == ROBOT_TYPE) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_chat_left_text, parent, false);
-            RecyclerView.ViewHolder holder = new RobotViewHolder(view);
+            RecyclerView.ViewHolder holder = new CommonAdapter.RobotViewHolder(view);
             return holder;
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_chat_right_text, parent, false);
-            RecyclerView.ViewHolder holder = new PersonViewHolder(view);
+            RecyclerView.ViewHolder holder = new CommonAdapter.PersonViewHolder(view);
             return holder;
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof RobotViewHolder) {
-            ((RobotViewHolder) holder).mTextView.setText(mData.get(position).getMessage());
-        } else if (holder instanceof PersonViewHolder) {
-            ((PersonViewHolder) holder).mTextView.setText(mData.get(position).getMessage());
+        if (holder instanceof CommonAdapter.RobotViewHolder) {
+            ((CommonAdapter.RobotViewHolder) holder).mTextView.setText(mData.get(position).getMessage());
+        } else if (holder instanceof CommonAdapter.PersonViewHolder) {
+            ((CommonAdapter.PersonViewHolder) holder).mTextView.setText(mData.get(position).getMessage());
         }
     }
 
@@ -91,6 +78,4 @@ public class CommonAdapter extends RecyclerView.Adapter {
             mImageView = itemView.findViewById(R.id.iv_right_photo);
         }
     }
-
-
 }

@@ -32,6 +32,7 @@ ext {
             "eventbus"       : 'org.greenrobot:eventbus:3.1.1',
             "tablayout"      : 'com.google.android.material:material:1.0.0',
             "greendao"       : 'org.greenrobot:greendao:3.3.0',
+            "MPAndroidChart" : 'com.github.PhilJay:MPAndroidChart:v3.1.0',
 //            "photoview"      : 'com.github.chrisbanes:PhotoView:2.3.0',
 //            "3dmap"          : 'com.amap.api:3dmap:5.0.0',
 //            "location"       : 'com.amap.api:location:3.3.0',
