@@ -13,12 +13,11 @@ import com.shangyizhou.develop.R;
 
 import java.util.List;
 
-public class CommonAdapter extends RecyclerView.Adapter {
+public class ExampleAdapter extends RecyclerView.Adapter {
     private List<String> mData;
     private int NORMAL_TYPE = 0;
     private int HEADER_TYPE = 1;
     private int FOOTER_TYPE = 2;
-
 
     @NonNull
     @Override

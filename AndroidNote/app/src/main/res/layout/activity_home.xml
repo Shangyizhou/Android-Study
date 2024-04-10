@@ -25,6 +25,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="news" />
+    <Button
+        android:id="@+id/btn_to_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="user" />
 
 
 </LinearLayout>

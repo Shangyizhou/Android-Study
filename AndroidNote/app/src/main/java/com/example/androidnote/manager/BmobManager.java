@@ -106,13 +106,19 @@ public class BmobManager {
         }
     }
 
-    public void getUserInfo() {
+    public User getUserInfo() {
         if (BmobUser.isLogin()) {
             User user = BmobUser.getCurrentUser(User.class);
             ToastUtil.getInstance().showToast("登录成功");
             SLog.i(TAG, "[getUserInfo]" + user);
+            return user;
         } else {
             ToastUtil.getInstance().showToast("尚未登录，请先登录");
         }
+        return null;
+    }
+
+    public IMUser getUser() {
+        return BmobUser.getCurrentUser(IMUser.class);
     }
 }

@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.shangyizhou.develop.ui.HeadZoomScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:scrollbars="none"
-    android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,309 +10,179 @@
         android:orientation="vertical">
 
         <RelativeLayout
-            android:id="@+id/ll_photo"
             android:layout_width="match_parent"
-            android:layout_height="240dp"
-            android:background="@color/colorAccent">
+            android:layout_height="240dp">
 
             <ImageView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_centerInParent="true"
-                android:background="@drawable/img_upload_photo_bg"
-                android:contentDescription="TODO" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/img_me_bg" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_user_photo"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:id="@+id/iv_me_photo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_centerInParent="true"
-                android:src="@mipmap/ic_launcher" />
+                app:civ_border_color="@android:color/white"
+                app:civ_border_width="1dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/tv_server_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/color_star_bg" />
+
+            </LinearLayout>
 
         </RelativeLayout>
 
-        <!--姓名-->
+        <!--个人信息 新朋友 隐私设置 分享 设置-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:background="@android:color/white"
-            android:gravity="center_vertical"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_me_info_name"
-                android:textColor="@android:color/black" />
-
-            <EditText
-                android:id="@+id/et_nickname"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:maxLines="8"
-                android:paddingLeft="20dp"
-                android:textColor="@android:color/black"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/img_right_arrow" />
-
-        </LinearLayout>
-
-        <!--性别-->
-        <LinearLayout
-            android:id="@+id/ll_user_sex"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@android:color/white"
-            android:gravity="center_vertical"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_me_info_sex"
-                android:textColor="@android:color/black" />
-
-            <TextView
-                android:id="@+id/tv_user_sex"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
+            <LinearLayout
+                android:id="@+id/ll_me_info"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@android:color/white"
                 android:gravity="center_vertical"
-                android:paddingLeft="20dp"
-                android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                android:orientation="horizontal"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/img_right_arrow" />
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/img_user_info_icon" />
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="@string/text_me_item_title_1"
+                    android:textColor="@android:color/black" />
 
-        <!--年龄-->
-        <LinearLayout
-            android:id="@+id/ll_user_age"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@android:color/white"
-            android:gravity="center_vertical"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/img_right_arrow" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_me_info_age"
-                android:textColor="@android:color/black" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_user_age"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
+
+
+            <LinearLayout
+                android:id="@+id/ll_share"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@android:color/white"
                 android:gravity="center_vertical"
-                android:paddingLeft="20dp"
-                android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                android:orientation="horizontal"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/img_right_arrow" />
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/img_user_info_icon" />
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="隐私设置"
+                    android:textColor="@android:color/black" />
 
-        <!--签名-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginTop="10dp"
-            android:background="@android:color/white"
-            android:gravity="center_vertical"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/img_right_arrow" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_me_info_desc"
-                android:textColor="@android:color/black" />
+            </LinearLayout>
 
-            <EditText
-                android:id="@+id/et_user_desc"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:maxLength="24"
-                android:maxLines="3"
-                android:paddingLeft="20dp"
-                android:textColor="@android:color/black"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/img_right_arrow" />
-
-        </LinearLayout>
-
-        <!--生日-->
-        <LinearLayout
-            android:id="@+id/ll_user_birthday"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:background="@android:color/white"
-            android:gravity="center_vertical"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_me_info_birthday"
-                android:textColor="@android:color/black" />
-
-            <TextView
-                android:id="@+id/tv_user_birthday"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
+            <LinearLayout
+                android:id="@+id/ll_notice"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@android:color/white"
                 android:gravity="center_vertical"
-                android:paddingLeft="20dp"
-                android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                android:orientation="horizontal"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/img_right_arrow" />
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/img_user_info_icon" />
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="无法连接服务器的通知[必看]"
+                    android:textColor="@android:color/black" />
 
-        <!--星座-->
-        <LinearLayout
-            android:id="@+id/ll_user_constellation"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@android:color/white"
-            android:gravity="center_vertical"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/img_right_arrow" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_me_info_constellation"
-                android:textColor="@android:color/black" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_user_constellation"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
+            <LinearLayout
+                android:id="@+id/ll_setting"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@android:color/white"
                 android:gravity="center_vertical"
-                android:paddingLeft="20dp"
-                android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                android:orientation="horizontal"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/img_right_arrow" />
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/img_user_info_icon" />
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="设置"
+                    android:textColor="@android:color/black" />
 
-        <!--爱好-->
-        <LinearLayout
-            android:id="@+id/ll_user_hobby"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@android:color/white"
-            android:gravity="center_vertical"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/img_right_arrow" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_me_info_hobby"
-                android:textColor="@android:color/black" />
-
-            <TextView
-                android:id="@+id/tv_user_hobby"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:gravity="center_vertical"
-                android:paddingLeft="20dp"
-                android:textColor="@android:color/black"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/img_right_arrow" />
-
-        </LinearLayout>
-
-        <!--状态-->
-        <LinearLayout
-            android:id="@+id/ll_user_status"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@android:color/white"
-            android:gravity="center_vertical"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_me_info_status"
-                android:textColor="@android:color/black" />
-
-            <TextView
-                android:id="@+id/tv_user_status"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:gravity="center_vertical"
-                android:paddingLeft="20dp"
-                android:textColor="@android:color/black"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/img_right_arrow" />
+            </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
 
-</ScrollView>
+
+</com.shangyizhou.develop.ui.HeadZoomScrollView>

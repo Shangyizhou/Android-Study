@@ -18,11 +18,12 @@ import com.google.gson.Gson;
 import com.shangyizhou.develop.base.BaseActivity;
 import com.shangyizhou.develop.log.SLog;
 
-public class HomeActivity extends BaseActivity implements View.OnClickListener{
+public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = HomeActivity.class.getSimpleName();
     private Button btnData;
     private Button btnChat;
     private Button btnNews;
+    private Button btnUser;
     public static void startUp(Context context) {
         SLog.i(TAG, "[HomeActivity] startUp");
         Intent intent = new Intent(context, HomeActivity.class);
@@ -39,9 +40,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         btnChat = findViewById(R.id.btn_to_chat);
         btnData = findViewById(R.id.btn_to_data);
         btnNews = findViewById(R.id.btn_to_news);
+        btnUser = findViewById(R.id.btn_to_user);
         btnChat.setOnClickListener(this);
         btnData.setOnClickListener(this);
         btnNews.setOnClickListener(this);
+        btnUser.setOnClickListener(this);
     }
 
     @Override
@@ -53,6 +56,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
             DataActivity.startUp(HomeActivity.this);
         } else if (id == R.id.btn_to_news) {
             NewsActivity.startUp(HomeActivity.this);
+        } else if (id == R.id.btn_to_user) {
+            UserActivity.startUp(HomeActivity.this);
         }
     }
 }

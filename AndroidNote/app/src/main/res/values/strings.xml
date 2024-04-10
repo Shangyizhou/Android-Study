@@ -3,5 +3,7 @@
     <string name="text_login_name">请输入用户名</string>
     <string name="text_login_code">请输入密码</string>
     <string name="text_login_code_again">请重复输入密码</string>
+    <string name="text_me_item_title_1">个人信息</string>
+    @string/
 
 </resources>
