@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.androidnote.R;
+import com.example.androidnote.activity.user.UserInfoActivity;
 import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.IMUser;
 import com.shangyizhou.develop.base.BaseActivity;
@@ -71,6 +72,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
         int id = v.getId();
         if (id == R.id.ll_me_info) {
             // 个人信息
+            UserInfoActivity.startUp(this);
         } else if (id == R.id.ll_share) {
             // 分享
         } else if (id == R.id.ll_setting) {
