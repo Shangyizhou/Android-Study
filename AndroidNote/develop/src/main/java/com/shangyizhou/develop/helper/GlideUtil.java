@@ -116,6 +116,14 @@ public class GlideUtil {
         }
     }
 
+    /**
+     * 加载本地图片
+     */
+    public static void loadLocalFile(Context mContext, File file, ImageView imageView) {
+        //加载图片
+        Glide.with(mContext).load(file).into(imageView);
+    }
+
     public interface OnGlideBitmapResultListener {
         void onResourceReady(Bitmap resource);
     }

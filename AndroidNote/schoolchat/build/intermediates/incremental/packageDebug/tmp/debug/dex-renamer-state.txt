@@ -1,0 +1,4 @@
+#Thu Apr 04 23:51:34 CST 2024
+base.0=/Users/shangyizhou/code/project/Android-Study/AndroidNote/schoolchat/build/intermediates/dex/debug/mergeDexDebug/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex

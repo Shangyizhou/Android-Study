@@ -25,11 +25,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.androidnote.R;
 import com.example.androidnote.activity.UserActivity;
 import com.example.androidnote.constant.Constants;
+import com.example.androidnote.manager.BmobManager;
+import com.example.androidnote.model.IMUser;
 import com.shangyizhou.develop.adapter.common.CommonAdapter;
 import com.shangyizhou.develop.adapter.common.CommonViewHolder;
 import com.shangyizhou.develop.base.BaseActivity;
@@ -38,15 +41,21 @@ import com.shangyizhou.develop.helper.MediaUtil;
 import com.shangyizhou.develop.helper.PermissionUtils;
 import com.shangyizhou.develop.helper.ToastUtil;
 import com.shangyizhou.develop.log.SLog;
+import com.shangyizhou.develop.model.EventIdCenter;
 import com.shangyizhou.develop.ui.dialog.DialogManager;
 import com.shangyizhou.develop.ui.dialog.DialogView;
 import com.shangyizhou.develop.ui.dialog.DialogView2;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FetchUserInfoListener;
+import cn.bmob.v3.listener.UpdateListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserInfoActivity extends BaseActivity implements View.OnClickListener{
@@ -186,16 +195,83 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         // Uri uri = Uri.fromFile(uploadPhotoFile);
         // GlideUtil.loadUrl(this, uri.toString(), iv_user_photo);
 
-        // et_nickname.setText(imUser.getNickName());
 
-        // tv_user_sex.setText(imUser.isSex() ? getString(R.string.text_me_info_boy) : getString(R.string.text_me_info_girl));
-        // tv_user_age.setText(imUser.getAge() + "");
-        // et_user_desc.setText(imUser.getDesc());
-        //
-        // tv_user_birthday.setText(imUser.getBirthday());
-        // tv_user_constellation.setText(imUser.getConstellation());
-        // tv_user_hobby.setText(imUser.getHobby());
-        // tv_user_status.setText(imUser.getStatus());
+        IMUser imUser = BmobManager.getInstance().getUser();
+
+        SLog.i(TAG, "[loadUserInfo phont] " + imUser.getPhoto());
+        Bitmap bitmap = BitmapFactory.decodeFile(imUser.getPhoto());
+        iv_user_photo.setImageBitmap(bitmap);
+        et_nickname.setText(imUser.getUserName());
+        tv_user_sex.setText(imUser.isSex() ? getString(R.string.text_me_info_boy) : getString(R.string.text_me_info_girl));
+        tv_user_age.setText(imUser.getAge() + "");
+        et_user_desc.setText(imUser.getDesc());
+
+        tv_user_birthday.setText(imUser.getBirthday());
+        tv_user_constellation.setText(imUser.getConstellation());
+        tv_user_hobby.setText(imUser.getHobby());
+    }
+
+    @Override
+    public void onBackPressed() {
+        SLog.i(TAG, "[onBackPressed]");
+        updateUser(BmobManager.getInstance().getUser());
+        super.onBackPressed();
+    }
+
+    private void updateUser(IMUser imUser) {
+        //名称不能为空
+        String nickName = et_nickname.getText().toString().trim();
+        if (TextUtils.isEmpty(nickName)) {
+            Toast.makeText(this, getString(R.string.text_update_nickname_null), Toast.LENGTH_SHORT).show();
+            // mLodingView.hide();
+            return;
+        }
+
+        String desc = et_user_desc.getText().toString().trim();
+        String sex = tv_user_sex.getText().toString();
+        String age = tv_user_age.getText().toString();
+        String birthday = tv_user_birthday.getText().toString();
+        String constellation = tv_user_constellation.getText().toString();
+        String hobby = tv_user_hobby.getText().toString();
+        String status = tv_user_status.getText().toString();
+
+        if (uploadPhotoFile != null) {
+            // 更新头像
+            SLog.i(TAG, "[updateUser photo image] " + uploadPhotoFile.getPath());
+            imUser.setPhoto(uploadPhotoFile.getPath());
+        }
+        imUser.setUserName(nickName);
+        imUser.setDesc(desc);
+        imUser.setSex(sex.equals(getString(R.string.text_me_info_boy)) ? true : false);
+        imUser.setAge(Integer.parseInt(age));
+        imUser.setBirthday(birthday);
+        imUser.setConstellation(constellation);
+        imUser.setHobby(hobby);
+        // imUser.setStatus(status);
+        imUser.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                // mLodingView.hide();
+                if (e == null) {
+                    //同步缓存
+                    BmobManager.getInstance().fetchUserInfo(new FetchUserInfoListener<BmobUser>() {
+                        @Override
+                        public void done(BmobUser bmobUser, BmobException e) {
+                            if (e == null) {
+                                SLog.i(TAG, "[update done] " + bmobUser);
+                                // UserActivity加载个人信息
+                                EventBus.getDefault().post(EventIdCenter.EVENT_REFRE_ME_INFO);
+                                finish();
+                            } else {
+                                ToastUtil.getInstance().showToast(e.toString());
+                            }
+                        }
+                    });
+                } else {
+                    ToastUtil.getInstance().showToast(e.toString());
+                }
+            }
+        });
     }
 
     @Override
@@ -224,6 +300,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA,
             Manifest.permission.READ_CONTACTS,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
     };
 
     private static final int REQUEST_PERMISSION_CODE = 200;
@@ -242,11 +320,13 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             public void onPermissionsAllGranted(int requestCode, List<String> perms, boolean isAllGranted) {
                 SLog.i(TAG, "授权成功" + String.valueOf(perms));
                 ToastUtil.getInstance().showToast("授权成功" + String.valueOf(perms));
+                SLog.i(TAG, "授权成功" + String.valueOf(perms));
             }
 
             @Override
             public void onPermissionsDenied(int requestCode, List<String> perms) {
                 ToastUtil.getInstance().showToast("授权失败" + String.valueOf(perms));
+                SLog.i(TAG, "授权失败" + String.valueOf(perms));
             }
         });
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -398,20 +478,21 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             } else if (requestCode == MediaUtil.CAMERA_CROP_RESULT) {
                 uploadPhotoFile = new File(MediaUtil.getInstance().getCropPath());
                 SLog.i(TAG, "uploadPhotoFile:" + uploadPhotoFile.getPath());
-                Uri uri = Uri.fromFile(uploadPhotoFile);
-                if (uploadPhotoFile.exists() && uploadPhotoFile.isFile()) {
-                    SLog.i(TAG, "uploadPhotoFile is true" );
-                    Glide.with(this).load(uri).into(iv_user_photo);
-                }
+                // Uri uri = Uri.fromFile(uploadPhotoFile);
+                // if (uploadPhotoFile.exists() && uploadPhotoFile.isFile()) {
+                //     SLog.i(TAG, "uploadPhotoFile is true" );
+                //     Glide.with(this).load(uri).into(iv_user_photo);
+                // }
 
                 // GlideUtil.loadUrl(this, uri, iv_user_photo);
             }
             if (uploadPhotoFile != null) {
+                SLog.i(TAG, "uploadPhotoFile Bitmap iv_user_photo" );
+                IMUser user = BmobManager.getInstance().getUser();
+                user.setPhoto(uploadPhotoFile.getPath());
                 Bitmap bitmap = BitmapFactory.decodeFile(uploadPhotoFile.getPath());
                 iv_user_photo.setImageBitmap(bitmap);
             }
         }
     }
-
-
 }

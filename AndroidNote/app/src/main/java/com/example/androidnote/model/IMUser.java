@@ -4,24 +4,24 @@ import cn.bmob.v3.BmobUser;
 
 public class IMUser extends BmobUser {
     //昵称
-    private String userName;
+    private String userName = "";
     //头像
-    private String photo;
-    private String schoolName;
-    private String className;
+    private String photo = "";
+    private String schoolName = "";
+    private String className = "";
 
     //性别 true = 男 false = 女
     private boolean sex = true;
     //简介
-    private String desc;
+    private String desc = "";
     //年龄
     private int age = 0;
     //生日
-    private String birthday;
+    private String birthday = "";
     //星座
-    private String constellation;
+    private String constellation = "";
     //爱好
-    private String hobby;
+    private String hobby = "";
 
     public String getUserName() {
         return userName;

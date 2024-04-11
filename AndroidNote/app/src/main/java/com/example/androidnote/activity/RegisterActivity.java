@@ -18,13 +18,13 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.androidnote.R;
 import com.example.androidnote.manager.BmobManager;
+import com.example.androidnote.model.IMUser;
 import com.shangyizhou.develop.base.BaseActivity;
 import com.shangyizhou.develop.helper.SimpleTaskExecutor;
 import com.shangyizhou.develop.helper.ToastUtil;
 import com.shangyizhou.develop.log.SLog;
 import com.shangyizhou.develop.ui.dialog.DialogView;
 
-import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 
 public class RegisterActivity extends BaseActivity {
@@ -79,7 +79,7 @@ public class RegisterActivity extends BaseActivity {
         }
         BmobManager.getInstance().signUp(name, passwd, new BmobManager.RegisterCallback() {
             @Override
-            public void onSuccess(BmobUser user) {
+            public void onSuccess(IMUser user) {
                 SLog.i(TAG, "Register onSuccess");
                 dialog.setMessage("注册成功，即将跳转到登录页面");
                 dialog.show();

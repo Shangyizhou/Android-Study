@@ -27,6 +27,7 @@
                 android:background="@drawable/login_edit_bg"
                 android:cursorVisible="false"
                 android:hint="@string/text_login_name"
+                android:text="15016749552"
                 android:inputType="phone"
                 android:padding="5dp" />
 
@@ -38,6 +39,7 @@
                 android:background="@drawable/login_edit_bg"
                 android:cursorVisible="false"
                 android:hint="@string/text_login_code"
+                android:text="123456"
                 android:inputType="number"
                 android:padding="5dp" />
 
