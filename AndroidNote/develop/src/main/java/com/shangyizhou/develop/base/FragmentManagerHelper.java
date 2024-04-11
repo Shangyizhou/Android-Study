@@ -13,6 +13,7 @@ public class FragmentManagerHelper {
     private FragmentManager mFragmentManager;
     // 容器布局id containerViewId
     private int mContainerViewId;
+    private List<Fragment> fragments;
 
     /**
      * 构造函数
@@ -61,5 +62,9 @@ public class FragmentManagerHelper {
         // fragmentTransaction.replace(R.id.main_tab_fl,mHomeFragment);
         // 一定要commit
         fragmentTransaction.commit();
+    }
+
+    public void hideAll() {
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
     }
 }

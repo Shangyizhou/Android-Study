@@ -21,7 +21,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/ll_star"
+            android:id="@+id/ll_news"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -29,21 +29,21 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/iv_star"
+                android:id="@+id/iv_news"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/tv_star"
+                android:id="@+id/tv_news"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/text_main_star"
-                android:textColor="@android:color/white" />
+                android:text="新闻"
+                android:textColor="@android:color/black" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ll_square"
+            android:id="@+id/ll_ai"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -51,21 +51,21 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/iv_square"
+                android:id="@+id/iv_ai"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/tv_square"
+                android:id="@+id/tv_ai"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/text_main_square"
-                android:textColor="@android:color/white" />
+                android:text="AI"
+                android:textColor="@android:color/black" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ll_chat"
+            android:id="@+id/ll_data"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -73,16 +73,16 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/iv_chat"
+                android:id="@+id/iv_data"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/tv_chat"
+                android:id="@+id/tv_data"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/text_main_chat"
-                android:textColor="@android:color/white" />
+                android:text="数据"
+                android:textColor="@android:color/black" />
         </LinearLayout>
 
         <LinearLayout
@@ -102,8 +102,8 @@
                 android:id="@+id/tv_me"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/text_main_me"
-                android:textColor="@android:color/white" />
+                android:text="个人"
+                android:textColor="@android:color/black" />
 
         </LinearLayout>
 

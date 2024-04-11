@@ -70,7 +70,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onSuccess(BmobUser user) {
                 SLog.i(TAG, "Login onSuccess");
-                Home2Activity.startUp(LoginActivity.this);
+                HomeActivity.startUp(LoginActivity.this);
             }
 
             @Override

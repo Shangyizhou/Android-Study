@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,42 +14,51 @@ import android.widget.TextView;
 
 import com.example.androidnote.R;
 import com.example.androidnote.fragment.ChatFragment;
+import com.example.androidnote.fragment.DataFragment;
+import com.example.androidnote.fragment.NewsFragment;
+import com.example.androidnote.fragment.PersonFragment;
 import com.shangyizhou.develop.base.BaseActivity;
 import com.shangyizhou.develop.base.FragmentManagerHelper;
+import com.shangyizhou.develop.log.SLog;
 
 import io.reactivex.disposables.Disposable;
 
-public class HomeActivity extends BaseActivity implements View.OnClickListener{
+public class HomeActivity extends BaseActivity implements View.OnClickListener {
+    private static final String TAG = HomeActivity.class.getSimpleName();
     FragmentManagerHelper fragmentManagerHelper;
 
-    //星球
-    private ImageView iv_star;
-    private TextView tv_star;
-    private LinearLayout ll_star;
+    //news
+    private ImageView iv_news;
+    private TextView tv_news;
+    private LinearLayout ll_news;
+    private NewsFragment newsFragment = null;
+
+    // ai
+    private ImageView iv_ai;
+    private TextView tv_ai;
+    private LinearLayout ll_ai;
     private ChatFragment chatFragment = null;
 
-    //广场
-    // private ImageView iv_square;
-    // private TextView tv_square;
-    // private LinearLayout ll_square;
-    // private SquareFragment mSquareFragment = null;
-    // private FragmentTransaction mSquareTransaction = null;
-    //
-    // //聊天
-    // private ImageView iv_chat;
-    // private TextView tv_chat;
-    // private LinearLayout ll_chat;
-    // private ChatFragment mChatFragment = null;
-    // private FragmentTransaction mChatTransaction = null;
-    //
-    // //我的
-    // private ImageView iv_me;
-    // private TextView tv_me;
-    // private LinearLayout ll_me;
-    // private MeFragment mMeFragment = null;
-    // private FragmentTransaction mMeTransaction = null;
+    // data
+    private ImageView iv_data;
+    private TextView tv_data;
+    private LinearLayout ll_data;
+    private DataFragment dataFragment = null;
+
+
+    //我的
+    private ImageView iv_me;
+    private TextView tv_me;
+    private LinearLayout ll_me;
+    private PersonFragment personFragment = null;
 
     private Disposable disposable;
+
+    public static void startUp(Context context) {
+        SLog.i(TAG, "[HomeActivity] startUp");
+        Intent intent = new Intent(context, HomeActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreateChildren(Bundle bundle) {
@@ -57,51 +68,55 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
 
     @SuppressLint("ResourceType")
     private void initView() {
-        // 初始化FragmentManagerHelper
-        fragmentManagerHelper = new FragmentManagerHelper(getSupportFragmentManager(), R.id.mMainLayout);
+        iv_news = (ImageView) findViewById(R.id.iv_news);
+        tv_news = (TextView) findViewById(R.id.tv_news);
+        ll_news = (LinearLayout) findViewById(R.id.ll_news);
+
+        iv_ai = (ImageView) findViewById(R.id.iv_ai);
+        tv_ai = (TextView) findViewById(R.id.tv_ai);
+        ll_ai = (LinearLayout) findViewById(R.id.ll_ai);
+
+        iv_data = (ImageView) findViewById(R.id.iv_data);
+        tv_data = (TextView) findViewById(R.id.tv_data);
+        ll_data = (LinearLayout) findViewById(R.id.ll_data);
+
+        iv_me = (ImageView) findViewById(R.id.iv_me);
+        tv_me = (TextView) findViewById(R.id.tv_me);
+        ll_me = (LinearLayout) findViewById(R.id.ll_me);
+
+        ll_news.setOnClickListener(this);
+        ll_data.setOnClickListener(this);
+        ll_me.setOnClickListener(this);
+        ll_ai.setOnClickListener(this);
+
         initFragment();
-
-        iv_star = (ImageView) findViewById(R.id.iv_star);
-        tv_star = (TextView) findViewById(R.id.tv_star);
-        ll_star = (LinearLayout) findViewById(R.id.ll_star);
-
-        // iv_square = (ImageView) findViewById(R.id.iv_square);
-        // tv_square = (TextView) findViewById(R.id.tv_square);
-        // ll_square = (LinearLayout) findViewById(R.id.ll_square);
-        //
-        // iv_chat = (ImageView) findViewById(R.id.iv_chat);
-        // tv_chat = (TextView) findViewById(R.id.tv_chat);
-        // ll_chat = (LinearLayout) findViewById(R.id.ll_chat);
-        //
-        // iv_me = (ImageView) findViewById(R.id.iv_me);
-        // tv_me = (TextView) findViewById(R.id.tv_me);
-        // ll_me = (LinearLayout) findViewById(R.id.ll_me);
-
-        ll_star.setOnClickListener(this);
-        // ll_square.setOnClickListener(this);
-        // ll_chat.setOnClickListener(this);
-        // ll_me.setOnClickListener(this);
-
-        //设置文本
-        tv_star.setText(getString(R.string.text_main_star));
-        // tv_square.setText(getString(R.string.text_main_square));
-        // tv_chat.setText(getString(R.string.text_main_chat));
-        // tv_me.setText(getString(R.string.text_main_me));
     }
 
     private void initFragment () {
+        fragmentManagerHelper = new FragmentManagerHelper(getSupportFragmentManager(), R.id.mMainLayout);
+
         chatFragment = new ChatFragment();
-        fragmentManagerHelper.add(chatFragment);
+        dataFragment = new DataFragment();
+        newsFragment = new NewsFragment();
+        personFragment = new PersonFragment();
+        fragmentManagerHelper.switchFragment(newsFragment);
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.iv_star) {
+        if (id == R.id.ll_ai) {
+            SLog.i(TAG, "[onClick] ll_ai");
             fragmentManagerHelper.switchFragment(chatFragment);
-        } else if (id == R.id.iv_square) {
-        } else if (id == R.id.iv_chat) {
-        } else if (id == R.id.iv_me) {
+        } else if (id == R.id.ll_news) {
+            SLog.i(TAG, "[onClick] ll_news");
+            fragmentManagerHelper.switchFragment(newsFragment);
+        } else if (id == R.id.ll_data) {
+            SLog.i(TAG, "[onClick] ll_data");
+            fragmentManagerHelper.switchFragment(dataFragment);
+        } else if (id == R.id.ll_me) {
+            SLog.i(TAG, "[onClick] ll_me");
+            fragmentManagerHelper.switchFragment(personFragment);
         }
     }
 }
