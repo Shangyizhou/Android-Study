@@ -43,6 +43,8 @@ ext {
 //            "buglyndk"       : 'com.tencent.bugly:nativecrashreport:3.0',
 //            "zxing"          : 'cn.yipianfengye.android:zxing-library:2.2',
 //            "videoplayer"    : 'cn.jzvd:jiaozivideoplayer:7.0.5'
+            "ShadowDrawable"   : 'com.github.Liberuman:ShadowDrawable:0.1',
+
     ]
     //仓库
     maven = [

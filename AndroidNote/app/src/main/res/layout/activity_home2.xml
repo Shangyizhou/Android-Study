@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.Home2Activity">
+    tools:context=".activity.TestActivity">
 
   <Button
       android:id="@+id/btn_to_data"
@@ -35,6 +35,31 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="btn_test_permission" />
+
+
+  <TextView
+      android:gravity="center"
+      android:id="@+id/tv_txt"
+      android:padding="20dp"
+      android:layout_marginTop="20dp"
+      android:textColor="#000"
+      android:text="识别到的内容"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"/>
+
+  <Button
+      android:id="@+id/btn_stop"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:text="停止" />
+
+  <Button
+      android:id="@+id/btn_start"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:text="开始" />
 
 
 

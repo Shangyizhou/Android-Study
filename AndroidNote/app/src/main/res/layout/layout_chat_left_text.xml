@@ -13,10 +13,10 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_left_photo"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginLeft="10dp"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/robot" />
 
         <TextView
             android:id="@+id/tv_left_text"

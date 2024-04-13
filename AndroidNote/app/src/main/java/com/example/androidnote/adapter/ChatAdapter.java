@@ -55,6 +55,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof RobotViewHolder) {
             ((RobotViewHolder) holder).mTextView.setText(mData.get(position).getMessage());
+            ((RobotViewHolder) holder).mImageView.setImageResource(R.drawable.robot);
         } else if (holder instanceof PersonViewHolder) {
             ((PersonViewHolder) holder).mTextView.setText(mData.get(position).getMessage());
         }

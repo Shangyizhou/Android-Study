@@ -45,6 +45,8 @@ dependencies {
     api rootProject.ext.dependencies["MPAndroidChart"]
     api rootProject.ext.dependencies["lottie"]
     api rootProject.ext.dependencies["easypermissions"]
+    api rootProject.ext.dependencies["ShadowDrawable"]
+
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'

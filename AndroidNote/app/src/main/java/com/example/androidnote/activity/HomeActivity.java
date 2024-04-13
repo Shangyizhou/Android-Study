@@ -1,11 +1,14 @@
 package com.example.androidnote.activity;
 
+import static com.google.android.material.internal.ViewUtils.dpToPx;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,12 +21,14 @@ import com.example.androidnote.fragment.DataFragment;
 import com.example.androidnote.fragment.NewsFragment;
 import com.example.androidnote.fragment.PersonFragment;
 import com.shangyizhou.develop.base.BaseActivity;
+import com.shangyizhou.develop.base.BaseUiActivity;
 import com.shangyizhou.develop.base.FragmentManagerHelper;
 import com.shangyizhou.develop.log.SLog;
+import com.sxu.shadowdrawable.ShadowDrawable;
 
 import io.reactivex.disposables.Disposable;
 
-public class HomeActivity extends BaseActivity implements View.OnClickListener {
+public class HomeActivity extends BaseUiActivity implements View.OnClickListener {
     private static final String TAG = HomeActivity.class.getSimpleName();
     FragmentManagerHelper fragmentManagerHelper;
 
@@ -62,12 +67,15 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void onCreateChildren(Bundle bundle) {
+        super.onCreateChildren(bundle);
         setContentView(R.layout.activity_home);
         initView();
     }
 
     @SuppressLint("ResourceType")
     private void initView() {
+        View view = findViewById(R.id.ll_bottom);
+        setShadowDrawable(view);
         iv_news = (ImageView) findViewById(R.id.iv_news);
         tv_news = (TextView) findViewById(R.id.tv_news);
         ll_news = (LinearLayout) findViewById(R.id.ll_news);
@@ -90,6 +98,29 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         ll_ai.setOnClickListener(this);
 
         initFragment();
+    }
+
+    /**
+     * 为指定View设置带阴影的背景
+     *
+     * @param view         目标View
+     * @param bgColor      View背景色
+     * @param shapeRadius  View的圆角
+     * @param shadowColor  阴影的颜色
+     * @param shadowRadius 阴影的宽度
+     * @param offsetX      阴影水平方向的偏移量
+     * @param offsetY      阴影垂直方向的偏移量
+     */
+    @SuppressLint("RestrictedApi")
+    public void setShadowDrawable(View view) {
+        // 实例：设置背景为颜色为#3D5AFE，圆角为8dp, 阴影颜色为#66000000，宽度为10dp的背景
+        ShadowDrawable.setShadowDrawable(view,
+                Color.parseColor("#FFFFFF"),
+                30,
+                Color.parseColor("#20000000"),
+                15,
+                0,
+                -20);
     }
 
     private void initFragment () {

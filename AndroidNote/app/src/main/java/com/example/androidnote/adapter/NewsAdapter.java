@@ -1,9 +1,6 @@
 package com.example.androidnote.adapter;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,16 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidnote.R;
-import com.example.androidnote.activity.ContentActivity;
-import com.example.androidnote.model.ChatModel;
+import com.example.androidnote.activity.news.ContentActivity;
 import com.example.androidnote.model.News;
-import com.example.androidnote.model.Title;
 import com.google.gson.Gson;
 import com.shangyizhou.develop.helper.GlideUtil;
-import com.shangyizhou.develop.log.SLog;
 
 import java.util.List;
-import java.util.Timer;
 
 public class NewsAdapter extends RecyclerView.Adapter {
     private Context mContext;

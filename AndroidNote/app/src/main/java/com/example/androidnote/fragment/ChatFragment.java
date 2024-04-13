@@ -1,17 +1,23 @@
 package com.example.androidnote.fragment;
 
+
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.example.androidnote.DirectToServer;
 import com.example.androidnote.R;
@@ -72,6 +78,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener{
     private RecyclerView recyclerView;
     private Button sendBtn;
     private EditText editText;
+    private LinearLayout llBottom;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,14 +107,43 @@ public class ChatFragment extends Fragment implements View.OnClickListener{
         recyclerView.setAdapter(mChatAdapter);
 
         sendBtn.setOnClickListener(this);
+        editText.setOnClickListener(this);
+
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        // 点击聊天背景的时候输入键盘隐藏，那个隐藏的view也重新显示出来
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            private Context context = getActivity();
+
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (!hasFocus) {
+                    InputMethodManager manager = ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE));
+                    if (manager != null)
+                        manager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+            }
+        });
     }
+
+
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        SLog.i(TAG, "sendBtn");
         if (id == R.id.btn_send_msg) {
-            SLog.i(TAG, "sendBtn");
             String inputText = editText.getText().toString();
             if (TextUtils.isEmpty(inputText)) {
                 return;
@@ -130,6 +166,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener{
                     SLog.e(TAG, "DirectToServer error");
                 }
             });
+        } else if (id == R.id.et_input_msg) {
+            llBottom.setVisibility(View.GONE);
         }
     }
 

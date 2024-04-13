@@ -3,6 +3,9 @@
 
     <application>
         <activity
+            android:name=".base.BaseUiActivity"
+            android:exported="false" />
+        <activity
             android:name=".base.BaseActivity"
             android:exported="false" />
     </application>
