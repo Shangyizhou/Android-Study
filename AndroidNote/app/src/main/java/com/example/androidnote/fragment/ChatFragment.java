@@ -1,46 +1,48 @@
 package com.example.androidnote.fragment;
 
-
-import android.content.Context;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.Editable;
+import android.os.Handler;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 
 import com.example.androidnote.DirectToServer;
 import com.example.androidnote.R;
 import com.example.androidnote.adapter.ChatAdapter;
 import com.example.androidnote.model.ChatModel;
+import com.shangyizhou.develop.helper.UUIDUtil;
 import com.shangyizhou.develop.log.SLog;
-import com.shangyizhou.develop.model.EventIdCenter;
-import com.shangyizhou.develop.model.MessageEvent;
 import com.shangyizhou.develop.net.IResponse;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ChatFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChatFragment extends Fragment implements View.OnClickListener{
-
+public class ChatFragment extends Fragment implements View.OnClickListener {
+    private static final String TAG = "ChatFragment";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -49,6 +51,10 @@ public class ChatFragment extends Fragment implements View.OnClickListener{
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+
+    private static final int ROBOT_TEXT = 0;
+    private static final int PERSON_TEXT = 1;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -72,13 +78,13 @@ public class ChatFragment extends Fragment implements View.OnClickListener{
         return fragment;
     }
 
+    private Map<Integer, ChatModel> chatModelIndex = new HashMap<>();
     private List<ChatModel> mList = new ArrayList<>();
     ChatAdapter mChatAdapter = new ChatAdapter();
-    private static final String TAG = "ChatActivity";
     private RecyclerView recyclerView;
     private Button sendBtn;
     private EditText editText;
-    private LinearLayout llBottom;
+    private Handler mHandler;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,97 +111,140 @@ public class ChatFragment extends Fragment implements View.OnClickListener{
         sendBtn = view.findViewById(R.id.btn_send_msg);
         editText = view.findViewById(R.id.et_input_msg);
         recyclerView.setAdapter(mChatAdapter);
-
+        mHandler = new Handler();
         sendBtn.setOnClickListener(this);
-        editText.setOnClickListener(this);
-
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-
-        // 点击聊天背景的时候输入键盘隐藏，那个隐藏的view也重新显示出来
-        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            private Context context = getActivity();
-
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (!hasFocus) {
-                    InputMethodManager manager = ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE));
-                    if (manager != null)
-                        manager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                }
-            }
-        });
     }
-
-
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
+        SLog.i(TAG, "sendBtn");
         if (id == R.id.btn_send_msg) {
-            String inputText = editText.getText().toString();
-            if (TextUtils.isEmpty(inputText)) {
-                return;
-            }
-            addText(1, inputText);
-            editText.setText("");
-            DirectToServer.callYiYan(inputText, new IResponse() {
-                @Override
-                public void onSuccess(String originJson) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            addText(0, originJson);
-                        }
-                    });
-                }
-
-                @Override
-                public void onFailure(String errorMsg) {
-                    SLog.e(TAG, "DirectToServer error");
-                }
-            });
-        } else if (id == R.id.et_input_msg) {
-            llBottom.setVisibility(View.GONE);
+            // 先加入Person的Text
+            addPerson();
+            addRobot();
+            callYiyan();
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(MessageEvent event) {
-        if (event == null || event.message == null) {
-            SLog.e(TAG, "【onMessageEvent】event is null");
+    private void addPerson() {
+        ChatModel model = new ChatModel();
+        model.setId(UUIDUtil.getUUID());
+        model.setName("syz");
+        model.setImageUrl("");
+        model.setMessage(editText.getText().toString());
+        model.setType(PERSON_TEXT);
+        mList.add(model);
+        updateAdapter();
+    }
+
+    private void addRobot() {
+        ChatModel model = new ChatModel();
+        model.setId(UUIDUtil.getUUID());
+        model.setName("");
+        model.setImageUrl("");
+        model.setMessage("");
+        model.setStatus(ChatModel.LOADING);
+        model.setType(ROBOT_TEXT);
+        mList.add(model);
+        updateAdapter();
+    }
+
+    // TODO: callYiyan callEB
+    public void callYiyan() {
+        callEBStream();
+    }
+
+    // private void callEB() {
+    //     SLog.i(TAG, "sendBtn");
+    //     String inputText = editText.getText().toString();
+    //     if (TextUtils.isEmpty(inputText)) {
+    //         return;
+    //     }
+    //     showSpeak(PERSON_TEXT, inputText);
+    //     editText.setText("");
+    //     DirectToServer.callYiYan(inputText, new IResponse() {
+    //         @Override
+    //         public void onSuccess(String originJson) {
+    //             getActivity().runOnUiThread(new Runnable() {
+    //                 @Override
+    //                 public void run() {
+    //
+    //                     showSpeak(ROBOT_TEXT, originJson);
+    //                 }
+    //             });
+    //         }
+    //
+    //         @Override
+    //         public void onFailure(String errorMsg) {
+    //             SLog.e(TAG, "DirectToServer error");
+    //         }
+    //     });
+    // }
+
+
+    // 历史对话，需要按照user,assistant
+    static List<Map<String, String>> messages = new ArrayList<>();
+
+    private void callEBStream() {
+        SLog.i(TAG, "sendBtn");
+        // 获取输入的问题
+        String inputText = editText.getText().toString();
+        if (TextUtils.isEmpty(inputText)) {
             return;
         }
-        switch (event.name) {
-            case EventIdCenter.ROBOT_MESSAGE_ARRIVED:
-                String msg = event.message;
-                addText(0, msg);
-                break;
-        }
+        // 清空输入框
+        editText.setText("");
+        DirectToServer.callYiYanERNIEStream(inputText, new IResponse() {
+            @Override
+            public void onSuccess(String originJson) {
+                // 将回复的内容添加到消息中
+                HashMap<String, String> assistant = new HashMap<>();
+                assistant.put("role", "assistant");
+                assistant.put("content", "");
+                // 取出我们需要的内容,也就是result部分
+                String[] answerArray = originJson.split("data: ");
+                for (int i = 1; i < answerArray.length; ++i) {
+                    answerArray[i] = answerArray[i].substring(0, answerArray[i].length() - 2);
+                    SLog.i(TAG, "answerArray: " + answerArray[i]);
+                    try {
+                        assistant.put("content", assistant.get("content") + new JSONObject(answerArray[i]).getString("result"));
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                messages.add(assistant);
+                SLog.i(TAG, String.valueOf(messages));
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showResponse(ROBOT_TEXT, assistant.get("content"));
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(String errorMsg) {
+                SLog.e(TAG, "DirectToServer error");
+            }
+        });
     }
 
-    private void addText(int type, String text) {
-        SLog.i(TAG, "ChatA:" + text);
-        ChatModel model = new ChatModel("123", "张三", "", type);
+    /**
+     * @param type 0:机器人 1:用户
+     * @param text
+     */
+    private void showResponse(int type, String text) {
+        SLog.i(TAG, "Robot showResponse:" + text);
+        ChatModel model = mList.get(mList.size() - 1);
+        model.setStatus(ChatModel.START_SHOW);
         model.setMessage(text);
-        baseAddItem(model);
+        updateAdapter();
     }
 
-    private void baseAddItem(ChatModel model) {
-        mList.add(model);
+    private void updateAdapter() {
         mChatAdapter.updateDataList(mList);
-        //滑动到底部
+        // 滑动到底部
         recyclerView.scrollToPosition(mList.size() - 1);
     }
 }

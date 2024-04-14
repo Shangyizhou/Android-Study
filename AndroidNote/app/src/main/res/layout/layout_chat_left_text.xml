@@ -26,5 +26,12 @@
             android:textColor="@android:color/black"
             android:textSize="16sp" />
 
+        <ImageView
+            android:id="@+id/iv_left_loading"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/img_loading" />
+
     </LinearLayout>
 </RelativeLayout>

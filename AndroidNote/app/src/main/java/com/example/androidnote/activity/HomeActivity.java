@@ -24,7 +24,7 @@ import com.shangyizhou.develop.base.BaseActivity;
 import com.shangyizhou.develop.base.BaseUiActivity;
 import com.shangyizhou.develop.base.FragmentManagerHelper;
 import com.shangyizhou.develop.log.SLog;
-import com.sxu.shadowdrawable.ShadowDrawable;
+// import com.sxu.shadowdrawable.ShadowDrawable;
 
 import io.reactivex.disposables.Disposable;
 
@@ -75,7 +75,7 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
     @SuppressLint("ResourceType")
     private void initView() {
         View view = findViewById(R.id.ll_bottom);
-        setShadowDrawable(view);
+        // setShadowDrawable(view);
         iv_news = (ImageView) findViewById(R.id.iv_news);
         tv_news = (TextView) findViewById(R.id.tv_news);
         ll_news = (LinearLayout) findViewById(R.id.ll_news);
@@ -111,17 +111,17 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
      * @param offsetX      阴影水平方向的偏移量
      * @param offsetY      阴影垂直方向的偏移量
      */
-    @SuppressLint("RestrictedApi")
-    public void setShadowDrawable(View view) {
-        // 实例：设置背景为颜色为#3D5AFE，圆角为8dp, 阴影颜色为#66000000，宽度为10dp的背景
-        ShadowDrawable.setShadowDrawable(view,
-                Color.parseColor("#FFFFFF"),
-                30,
-                Color.parseColor("#20000000"),
-                15,
-                0,
-                -20);
-    }
+    // @SuppressLint("RestrictedApi")
+    // public void setShadowDrawable(View view) {
+    //     // 实例：设置背景为颜色为#3D5AFE，圆角为8dp, 阴影颜色为#66000000，宽度为10dp的背景
+    //     ShadowDrawable.setShadowDrawable(view,
+    //             Color.parseColor("#FFFFFF"),
+    //             30,
+    //             Color.parseColor("#20000000"),
+    //             15,
+    //             0,
+    //             -20);
+    // }
 
     private void initFragment () {
         fragmentManagerHelper = new FragmentManagerHelper(getSupportFragmentManager(), R.id.mMainLayout);

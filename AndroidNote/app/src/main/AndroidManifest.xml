@@ -65,7 +65,7 @@
             android:name=".activity.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".activity.TestActivity"
             android:exported="false" />
         <activity
             android:name=".activity.news.NewsActivity"
@@ -80,7 +80,7 @@
             android:name=".activity.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.TestActivity"
+            android:name=".activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
