@@ -1,7 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.AndroidNote" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="android:statusBarColor">@color/chat_bg_color</item>
+        <item name="android:windowBackground">@color/chat_bg_color</item>
+        <item name="android:navigationBarColor">@color/chat_bg_color</item>
     </style>
+
+    <style name="Theme.AndroidNote" parent="Base.Theme.AndroidNote" />
+
+    <!--Full Style Activity -->
+    <style name="AppThemeFull" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
 </resources>

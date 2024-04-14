@@ -11,7 +11,8 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="397dp"
+            android:layout_height="255dp"
+            android:layout_marginBottom="50dp"
             android:src="@drawable/img_login_bg" />
 
         <LinearLayout

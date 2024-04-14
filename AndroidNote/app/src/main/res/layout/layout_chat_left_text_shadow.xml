@@ -8,8 +8,8 @@
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical|left"
         android:layout_marginRight="50dp"
-        android:gravity="top"
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -30,18 +30,23 @@
                 android:id="@+id/tv_left_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
+                android:gravity="left"
+                android:text="Null"
+                android:textColor="@android:color/white"
+                android:background="@color/chat_robot_text_bg_color"
                 android:textSize="16sp"
                 android:padding="15dp" />
 
-            <ImageView
-                android:id="@+id/iv_left_loading"
-                android:layout_width="48dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/img_loading"
-                />
         </androidx.cardview.widget.CardView>
+
+        <ImageView
+            android:id="@+id/iv_left_loading"
+            android:layout_width="48dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/img_loading"
+            android:visibility="gone"
+            />
 
     </LinearLayout>
 </RelativeLayout>

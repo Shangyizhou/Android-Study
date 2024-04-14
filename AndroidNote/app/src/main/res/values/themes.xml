@@ -1,13 +1,20 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.AndroidNote" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="backgroundColor">@color/white</item>
-        <item name="android:windowBackground">@android:color/white</item>
         <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:windowBackground">@color/white</item>
         <item name="android:navigationBarColor">@color/white</item>
     </style>
 
-    <style name="Theme.AndroidNote" parent="Base.Theme.AndroidNote" >
+    <style name="Theme.AndroidNote" parent="Base.Theme.AndroidNote" />
 
+    <!--Full Sutyle Activity -->
+    <style name="AppThemeFull" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
+
 </resources>
