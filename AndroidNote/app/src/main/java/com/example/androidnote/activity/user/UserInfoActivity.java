@@ -31,8 +31,11 @@ import com.bumptech.glide.Glide;
 import com.example.androidnote.R;
 import com.example.androidnote.activity.UserActivity;
 import com.example.androidnote.constant.Constants;
+import com.example.androidnote.db.helper.UserInfoHelper;
 import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.IMUser;
+import com.example.androidnote.model.User;
+import com.example.androidnote.model.UserInfo;
 import com.shangyizhou.develop.adapter.common.CommonAdapter;
 import com.shangyizhou.develop.adapter.common.CommonViewHolder;
 import com.shangyizhou.develop.base.BaseActivity;
@@ -137,6 +140,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
     //头像文件
     private File uploadPhotoFile;
+    private UserInfo userInfo;
+
 
     //加载View
     // private LodingView mLodingView;
@@ -183,8 +188,37 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         initSexDialog();
         initAgeDialog();
         initBirthdayDialog();
+    }
 
-        loadUserInfo();
+    private void getData() {
+        IMUser imUser = BmobManager.getInstance().getUser();
+        String name = imUser.getUserName();
+        userInfo = UserInfoHelper.getInstance().getUserByName(name);
+        if (userInfo == null) {
+            userInfo = new UserInfo();
+        }
+        SLog.i(TAG, "[loadUserInfo getData] " + userInfo);
+        Bitmap bitmap = BitmapFactory.decodeFile(userInfo.getImageFilePath());
+        iv_user_photo.setImageBitmap(bitmap);
+        et_nickname.setText(userInfo.getUserName());
+        tv_user_sex.setText(userInfo.isSex() ? getString(R.string.text_me_info_boy) : getString(R.string.text_me_info_girl));
+        tv_user_age.setText(userInfo.getAge() + "");
+        et_user_desc.setText(userInfo.getDesc());
+        tv_user_birthday.setText(userInfo.getBirthday());
+        tv_user_constellation.setText(userInfo.getConstellation());
+        tv_user_hobby.setText(userInfo.getHobby());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        UserInfoHelper.getInstance().save(userInfo);
     }
 
     /**
@@ -379,6 +413,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             public void onClick(View view) {
                 DialogManager.getInstance().hide(mSexDialog);
                 tv_user_sex.setText("男");
+                userInfo.setSex(true);
             }
         });
         tv_girl.setOnClickListener(new View.OnClickListener() {
@@ -386,6 +421,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             public void onClick(View view) {
                 DialogManager.getInstance().hide(mSexDialog);
                 tv_user_sex.setText("女");
+                userInfo.setSex(false);
             }
         });
         tv_sex_cancel.setOnClickListener(new View.OnClickListener() {
@@ -421,6 +457,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                     public void onClick(View view) {
                         DialogManager.getInstance().hide(mAgeDialog);
                         tv_user_age.setText(model + "");
+                        userInfo.setAge(model);
                     }
                 });
             }
@@ -454,7 +491,9 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             mDatePicker.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
                 @Override
                 public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    tv_user_birthday.setText(year + "年" + monthOfYear + 1 + "月" + dayOfMonth + "日");
+                    String text = year + "年" + monthOfYear + 1 + "月" + dayOfMonth + "日";
+                    tv_user_birthday.setText(text);
+                    userInfo.setBirthday(text);
                 }
             });
         }
@@ -466,7 +505,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         if (resultCode == RESULT_OK) {
             if (requestCode == MediaUtil.CAMEAR_REQUEST_CODE) {
                 MediaUtil.getInstance().startPhotoZoom(this, MediaUtil.getInstance().getTempFile());
-            } else if (requestCode == MediaUtil.ALBUM_REQUEST_CODE) {
+            } else if (requestCode == MediaUtil.ALBUM_REQUEST_CODE) { // 相册
                 Uri uri = data.getData();
                 if (uri != null) {
                     String path = MediaUtil.getInstance().getRealPathFromURI(this, uri);
@@ -488,8 +527,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             }
             if (uploadPhotoFile != null) {
                 SLog.i(TAG, "uploadPhotoFile Bitmap iv_user_photo" );
-                IMUser user = BmobManager.getInstance().getUser();
-                user.setPhoto(uploadPhotoFile.getPath());
+                userInfo.setImageFilePath(uploadPhotoFile.getPath());
                 Bitmap bitmap = BitmapFactory.decodeFile(uploadPhotoFile.getPath());
                 iv_user_photo.setImageBitmap(bitmap);
             }
