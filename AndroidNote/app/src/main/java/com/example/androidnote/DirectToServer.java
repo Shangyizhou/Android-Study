@@ -4,12 +4,16 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
+import com.example.androidnote.fragment.ChatFragment;
+import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.NewsList;
+import com.example.androidnote.model.ResponseInfo;
 import com.example.androidnote.model.ResponseToken;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.shangyizhou.develop.AppHolder;
+import com.shangyizhou.develop.helper.UUIDUtil;
 import com.shangyizhou.develop.log.SLog;
 import com.shangyizhou.develop.net.IResponse;
 
@@ -25,6 +29,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -41,6 +46,8 @@ public class DirectToServer {
     public static final String DUROOBT_SERVICE_ENCRYPT_KEY = "EFKKDUfdkaD982~!jK";
 
     private static final OkHttpClient client = createOkHttpClient();
+
+    private static String requestId;
 
     /**
      * 不能直接从BaseApplication中获取
@@ -153,6 +160,8 @@ public class DirectToServer {
     private static Date CREATE_TIME = null;     // accessToken创建时间
     private static Date EXPIRATION_TIME = null; // accessToken到期时间
 
+    final static CountDownLatch countDownLatch = new CountDownLatch(1);
+
     /**
      * 获取token
      */
@@ -198,12 +207,19 @@ public class DirectToServer {
                         REFRESH_TOKEN = refreshToken;
                         CREATE_TIME = new Date();
                         EXPIRATION_TIME = new Date(Long.parseLong(jsonObject.getString("expires_in")) + CREATE_TIME.getTime());
+                        countDownLatch.countDown();
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
                 }
             }
         });
+
+        try {
+            countDownLatch.await();  // 等待获取token
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         return ACCESS_TOKEN;
     }
@@ -277,6 +293,12 @@ public class DirectToServer {
      * @param callback
      */
     public static void callYiYanERNIEStream(String message, IResponse callback) {
+        ResponseInfo responseInfo = new ResponseInfo();
+        requestId = UUIDUtil.getUUID();
+        responseInfo.setUserName(BmobManager.getInstance().getUser().getUserName());
+        responseInfo.setModelName("ERNIE-4.0-8K");
+        responseInfo.setRequestId(requestId);
+        responseInfo.setRequestTime(System.currentTimeMillis());
         MediaType mediaType = MediaType.parse("application/json");
 
         // 创建消息部分的JSON对象
@@ -316,6 +338,8 @@ public class DirectToServer {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response != null) {
+                    responseInfo.setResponseTime(System.currentTimeMillis());
+                    ChatFragment.data.get("ERNIE-4.0-8K").add(responseInfo);
                     StringBuilder answer = new StringBuilder();
                     ResponseBody responseBody = response.body();
                     if (response != null) {

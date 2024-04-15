@@ -1,8 +1,5 @@
 package com.example.androidnote.fragment;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,12 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.example.androidnote.DirectToServer;
 import com.example.androidnote.R;
 import com.example.androidnote.adapter.ChatAdapter;
+import com.example.androidnote.db.helper.ResponseInfoHelper;
+import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.ChatModel;
+import com.example.androidnote.model.ResponseInfo;
+import com.shangyizhou.develop.helper.ToastUtil;
 import com.shangyizhou.develop.helper.UUIDUtil;
 import com.shangyizhou.develop.log.SLog;
 import com.shangyizhou.develop.net.IResponse;
@@ -33,8 +33,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -84,7 +82,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     private RecyclerView recyclerView;
     private Button sendBtn;
     private EditText editText;
-    private Handler mHandler;
+    public static HashMap<String, List<ResponseInfo>> data;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,7 +99,15 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.activity_chat, container, false);
         initView(view);
+        getData();
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        SLog.i(TAG, "onDestroy saveHashMap");
+        ResponseInfoHelper.getInstance().saveHashMap(data);
     }
 
     private void initView(View view) {
@@ -111,8 +117,17 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         sendBtn = view.findViewById(R.id.btn_send_msg);
         editText = view.findViewById(R.id.et_input_msg);
         recyclerView.setAdapter(mChatAdapter);
-        mHandler = new Handler();
         sendBtn.setOnClickListener(this);
+    }
+
+    private void getData() {
+        // ResponseInfoHelper.getInstance().deleteData();
+        data = ResponseInfoHelper.getInstance().getAllModelInfoByUserName(BmobManager.getInstance().getUser().getUserName());
+        if (data.keySet().size() <= 0) {
+            SLog.i(TAG, "getData" + data);
+            data.put("ERNIE-4.0-8K", new ArrayList<ResponseInfo>());
+        }
+        SLog.i(TAG, "getData" + data);
     }
 
     @Override
@@ -120,6 +135,10 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         int id = v.getId();
         SLog.i(TAG, "sendBtn");
         if (id == R.id.btn_send_msg) {
+            if (TextUtils.isEmpty(editText.getText().toString())) {
+                ToastUtil.getInstance().showToast("输入内容不能为空");
+                return;
+            }
             // 先加入Person的Text
             addPerson();
             addRobot();

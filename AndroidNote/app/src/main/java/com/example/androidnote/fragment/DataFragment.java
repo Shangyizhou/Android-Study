@@ -98,13 +98,13 @@ public class DataFragment extends Fragment {
         //找到图表控件
         topLeftlineChart = view.findViewById(R.id.chartTopLeft);
         chartTopRight = view.findViewById(R.id.chartTopRight);
-        chartBottomLeft = view.findViewById(R.id.chartBottomLeft);
-        chartBottomRight = view.findViewById(R.id.chartBottomRight);
+        // chartBottomLeft = view.findViewById(R.id.chartBottomLeft);
+        // chartBottomRight = view.findViewById(R.id.chartBottomRight);
 
         initLineChart();
         initRightTop();
-        initLeftBottom();
-        initRightBottom();
+        // initLeftBottom();
+        // initRightBottom();
     }
 
     private void initLineChart() {

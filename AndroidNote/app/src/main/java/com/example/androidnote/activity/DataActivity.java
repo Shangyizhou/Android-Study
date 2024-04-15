@@ -57,13 +57,11 @@ public class DataActivity extends BaseActivity {
         //找到图表控件
         topLeftlineChart = findViewById(R.id.chartTopLeft);
         chartTopRight = findViewById(R.id.chartTopRight);
-        chartBottomLeft = findViewById(R.id.chartBottomLeft);
-        chartBottomRight = findViewById(R.id.chartBottomRight);
+
 
         initLineChart();
         initRightTop();
-        initLeftBottom();
-        initRightBottom();
+
 
     }
 
