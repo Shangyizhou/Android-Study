@@ -1,5 +1,6 @@
 package com.example.androidnote.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -39,10 +40,12 @@ public class NewsAdapter extends RecyclerView.Adapter {
         return holder;
     }
 
+    @SuppressLint("RecyclerView")
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder,  int position) {
         if (holder instanceof NewsViewHolder) {
-            ((NewsViewHolder) holder).desc.setText(mData.get(position).getDescription());
+            // ((NewsViewHolder) holder).desc.setText(mData.get(position).getDescription());
+            ((NewsViewHolder) holder).time.setText(mData.get(position).getTime());
             ((NewsViewHolder) holder).title.setText(mData.get(position).getTitle());
             GlideUtil.loadUrl(mContext, mData.get(position).getPicUrl(), ((NewsViewHolder) holder).mImageView);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -69,13 +72,15 @@ public class NewsAdapter extends RecyclerView.Adapter {
 
     class NewsViewHolder extends RecyclerView.ViewHolder {
         TextView desc;
+        TextView time;
         TextView title;
         ImageView mImageView;
 
         public NewsViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.title_text);
-            desc = itemView.findViewById(R.id.descr_text);
+            time = itemView.findViewById(R.id.time);
+            // desc = itemView.findViewById(R.id.descr_text);
             mImageView = itemView.findViewById(R.id.title_pic);
         }
     }

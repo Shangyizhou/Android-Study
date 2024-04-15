@@ -11,9 +11,13 @@ import android.view.ViewGroup;
 import android.widget.GridLayout;
 
 import com.example.androidnote.R;
+import com.example.androidnote.manager.DataCollectionManager;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -109,14 +113,15 @@ public class DataFragment extends Fragment {
 
     private void initLineChart() {
         // 准备数据. 比如我们创建一个有10个数据点的图表
+        int[] invokeData = DataCollectionManager.getYesterdayInvokeInfo();
+
         ArrayList<Entry> values = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            float val = (float) (Math.random() * 50) + 3;
-            values.add(new Entry(i, val));
+        for (int i = 0; i < 12; i++) {
+            values.add(new Entry(i, invokeData[i]));
         }
 
         // 创建数据集
-        LineDataSet set1 = new LineDataSet(values, "DataSet 1");
+        LineDataSet set1 = new LineDataSet(values, "24h 调用情况");
         set1.setFillAlpha(110);
 
         //使用RGB颜色填充
@@ -131,7 +136,7 @@ public class DataFragment extends Fragment {
         LineData lineData = new LineData(dataSets);
         topLeftlineChart.setDrawGridBackground(false);
         topLeftlineChart.setData(lineData);
-        topLeftlineChart.setDragEnabled(false);
+        topLeftlineChart.setDragEnabled(true);
         topLeftlineChart.setScaleEnabled(false);
         topLeftlineChart.setScaleXEnabled(false);
         topLeftlineChart.setScaleYEnabled(false);
@@ -150,6 +155,23 @@ public class DataFragment extends Fragment {
 
             }
         });
+
+        // 设置y轴左侧坐标
+        YAxis leftAxis = topLeftlineChart.getAxisLeft();
+        leftAxis.setAxisMinimum(0f);
+        leftAxis.setGranularity(1f);
+        leftAxis.setGranularityEnabled(true);
+
+        // 关闭右侧y轴和顶部x轴的显示
+        topLeftlineChart.getAxisRight().setEnabled(false);
+        topLeftlineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        // 创建一个空的Description对象
+        Description description = new Description();
+        description.setText("");
+
+        // 将空的Description对象设置到图表
+        topLeftlineChart.setDescription(description);
 
         //无数据时显示
         topLeftlineChart.setNoDataText("没有获取到数据哦~");

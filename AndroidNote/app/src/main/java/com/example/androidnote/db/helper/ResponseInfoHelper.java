@@ -16,6 +16,7 @@ public class ResponseInfoHelper {
     private static volatile ResponseInfoHelper instance;
     ResponseInfoDao mResponseInfoDao;
     private Context context;
+
     public ResponseInfoHelper() {
         mResponseInfoDao = DaoManager.getInstance().getDaoSession().getResponseInfoDao();
     }
@@ -97,6 +98,15 @@ public class ResponseInfoHelper {
         }
 
         return map;
+    }
+
+    public List<ResponseInfo> getDurationInfo(long start, long end) {
+        SLog.i(TAG, "getDurationInfo start: " + start + " end: " + end);
+        List<ResponseInfo> data = mResponseInfoDao.queryBuilder()
+                .where(ResponseInfoDao.Properties.RequestTime.ge(start),
+                        ResponseInfoDao.Properties.RequestTime.le(end))
+                .list();
+        return data;
     }
 
     public void deleteData() {
