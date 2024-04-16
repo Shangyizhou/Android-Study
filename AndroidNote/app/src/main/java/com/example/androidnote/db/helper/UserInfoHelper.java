@@ -7,6 +7,9 @@ import com.example.androidnote.db.UserInfoDao;
 import com.example.androidnote.model.UserInfo;
 import com.shangyizhou.develop.log.SLog;
 
+/**
+ * 使用IMUser代替了
+ */
 public class UserInfoHelper {
     private static final String TAG = UserInfoHelper.class.getSimpleName();
     private static volatile UserInfoHelper instance;

@@ -8,11 +8,15 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
+import com.example.androidnote.model.Message;
 import com.example.androidnote.model.ResponseInfo;
+import com.example.androidnote.model.Session;
 import com.example.androidnote.model.User;
 import com.example.androidnote.model.UserInfo;
 
+import com.example.androidnote.db.MessageDao;
 import com.example.androidnote.db.ResponseInfoDao;
+import com.example.androidnote.db.SessionDao;
 import com.example.androidnote.db.UserDao;
 import com.example.androidnote.db.UserInfoDao;
 
@@ -25,11 +29,15 @@ import com.example.androidnote.db.UserInfoDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
+    private final DaoConfig messageDaoConfig;
     private final DaoConfig responseInfoDaoConfig;
+    private final DaoConfig sessionDaoConfig;
     private final DaoConfig userDaoConfig;
     private final DaoConfig userInfoDaoConfig;
 
+    private final MessageDao messageDao;
     private final ResponseInfoDao responseInfoDao;
+    private final SessionDao sessionDao;
     private final UserDao userDao;
     private final UserInfoDao userInfoDao;
 
@@ -37,8 +45,14 @@ public class DaoSession extends AbstractDaoSession {
             daoConfigMap) {
         super(db);
 
+        messageDaoConfig = daoConfigMap.get(MessageDao.class).clone();
+        messageDaoConfig.initIdentityScope(type);
+
         responseInfoDaoConfig = daoConfigMap.get(ResponseInfoDao.class).clone();
         responseInfoDaoConfig.initIdentityScope(type);
+
+        sessionDaoConfig = daoConfigMap.get(SessionDao.class).clone();
+        sessionDaoConfig.initIdentityScope(type);
 
         userDaoConfig = daoConfigMap.get(UserDao.class).clone();
         userDaoConfig.initIdentityScope(type);
@@ -46,23 +60,37 @@ public class DaoSession extends AbstractDaoSession {
         userInfoDaoConfig = daoConfigMap.get(UserInfoDao.class).clone();
         userInfoDaoConfig.initIdentityScope(type);
 
+        messageDao = new MessageDao(messageDaoConfig, this);
         responseInfoDao = new ResponseInfoDao(responseInfoDaoConfig, this);
+        sessionDao = new SessionDao(sessionDaoConfig, this);
         userDao = new UserDao(userDaoConfig, this);
         userInfoDao = new UserInfoDao(userInfoDaoConfig, this);
 
+        registerDao(Message.class, messageDao);
         registerDao(ResponseInfo.class, responseInfoDao);
+        registerDao(Session.class, sessionDao);
         registerDao(User.class, userDao);
         registerDao(UserInfo.class, userInfoDao);
     }
     
     public void clear() {
+        messageDaoConfig.clearIdentityScope();
         responseInfoDaoConfig.clearIdentityScope();
+        sessionDaoConfig.clearIdentityScope();
         userDaoConfig.clearIdentityScope();
         userInfoDaoConfig.clearIdentityScope();
     }
 
+    public MessageDao getMessageDao() {
+        return messageDao;
+    }
+
     public ResponseInfoDao getResponseInfoDao() {
         return responseInfoDao;
+    }
+
+    public SessionDao getSessionDao() {
+        return sessionDao;
     }
 
     public UserDao getUserDao() {
