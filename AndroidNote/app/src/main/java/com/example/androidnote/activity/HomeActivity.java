@@ -11,14 +11,17 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.androidnote.R;
 import com.example.androidnote.fragment.ChatFragment;
+import com.example.androidnote.fragment.ChatStartFragment;
 import com.example.androidnote.fragment.DataFragment;
 import com.example.androidnote.fragment.NewsFragment;
+import com.example.androidnote.fragment.NewsStartFragment;
 import com.example.androidnote.fragment.PersonFragment;
 import com.shangyizhou.develop.base.BaseActivity;
 import com.shangyizhou.develop.base.BaseUiActivity;
@@ -36,13 +39,15 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
     private ImageView iv_news;
     private TextView tv_news;
     private LinearLayout ll_news;
-    private NewsFragment newsFragment = null;
+    // private NewsFragment newsFragment = null;
+    private NewsStartFragment newsStartFragment = null;
 
     // ai
     private ImageView iv_ai;
     private TextView tv_ai;
     private LinearLayout ll_ai;
-    private ChatFragment chatFragment = null;
+    // private ChatFragment chatFragment = null;
+    ChatStartFragment chatStartFragment = null;
 
     // data
     private ImageView iv_data;
@@ -102,11 +107,14 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
     private void initFragment () {
         fragmentManagerHelper = new FragmentManagerHelper(getSupportFragmentManager(), R.id.mMainLayout);
 
-        chatFragment = new ChatFragment();
+
+        // chatFragment = new ChatFragment();
+        chatStartFragment = new ChatStartFragment();
         dataFragment = new DataFragment();
-        newsFragment = new NewsFragment();
+        // newsFragment = new NewsFragment();
+        newsStartFragment = new NewsStartFragment();
         personFragment = new PersonFragment();
-        fragmentManagerHelper.switchFragment(newsFragment);
+        fragmentManagerHelper.switchFragment(newsStartFragment);
     }
 
     @Override
@@ -114,10 +122,11 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
         int id = v.getId();
         if (id == R.id.ll_ai) {
             SLog.i(TAG, "[onClick] ll_ai");
-            fragmentManagerHelper.switchFragment(chatFragment);
+            // fragmentManagerHelper.switchFragment(chatFragment);
+            fragmentManagerHelper.switchFragment(chatStartFragment);
         } else if (id == R.id.ll_news) {
             SLog.i(TAG, "[onClick] ll_news");
-            fragmentManagerHelper.switchFragment(newsFragment);
+            fragmentManagerHelper.switchFragment(newsStartFragment);
         } else if (id == R.id.ll_data) {
             SLog.i(TAG, "[onClick] ll_data");
             fragmentManagerHelper.switchFragment(dataFragment);

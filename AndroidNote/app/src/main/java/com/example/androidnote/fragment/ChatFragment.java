@@ -1,5 +1,6 @@
 package com.example.androidnote.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,6 +12,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -143,6 +145,16 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
             addPerson();
             addRobot();
             callYiyan();
+        } else if (id == R.id.et_input_msg) {
+            // TODO: 点击输入框，隐藏软键盘
+
+        }
+    }
+
+    private void hideSoftInput() {
+        if (getActivity().getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
         }
     }
 

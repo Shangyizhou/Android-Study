@@ -54,7 +54,7 @@ public class NewsActivity extends BaseActivity {
 
             @Override
             public void run() {
-                DirectToServer.getNewsList(new IResponse() {
+                DirectToServer.getNewsList("mUrl", new IResponse() {
                     @Override
                     public void onSuccess(String originJson) {
                        try {

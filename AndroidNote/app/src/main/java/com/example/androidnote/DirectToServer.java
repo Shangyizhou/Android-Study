@@ -1,5 +1,7 @@
 package com.example.androidnote;
 
+import static org.slf4j.MDC.put;
+
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -372,12 +374,28 @@ public class DirectToServer {
         void onFailure(String errorMsg);
     }
 
-    private static String API_KEY = "7c55a959ad3b1f1d78d455d48519aec7";
 
-    public static void getNewsList(IResponse callback) {
+
+    private static String API_KEY = "7c55a959ad3b1f1d78d455d48519aec7";
+    /**
+     * 科技 VR IT 接口
+     */
+    private static String[] newsUrls = {
+            "https://apis.tianapi.com/keji/index?key=" + API_KEY + "&num=10",
+            "https://apis.tianapi.com/vr/index?key=" + API_KEY + "&num=10",
+            "https://apis.tianapi.com/it/index?key=" + API_KEY + "&num=10",
+    };
+
+    private static HashMap<String, String> urlMap = new HashMap<String, String>() {{
+        put("科技新闻", "https://apis.tianapi.com/keji/index?key=" + API_KEY + "&num=10");
+        put("VR资讯", "https://apis.tianapi.com/vr/index?key=" + API_KEY + "&num=10");
+        put("IT资讯", "https://apis.tianapi.com/it/index?key=" + API_KEY + "&num=10");
+    }};
+
+    public static void getNewsList(String name, IResponse callback) {
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
         Request request = new Request.Builder()
-                .url("https://apis.tianapi.com/keji/index?key=" + API_KEY + "&num=10")
+                .url(urlMap.get(name))
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .build();
         client.newCall(request).enqueue(new Callback() {
