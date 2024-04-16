@@ -54,6 +54,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
@@ -140,7 +141,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
     //头像文件
     private File uploadPhotoFile;
-    private UserInfo userInfo;
+    // private UserInfo userInfo;
 
 
     //加载View
@@ -190,51 +191,16 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         initBirthdayDialog();
     }
 
+    // private IMUser imUser;
+
     private void getData() {
+        SLog.i(TAG, "[getData]");
         IMUser imUser = BmobManager.getInstance().getUser();
-        String name = imUser.getUserName();
-        userInfo = UserInfoHelper.getInstance().getUserByName(name);
-        if (userInfo == null) {
-            userInfo = new UserInfo();
+        SLog.i(TAG, "[getData] " + imUser);
+        if (!imUser.getPhoto().equals("")) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imUser.getPhoto());
+            iv_user_photo.setImageBitmap(bitmap);
         }
-        SLog.i(TAG, "[loadUserInfo getData] " + userInfo);
-        Bitmap bitmap = BitmapFactory.decodeFile(userInfo.getImageFilePath());
-        iv_user_photo.setImageBitmap(bitmap);
-        et_nickname.setText(userInfo.getUserName());
-        tv_user_sex.setText(userInfo.isSex() ? getString(R.string.text_me_info_boy) : getString(R.string.text_me_info_girl));
-        tv_user_age.setText(userInfo.getAge() + "");
-        et_user_desc.setText(userInfo.getDesc());
-        tv_user_birthday.setText(userInfo.getBirthday());
-        tv_user_constellation.setText(userInfo.getConstellation());
-        tv_user_hobby.setText(userInfo.getHobby());
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getData();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        UserInfoHelper.getInstance().save(userInfo);
-    }
-
-    /**
-     * 加载用户信息
-     */
-    private void loadUserInfo() {
-        // IMUser imUser = BmobManager.getInstance().getUser();
-        // Uri uri = Uri.fromFile(uploadPhotoFile);
-        // GlideUtil.loadUrl(this, uri.toString(), iv_user_photo);
-
-
-        IMUser imUser = BmobManager.getInstance().getUser();
-
-        SLog.i(TAG, "[loadUserInfo phont] " + imUser.getPhoto());
-        Bitmap bitmap = BitmapFactory.decodeFile(imUser.getPhoto());
-        iv_user_photo.setImageBitmap(bitmap);
         et_nickname.setText(imUser.getUserName());
         tv_user_sex.setText(imUser.isSex() ? getString(R.string.text_me_info_boy) : getString(R.string.text_me_info_girl));
         tv_user_age.setText(imUser.getAge() + "");
@@ -243,16 +209,47 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         tv_user_birthday.setText(imUser.getBirthday());
         tv_user_constellation.setText(imUser.getConstellation());
         tv_user_hobby.setText(imUser.getHobby());
+
+        // userInfo = UserInfoHelper.getInstance().getUserByName(name);
+        // if (userInfo == null) {
+        //     userInfo = new UserInfo();
+        // }
+        // SLog.i(TAG, "[loadUserInfo getData] " + userInfo);
+        // Bitmap bitmap = BitmapFactory.decodeFile(userInfo.getImageFilePath());
+        // iv_user_photo.setImageBitmap(bitmap);
+        // et_nickname.setText(userInfo.getUserName());
+        // tv_user_sex.setText(userInfo.isSex() ? getString(R.string.text_me_info_boy) : getString(R.string.text_me_info_girl));
+        // tv_user_age.setText(userInfo.getAge() + "");
+        // et_user_desc.setText(userInfo.getDesc());
+        // tv_user_birthday.setText(userInfo.getBirthday());
+        // tv_user_constellation.setText(userInfo.getConstellation());
+        // tv_user_hobby.setText(userInfo.getHobby());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getData();getData();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
     public void onBackPressed() {
         SLog.i(TAG, "[onBackPressed]");
-        updateUser(BmobManager.getInstance().getUser());
         super.onBackPressed();
+        updateUser();
     }
 
-    private void updateUser(IMUser imUser) {
+    private void updateUser() {
         //名称不能为空
         String nickName = et_nickname.getText().toString().trim();
         if (TextUtils.isEmpty(nickName)) {
@@ -269,6 +266,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         String hobby = tv_user_hobby.getText().toString();
         String status = tv_user_status.getText().toString();
 
+        IMUser imUser = BmobManager.getInstance().getUser();
         if (uploadPhotoFile != null) {
             // 更新头像
             SLog.i(TAG, "[updateUser photo image] " + uploadPhotoFile.getPath());
@@ -288,24 +286,17 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 // mLodingView.hide();
                 if (e == null) {
                     //同步缓存
-                    BmobManager.getInstance().fetchUserInfo(new FetchUserInfoListener<BmobUser>() {
-                        @Override
-                        public void done(BmobUser bmobUser, BmobException e) {
-                            if (e == null) {
-                                SLog.i(TAG, "[update done] " + bmobUser);
-                                // UserActivity加载个人信息
-                                EventBus.getDefault().post(EventIdCenter.EVENT_REFRE_ME_INFO);
-                                finish();
-                            } else {
-                                ToastUtil.getInstance().showToast(e.toString());
-                            }
-                        }
-                    });
+                    SLog.i(TAG, "[updateUser] " + imUser);
                 } else {
                     ToastUtil.getInstance().showToast(e.toString());
                 }
             }
         });
+        // try {
+        //     countDownLatch.await();
+        // } catch (InterruptedException e) {
+        //     throw new RuntimeException(e);
+        // }
     }
 
     @Override
@@ -413,7 +404,6 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             public void onClick(View view) {
                 DialogManager.getInstance().hide(mSexDialog);
                 tv_user_sex.setText("男");
-                userInfo.setSex(true);
             }
         });
         tv_girl.setOnClickListener(new View.OnClickListener() {
@@ -421,7 +411,6 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             public void onClick(View view) {
                 DialogManager.getInstance().hide(mSexDialog);
                 tv_user_sex.setText("女");
-                userInfo.setSex(false);
             }
         });
         tv_sex_cancel.setOnClickListener(new View.OnClickListener() {
@@ -457,7 +446,6 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                     public void onClick(View view) {
                         DialogManager.getInstance().hide(mAgeDialog);
                         tv_user_age.setText(model + "");
-                        userInfo.setAge(model);
                     }
                 });
             }
@@ -493,7 +481,6 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                     String text = year + "年" + monthOfYear + 1 + "月" + dayOfMonth + "日";
                     tv_user_birthday.setText(text);
-                    userInfo.setBirthday(text);
                 }
             });
         }
@@ -527,7 +514,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             }
             if (uploadPhotoFile != null) {
                 SLog.i(TAG, "uploadPhotoFile Bitmap iv_user_photo" );
-                userInfo.setImageFilePath(uploadPhotoFile.getPath());
+                // imUser.setPhoto(uploadPhotoFile.getPath());
                 Bitmap bitmap = BitmapFactory.decodeFile(uploadPhotoFile.getPath());
                 iv_user_photo.setImageBitmap(bitmap);
             }

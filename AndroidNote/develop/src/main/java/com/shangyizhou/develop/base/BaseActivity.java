@@ -35,6 +35,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        SLog.i(TAG, "onResume");
         //注册eventbus
         EventBus.getDefault().register(this);
     }
@@ -50,11 +51,15 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        SLog.d(TAG, "onStop");
         super.onStop();
     }
 
+
+
     @Override
     protected void onDestroy() {
+        SLog.d(TAG, "onDestroy");
         super.onDestroy();
     }
 

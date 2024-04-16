@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:text="Null"
-                android:textColor="@android:color/white"
+                android:textColor="@color/chat_person_text_color"
                 android:background="@color/chat_person_text_bg_color"
                 android:textSize="16sp"
                 android:padding="15dp" />

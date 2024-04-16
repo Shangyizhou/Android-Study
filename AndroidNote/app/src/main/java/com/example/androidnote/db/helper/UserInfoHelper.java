@@ -52,4 +52,12 @@ public class UserInfoHelper {
 
         return mUserInfoDao.queryBuilder().where(UserInfoDao.Properties.UserName.eq(name)).unique();
     }
+
+    public void clear() {
+        if (!isDataBaseValid()) {
+            SLog.e(TAG, "insert error");
+            return;
+        }
+        mUserInfoDao.deleteAll();
+    }
 }

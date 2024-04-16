@@ -56,6 +56,9 @@
     <last-used-operator value="EQUAL" />
     <filters />
   </component>
+  <component name="DBNavigator.Project.ParserDiagnosticsManager">
+    <diagnostics-history />
+  </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
       <connection id="a17a4668-e7e2-4da6-a08f-5067040d5baf" active="true" signed="true">
@@ -75,7 +78,7 @@
           <tns-folder value="" />
           <tns-profile value="" />
           <files>
-            <file path="C:\Users\25031\AppData\Local\Google\AndroidStudio2023.2\device-explorer\HONOR LGE-AN10\_\data\data\com.example.androidnote\databases\test.db" schema="main" />
+            <file path="/data/data/com.example.androidnote/databases/test.db" schema="main" />
           </files>
           <type value="NONE" />
           <user value="" />

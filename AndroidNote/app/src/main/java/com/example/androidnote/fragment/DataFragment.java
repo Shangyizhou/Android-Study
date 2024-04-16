@@ -8,14 +8,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
 
 import com.example.androidnote.R;
 import com.example.androidnote.manager.DataCollectionManager;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -30,7 +29,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.shangyizhou.develop.helper.ToastUtil;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Random;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -88,36 +87,28 @@ public class DataFragment extends Fragment {
         return view;
     }
 
-    GridLayout gridLayout;
 
-    CombinedChart mWeightChart;
-    List<String> xLabels;
-    float maxWeight;
-    float minWeight;
-    LineChart topLeftlineChart;
-    BarChart chartTopRight;
-    LineChart chartBottomLeft;
-    LineChart chartBottomRight;
+    LineChart lineChart;
+    BarChart barChart;
+
     private void initView(View view) {
         //找到图表控件
-        topLeftlineChart = view.findViewById(R.id.chartTopLeft);
-        chartTopRight = view.findViewById(R.id.chartTopRight);
-        // chartBottomLeft = view.findViewById(R.id.chartBottomLeft);
-        // chartBottomRight = view.findViewById(R.id.chartBottomRight);
+        lineChart = view.findViewById(R.id.line_chart);
+        barChart = view.findViewById(R.id.bar_chart);
 
         initLineChart();
         initRightTop();
-        // initLeftBottom();
-        // initRightBottom();
     }
 
     private void initLineChart() {
         // 准备数据. 比如我们创建一个有10个数据点的图表
         int[] invokeData = DataCollectionManager.getYesterdayInvokeInfo();
+        Random random = new Random(); // 创建Random实例
 
         ArrayList<Entry> values = new ArrayList<>();
         for (int i = 0; i < 12; i++) {
-            values.add(new Entry(i, invokeData[i]));
+            // values.add(new Entry(i, invokeData[i]));
+            values.add(new Entry(i, random.nextInt(100)));
         }
 
         // 创建数据集
@@ -125,26 +116,31 @@ public class DataFragment extends Fragment {
         set1.setFillAlpha(110);
 
         //使用RGB颜色填充
-        set1.setColor(Color.RED);
+        set1.setColor(Color.BLUE);
         set1.setValueTextColor(Color.BLUE);
+        set1.setMode(LineDataSet.Mode.CUBIC_BEZIER); // 设置曲线模式
+        set1.setDrawFilled(true); //设置曲线填充的颜色，这里以起点和终点为基准，进行渐变。
 
         // 创建数据集的一个包装器
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
 
+        Legend legend = lineChart.getLegend();
+        legend.setEnabled(false);
+
         // 创建一个数据对象，与图表对象关联
         LineData lineData = new LineData(dataSets);
-        topLeftlineChart.setDrawGridBackground(false);
-        topLeftlineChart.setData(lineData);
-        topLeftlineChart.setDragEnabled(true);
-        topLeftlineChart.setScaleEnabled(false);
-        topLeftlineChart.setScaleXEnabled(false);
-        topLeftlineChart.setScaleYEnabled(false);
+        lineChart.setDrawGridBackground(false);
+        lineChart.setData(lineData);
+        lineChart.setDragEnabled(true);
+        lineChart.setScaleEnabled(false);
+        lineChart.setScaleXEnabled(false);
+        lineChart.setScaleYEnabled(false);
         //是否可以双指缩放--是
-        topLeftlineChart.setPinchZoom(false);
+        lineChart.setPinchZoom(false);
         //是否可以双击放大--是
-        topLeftlineChart.setDoubleTapToZoomEnabled(false);
-        topLeftlineChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+        lineChart.setDoubleTapToZoomEnabled(false);
+        lineChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
                 ToastUtil.getInstance().showToast(e.toString());
@@ -157,28 +153,40 @@ public class DataFragment extends Fragment {
         });
 
         // 设置y轴左侧坐标
-        YAxis leftAxis = topLeftlineChart.getAxisLeft();
+        YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.setAxisMinimum(0f);
         leftAxis.setGranularity(1f);
         leftAxis.setGranularityEnabled(true);
+        leftAxis.setDrawGridLines(false);
+
+        float axisInterval = 20f;      // 你需要的轴间隔
+
+        float axisMinimum = 0f;    // 假设的最小值
+        float axisMaximum = 100f;  // 假设的最大值
+
+        lineChart.getAxisLeft().setAxisMinimum(axisMinimum);    // 左轴最小值
+        lineChart.getAxisLeft().setAxisMaximum(axisMaximum);    // 左轴最大值
+
+        int labelCount = (int) ((axisMaximum - axisMinimum) / axisInterval) + 1;
+        lineChart.getAxisLeft().setLabelCount(labelCount, true);  // 设置左轴的标签数，true表示强制的标签数目，即使有时候不能够完美的均匀分布
 
         // 关闭右侧y轴和顶部x轴的显示
-        topLeftlineChart.getAxisRight().setEnabled(false);
-        topLeftlineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        lineChart.getAxisRight().setEnabled(false);
+        lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
 
         // 创建一个空的Description对象
         Description description = new Description();
         description.setText("");
 
         // 将空的Description对象设置到图表
-        topLeftlineChart.setDescription(description);
+        lineChart.setDescription(description);
 
         //无数据时显示
-        topLeftlineChart.setNoDataText("没有获取到数据哦~");
+        lineChart.setNoDataText("没有获取到数据哦~");
 
         // 更新图表
-        topLeftlineChart.notifyDataSetChanged();
-        topLeftlineChart.invalidate();
+        lineChart.notifyDataSetChanged();
+        lineChart.invalidate();
     }
 
     private void initRightTop() {
@@ -194,17 +202,7 @@ public class DataFragment extends Fragment {
         BarDataSet dataSet = new BarDataSet(entries, "Bar data");
         BarData barData = new BarData(dataSet);
 
-        chartTopRight.setData(barData);
-        chartTopRight.invalidate(); // refresh
+        barChart.setData(barData);
+        barChart.invalidate(); // refresh
     }
-
-    private void initLeftBottom() {
-
-    }
-
-    private void initRightBottom() {
-
-    }
-
-
 }

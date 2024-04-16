@@ -2,6 +2,8 @@ package com.example.androidnote.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -56,6 +58,8 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
         ll_share.setOnClickListener(this);
         ll_setting.setOnClickListener(this);
         ll_notice.setOnClickListener(this);
+
+        loadMeInfo();
     }
 
     /**
@@ -63,7 +67,12 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
      */
     private void loadMeInfo() {
         IMUser imUser = BmobManager.getInstance().getUser();
-        GlideUtil.loadSmollUrl(this, imUser.getPhoto(), 100, 100, iv_me_photo);
+        // GlideUtil.loadSmollUrl(this, imUser.getPhoto(), 100, 100, iv_me_photo);
+        SLog.i(TAG, "[UserActivity] loadMeInfo" + imUser);
+        if (!imUser.getPhoto().equals("")) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imUser.getPhoto());
+            iv_me_photo.setImageBitmap(bitmap);
+        }
         tv_nickname.setText(imUser.getUserName());
     }
 

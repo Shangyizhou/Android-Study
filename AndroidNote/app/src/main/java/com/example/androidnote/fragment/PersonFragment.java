@@ -1,5 +1,7 @@
 package com.example.androidnote.fragment;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,6 +18,7 @@ import com.example.androidnote.activity.user.UserInfoActivity;
 import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.IMUser;
 import com.shangyizhou.develop.helper.GlideUtil;
+import com.shangyizhou.develop.log.SLog;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -97,12 +100,23 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         ll_notice.setOnClickListener(this);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadMeInfo();
+    }
+
     /**
      * 加载我的个人信息
      */
     private void loadMeInfo() {
         IMUser imUser = BmobManager.getInstance().getUser();
-        GlideUtil.loadSmollUrl(getActivity(), imUser.getPhoto(), 100, 100, iv_me_photo);
+        // GlideUtil.loadSmollUrl(this, imUser.getPhoto(), 100, 100, iv_me_photo);
+        SLog.i(TAG, "[UserActivity] loadMeInfo" + imUser);
+        if (!imUser.getPhoto().equals("")) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imUser.getPhoto());
+            iv_me_photo.setImageBitmap(bitmap);
+        }
         tv_nickname.setText(imUser.getUserName());
     }
 

@@ -141,7 +141,7 @@ public class TestActivity extends BaseActivity implements View.OnClickListener, 
         if (id == R.id.btn_to_chat) {
             ChatActivity.startUp(TestActivity.this);
         } else if (id == R.id.btn_to_data) {
-            DataActivity.startUp(TestActivity.this);
+            // DataActivity.startUp(TestActivity.this);
         } else if (id == R.id.btn_to_news) {
             NewsActivity.startUp(TestActivity.this);
         } else if (id == R.id.btn_to_user) {

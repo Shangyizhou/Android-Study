@@ -9,9 +9,23 @@
 
     <color name="color_star_bg">#12121F</color>
 
+
+    <!--  Color  -->
+    <color name="deep_blue">#2542A0</color>
+
+
+    <!--  HomeActivity  -->
+
+    <!--  ChatFragment  -->
     <color name="chat_bg_color">#151419</color>
-    <color name="chat_robot_text_bg_color">#262626</color>
-    <color name="chat_person_text_bg_color">#2542A0</color>
+    <color name="chat_robot_text_color">@color/black</color>
+    <color name="chat_robot_text_bg_color">@color/white</color>
+    <color name="chat_person_text_color">@color/white</color>
+    <color name="chat_person_text_bg_color">@color/deep_blue</color>
+    <color name="edit_bg">@color/white</color>
+    <color name="edit_solid">@color/deep_blue</color>
     <color name="slide_bg">#2A2B34</color>
     <color name="slide_bg_content_bg">#31323B</color>
+
+    <!--  ChatFragment  -->
 </resources>

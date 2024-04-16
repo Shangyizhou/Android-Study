@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:text="新闻"
-                android:textColor="@color/white" />
+                android:textColor="@color/chat_robot_text_color" />
 
         </LinearLayout>
 
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:text="AI"
-                android:textColor="@color/white" />
+                android:textColor="@color/chat_robot_text_color" />
 
         </LinearLayout>
 
@@ -85,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:text="数据"
-                android:textColor="@color/white" />
+                android:textColor="@color/chat_robot_text_color" />
         </LinearLayout>
 
         <LinearLayout
@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:text="个人"
                 android:textStyle="bold"
-                android:textColor="@color/white" />
+                android:textColor="@color/chat_robot_text_color" />
         </LinearLayout>
 
     </LinearLayout>
