@@ -92,6 +92,10 @@ public class NewsStartFragment extends Fragment {
         titleList.add("VR资讯");
         titleList.add("IT资讯");
 
+        fragmentList.add(NewsFragment.newInstance("科技新闻"));
+        fragmentList.add(NewsFragment.newInstance("VR资讯"));
+        fragmentList.add(NewsFragment.newInstance("IT资讯"));
+
         // 设置标题
         for (int i = 0; i < titleList.size(); i++) {
             tabLayout.addTab(tabLayout.newTab().setText(titleList.get(i)));
@@ -121,7 +125,7 @@ public class NewsStartFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            return NewsFragment.newInstance(titleList.get(position));
+            return fragmentList.get(position);
         }
         @Override
         public CharSequence getPageTitle(int position) {

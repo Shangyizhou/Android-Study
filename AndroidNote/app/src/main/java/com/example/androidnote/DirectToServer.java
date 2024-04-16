@@ -380,16 +380,10 @@ public class DirectToServer {
     /**
      * 科技 VR IT 接口
      */
-    private static String[] newsUrls = {
-            "https://apis.tianapi.com/keji/index?key=" + API_KEY + "&num=10",
-            "https://apis.tianapi.com/vr/index?key=" + API_KEY + "&num=10",
-            "https://apis.tianapi.com/it/index?key=" + API_KEY + "&num=10",
-    };
-
     private static HashMap<String, String> urlMap = new HashMap<String, String>() {{
-        put("科技新闻", "https://apis.tianapi.com/keji/index?key=" + API_KEY + "&num=10");
-        put("VR资讯", "https://apis.tianapi.com/vr/index?key=" + API_KEY + "&num=10");
-        put("IT资讯", "https://apis.tianapi.com/it/index?key=" + API_KEY + "&num=10");
+        put("科技新闻", "https://apis.tianapi.com/keji/index?key=" + API_KEY + "&num=5");
+        put("VR资讯", "https://apis.tianapi.com/vr/index?key=" + API_KEY + "&num=5");
+        put("IT资讯", "https://apis.tianapi.com/it/index?key=" + API_KEY + "&num=5");
     }};
 
     public static void getNewsList(String name, IResponse callback) {
