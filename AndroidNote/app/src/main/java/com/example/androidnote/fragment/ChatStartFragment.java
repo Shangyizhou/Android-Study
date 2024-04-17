@@ -10,14 +10,19 @@ import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TableLayout;
+import android.widget.TextView;
 
 import com.example.androidnote.R;
+import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.Session;
 import com.google.android.material.tabs.TabLayout;
+import com.shangyizhou.develop.helper.UUIDUtil;
 import com.shangyizhou.develop.log.SLog;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -63,6 +68,7 @@ public class ChatStartFragment extends Fragment {
     ViewPager viewPager;
     private List<String> titleList;
     private List<Fragment> fragmentList;
+    private Button addNewChat;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,20 +88,64 @@ public class ChatStartFragment extends Fragment {
         getData();
         return view;
     }
-
     private void initView(View view) {
         titleList = new ArrayList<>();
         fragmentList = new ArrayList<>();
 
         tabLayout = view.findViewById(R.id.tab_layout);
         viewPager = view.findViewById(R.id.view_pager);
+        addNewChat = view.findViewById(R.id.add_new_chat);
+        addNewChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SLog.i(TAG, "onItemClick: ChatFragment reload");
+                ChatFragment chatFragment = (ChatFragment) fragmentList.get(0);
+                chatFragment.addNewSession();
+                // viewPager.setCurrentItem(0);
+            }
+        });
 
         titleList.add("聊天");
         titleList.add("历史");
         // 设置标题
+        /**
+         * 记得要先设置默认的 app:tabTextAppearance="@style/TabLayoutTextStyle"
+         */
         for (int i = 0; i < titleList.size(); i++) {
             tabLayout.addTab(tabLayout.newTab().setText(titleList.get(i)));
         }
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                View customView = tab.getCustomView();
+                if (customView == null) {
+                    tab.setCustomView(R.layout.tab_text_layout);
+                }
+                TextView textView = tab.getCustomView().findViewById(android.R.id.text1);
+                textView.setTextAppearance(getActivity(), R.style.TabLayoutTextSelected);
+                if (tab.getPosition() == 0) {
+                    addNewChat.setVisibility(View.VISIBLE);
+                } else {
+                    addNewChat.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                View customView = tab.getCustomView();
+                if (customView == null) {
+                    tab.setCustomView(R.layout.tab_text_layout);
+                }
+                TextView textView = tab.getCustomView().findViewById(android.R.id.text1);
+                textView.setTextAppearance(getActivity(), R.style.TabLayoutTextUnSelected);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
         fragmentList.add(new ChatFragment());
         fragmentList.add(new HistoryFragment(new HistoryFragment.onItemViewClickListener() {
@@ -103,7 +153,7 @@ public class ChatStartFragment extends Fragment {
             public void onItemClick(Session session) {
                 SLog.i(TAG, "onItemClick: ChatFragment reload");
                 ChatFragment chatFragment = (ChatFragment) fragmentList.get(0);
-                chatFragment.reload(session);
+                chatFragment.reload(session, false);
                 viewPager.setCurrentItem(0);
             }
         }));

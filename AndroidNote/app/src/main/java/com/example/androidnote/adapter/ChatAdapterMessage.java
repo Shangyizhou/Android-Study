@@ -128,10 +128,11 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
         return mData == null ? 0 : mData.size();
     }
 
-    public void updateDataList(List<Message> data) {
-        this.mData = data;
+    public void updateDataList(Message message) {
+        this.mData.add(message);
         // notifyDataSetChanged();
-        notifyItemChanged(data.size() - 1);
+        notifyItemChanged(mData.size() - 1);
+        // notifyDataSetChanged();
     }
 
     public void updateDataListAll(List<Message> data) {

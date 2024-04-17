@@ -7,17 +7,64 @@
     android:orientation="vertical"
     tools:context=".fragment.ChatStartFragment">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout"
+
+    <!--    <com.google.android.material.tabs.TabLayout-->
+<!--        android:id="@+id/tab_layout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:tabIndicatorColor="@color/deep_blue"-->
+<!--        app:tabInlineLabel="true"-->
+<!--        app:tabUnboundedRipple="true">-->
+<!--    </com.google.android.material.tabs.TabLayout>-->
+
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabIndicatorColor="@color/deep_blue"
-        app:tabInlineLabel="true"
-        app:tabUnboundedRipple="true">
+        android:gravity="center">
 
-    </com.google.android.material.tabs.TabLayout>
+        <Button
+            android:id="@+id/button_left"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="70dp"
+            android:layout_toLeftOf="@+id/tab_layout"
+            android:background="@drawable/more_grey"
+            android:visibility="invisible"/>
 
-     <androidx.viewpager.widget.ViewPager
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:tabIndicatorColor="@android:color/transparent"
+            app:tabInlineLabel="true"
+            app:tabTextAppearance="@style/TabLayoutTextStyle"
+            app:tabUnboundedRipple="true">
+
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="标题 1" />-->
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="标题 2" />-->
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <Button
+            android:id="@+id/add_new_chat"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginLeft="70dp"
+            android:layout_toRightOf="@+id/tab_layout"
+            android:background="@drawable/new_chat_2" />
+
+    </RelativeLayout>
+
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

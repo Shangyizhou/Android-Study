@@ -364,6 +364,82 @@ public class DirectToServer {
         });
     }
 
+    /**
+     * ERNIE-Lite-8K-0922 https://cloud.baidu.com/doc/WENXINWORKSHOP/s/4lilb2lpf
+     *
+     * @param message
+     * @param callback
+     */
+    public static void callYiYanERNIELiteStream(String message, IResponse callback) {
+        ResponseInfo responseInfo = new ResponseInfo();
+        requestId = UUIDUtil.getUUID();
+        responseInfo.setUserName(BmobManager.getInstance().getUser().getUserName());
+        responseInfo.setModelName("ERNIE-4.0-8K");
+        responseInfo.setRequestId(requestId);
+        responseInfo.setRequestTime(System.currentTimeMillis());
+        MediaType mediaType = MediaType.parse("application/json");
+
+        // 创建消息部分的JSON对象
+        JsonObject msg = new JsonObject();
+        msg.addProperty("role", "user");
+        msg.addProperty("content", message);
+
+        // 将消息放入JSON数组中
+        JsonArray msgArray = new JsonArray();
+        msgArray.add(msg);
+
+        JsonObject stream = new JsonObject();
+
+        // 创建最外层的JSON对象并添加属性
+        JsonObject root = new JsonObject();
+        root.add("messages", msgArray);
+        root.addProperty("stream", true);
+        root.addProperty("disable_search", false);
+        root.addProperty("enable_citation", false);
+
+        // 将JSON对象转换为字符串
+        String jsonString = root.toString();
+        SLog.i(TAG, "callYiYan json: " + jsonString);
+        RequestBody body = RequestBody.create(mediaType, jsonString);
+
+        Request request = new Request.Builder()
+                .url("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant?access_token=" + getAccessToken())
+                .method("POST", body)
+                .addHeader("Content-Type", "application/json")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response != null) {
+                    responseInfo.setResponseTime(System.currentTimeMillis());
+                    // ChatFragment.data.get("ERNIE-4.0-8K").add(responseInfo);
+                    StringBuilder answer = new StringBuilder();
+                    ResponseBody responseBody = response.body();
+                    if (response != null) {
+                        InputStream inputStream = responseBody.byteStream();
+                        // 以流的方式处理响应内容，输出到控制台
+                        byte[] buffer = new byte[1024];
+                        int bytesRead;
+                        while ((bytesRead = inputStream.read(buffer)) != -1) {
+                            // 在控制台输出每个数据块
+                            System.out.write(buffer, 0, bytesRead);
+                            // 将结果汇总起来
+                            answer.append(new String(buffer, 0, bytesRead, "UTF-8"));
+                        }
+                    }
+                    SLog.i(TAG, answer.toString());
+                    callback.onSuccess(String.valueOf(answer));
+                }
+
+            }
+        });
+    }
+
 
     /**
      * 新闻接口

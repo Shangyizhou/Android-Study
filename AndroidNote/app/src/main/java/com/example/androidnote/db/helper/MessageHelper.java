@@ -33,7 +33,7 @@ public class MessageHelper {
     }
 
     public void saveMessageList(List<Message> messageList) {
-        SLog.i(TAG, "saveMessageList" + messageList.size());
+        SLog.i(TAG, "saveMessageList size is " + messageList.size());
         if (!isDataBaseValid()) {
             return;
         }

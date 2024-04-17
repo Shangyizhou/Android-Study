@@ -137,24 +137,50 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     /**
      * 其他会话页面点击打开，重新加载页面
      */
-    public void reload(Session session) {
+    public void reload(Session session, boolean isNew) {
         if (session == null) {
             SLog.i(TAG, "reload session is null");
             return;
         }
-        // 更新当前session修改时间
-        session.setUpdateTime(System.currentTimeMillis());
+
         // 保存历史消息和会话
         saveHistoryMessage();
         // 更新当前session
         mSession = session;
-        // 根据新sessionId获取历史消息
-        List<Message> messageList = MessageHelper.getInstance().getMessageListBySession(session.getSessionId());
-        SLog.i(TAG, "reload messageList" + messageList);
-        mMessageList.clear();
-        mMessageList.addAll(messageList);
-        SLog.i(TAG, "reload messageList" + messageList);
-        updateAdapterAll();
+        if (!isNew) {
+            // 根据新sessionId获取历史消息
+            List<Message> messageList = MessageHelper.getInstance().getMessageListBySession(mSession.getSessionId());
+            SLog.i(TAG, "reload messageList" + messageList);
+            mMessageList.clear();
+            mMessageList.addAll(messageList);
+            SLog.i(TAG, "reload messageList" + messageList);
+            updateAdapterAll();
+        } else {
+            SLog.i(TAG, "add new session need not database");
+            // 新页面，不需要Sqlite
+            mMessageList.clear();
+            updateAdapterAll();
+        }
+    }
+
+    public void addNewSession() {
+        if (mMessageList.size() <= 0) {
+            ToastUtil.getInstance().showToast("当前已经是最新会话");
+            return;
+        }
+        SLog.i(TAG, "addNewSession ");
+        Session session = new Session();
+        session.setName("" + new Date(System.currentTimeMillis()));
+        session.setDesc("hello ~");
+        session.setRobotId("");
+        session.setUserId(BmobManager.getInstance().getObjectId());
+        session.setUrl("");
+        session.setSessionId(UUIDUtil.getUUID());
+        session.setIsDel(false);
+        session.setCreateTime(System.currentTimeMillis());
+        session.setUpdateTime(System.currentTimeMillis());
+
+        reload(mSession, true);
     }
 
     private void getData() {
@@ -187,6 +213,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                 updateAdapterAll();
             } else {
                 SLog.i(TAG, "sessions no exist, create new Session");
+                SLog.i(TAG, "addNewSession ");
                 mSession = new Session();
                 mSession.setName("" + new Date(System.currentTimeMillis()));
                 mSession.setDesc("hello ~");
@@ -208,6 +235,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
      */
     private void saveHistoryMessage() {
         SLog.i(TAG, "saveHistoryMessage");
+        // 更新当前session修改时间
+        mSession.setUpdateTime(System.currentTimeMillis());
         SessionHelper.getInstance().save(mSession);
         MessageHelper.getInstance().saveMessageList(mMessageList);
     }
@@ -369,12 +398,14 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     }
 
     private void updateAdapter() {
-        mChatAdapter.updateDataList(mMessageList);
+        SLog.i(TAG, "updateAdapter " + mMessageList);
+        mChatAdapter.updateDataList(mMessageList.get(mMessageList.size() - 1));
         // 滑动到底部
         recyclerView.scrollToPosition(mMessageList.size() - 1);
     }
 
     private void updateAdapterAll() {
+        SLog.i(TAG, "updateAdapterAll " + mMessageList);
         mChatAdapter.updateDataListAll(mMessageList);
         // 滑动到底部
         recyclerView.scrollToPosition(mMessageList.size() - 1);
