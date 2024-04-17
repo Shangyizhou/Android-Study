@@ -31,15 +31,26 @@ public class Message {
     String message;
     @NotNull
     long sendTime;
-    @Generated(hash = 691201656)
+
+    /**
+     * LOADING = 0;
+     * START_SHOW = 1;
+     * HAS_SHOW = 2;
+     */
+    @NotNull
+    int status;
+
+    @Generated(hash = 349459025)
     public Message(Long id, int type, @NotNull String messageId,
-            @NotNull String sessionId, @NotNull String message, long sendTime) {
+            @NotNull String sessionId, @NotNull String message, long sendTime,
+            int status) {
         this.id = id;
         this.type = type;
         this.messageId = messageId;
         this.sessionId = sessionId;
         this.message = message;
         this.sendTime = sendTime;
+        this.status = status;
     }
     @Generated(hash = 637306882)
     public Message() {
@@ -79,5 +90,24 @@ public class Message {
     }
     public void setSendTime(long sendTime) {
         this.sendTime = sendTime;
+    }
+    public int getStatus() {
+        return this.status;
+    }
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", type=" + type +
+                ", messageId='" + messageId + '\'' +
+                ", sessionId='" + sessionId + '\'' +
+                ", message='" + message + '\'' +
+                ", sendTime=" + sendTime +
+                ", status=" + status +
+                '}';
     }
 }

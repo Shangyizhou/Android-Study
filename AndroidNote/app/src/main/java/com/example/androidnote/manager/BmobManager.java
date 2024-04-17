@@ -34,6 +34,10 @@ public class BmobManager {
         return instance;
     }
 
+    public String getObjectId() {
+        return BmobUser.getCurrentUser().getObjectId();
+    }
+
     public interface LoginCallback {
         void onSuccess(BmobUser user);
         void onFailure(BmobException e);

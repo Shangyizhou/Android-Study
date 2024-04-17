@@ -114,7 +114,7 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
         // newsFragment = new NewsFragment();
         newsStartFragment = new NewsStartFragment();
         personFragment = new PersonFragment();
-        fragmentManagerHelper.switchFragment(newsStartFragment);
+        fragmentManagerHelper.switchFragment(chatStartFragment);
     }
 
     @Override

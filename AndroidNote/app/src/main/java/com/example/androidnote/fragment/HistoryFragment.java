@@ -3,12 +3,21 @@ package com.example.androidnote.fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.androidnote.R;
+import com.example.androidnote.adapter.HistoryAdapter;
+import com.example.androidnote.db.helper.SessionHelper;
+import com.example.androidnote.manager.BmobManager;
+import com.example.androidnote.model.Session;
+import com.shangyizhou.develop.log.SLog;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,6 +57,10 @@ public class HistoryFragment extends Fragment {
         return fragment;
     }
 
+    public HistoryFragment(onItemViewClickListener listener) {
+        mOnItemClickListener = listener;
+    }
+
     private static final String TAG = "HistoryFragment";
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +69,14 @@ public class HistoryFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    private HistoryAdapter mHistoryAdapter;
+    private RecyclerView recyclerView;
+    private List<Session> mSessions;
+    private onItemViewClickListener mOnItemClickListener;
+    public void setOnItemClickListener(onItemViewClickListener listener) {
+        mOnItemClickListener = listener;
     }
 
     @Override
@@ -70,8 +91,30 @@ public class HistoryFragment extends Fragment {
     }
 
     private void initView(View view) {
+        mHistoryAdapter = new HistoryAdapter();
+        mHistoryAdapter.setOnItemClickListener(new HistoryAdapter.onItemViewClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Session session = mSessions.get(position);
+                if (mOnItemClickListener != null)
+                    mOnItemClickListener.onItemClick(session);
+            }
+        });
+        recyclerView = view.findViewById(R.id.recycle_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(mHistoryAdapter);
     }
 
     private void getData() {
+        SLog.i(TAG, "getData: objectId = " + BmobManager.getInstance().getObjectId());
+        mSessions = SessionHelper.getInstance().takeAllByUser(BmobManager.getInstance().getObjectId());
+        SLog.i(TAG, "getData: objectId = " + mSessions);
+        if (mSessions == null) {
+            SLog.i(TAG, "getData: mSessions is null");
+        }
+        mHistoryAdapter.updateDataList(mSessions);
+    }
+    public interface onItemViewClickListener {
+        void onItemClick(Session session);
     }
 }

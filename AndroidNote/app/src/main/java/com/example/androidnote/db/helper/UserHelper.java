@@ -23,7 +23,7 @@ public class UserHelper {
 
     public static UserHelper getInstance() {
         if (instance == null) {
-            synchronized (DaoManager.class) {
+            synchronized (UserHelper.class) {
                 if (instance == null) {
                     instance = new UserHelper();
                 }

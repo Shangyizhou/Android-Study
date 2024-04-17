@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +18,16 @@ import android.widget.EditText;
 import com.example.androidnote.DirectToServer;
 import com.example.androidnote.R;
 import com.example.androidnote.adapter.ChatAdapter;
+import com.example.androidnote.adapter.ChatAdapterMessage;
+import com.example.androidnote.db.helper.MessageHelper;
 import com.example.androidnote.db.helper.ResponseInfoHelper;
+import com.example.androidnote.db.helper.SessionHelper;
 import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.ChatModel;
+import com.example.androidnote.model.Message;
 import com.example.androidnote.model.ResponseInfo;
+import com.example.androidnote.model.Session;
+import com.shangyizhou.develop.helper.SnowFlakeUtil;
 import com.shangyizhou.develop.helper.ToastUtil;
 import com.shangyizhou.develop.helper.UUIDUtil;
 import com.shangyizhou.develop.log.SLog;
@@ -32,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,11 +53,13 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM3 = "session_id";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private String mSessionId;
+    private Session mSession;
 
     private static final int ROBOT_TEXT = 0;
     private static final int PERSON_TEXT = 1;
@@ -79,19 +87,23 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     }
 
     private Map<Integer, ChatModel> chatModelIndex = new HashMap<>();
-    private List<ChatModel> mList = new ArrayList<>();
-    ChatAdapter mChatAdapter = new ChatAdapter();
+    private List<Message> mMessageList = new ArrayList<>();
+    ChatAdapterMessage mChatAdapter = new ChatAdapterMessage();
     private RecyclerView recyclerView;
     private Button sendBtn;
     private EditText editText;
     public static HashMap<String, List<ResponseInfo>> data;
 
+    public static final int  LOADING = 0;
+    public static final int  START_SHOW = 1;
+    public static final int  HAS_SHOW = 2;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            // mSessionId = getArguments().getString(ARG_PARAM3);
         }
     }
 
@@ -108,12 +120,12 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        SLog.i(TAG, "onDestroy saveHashMap");
-        ResponseInfoHelper.getInstance().saveHashMap(data);
+        SLog.i(TAG, "onDestroy");
+        saveHistoryMessage();
     }
 
     private void initView(View view) {
-        mChatAdapter = new ChatAdapter();
+        mChatAdapter = new ChatAdapterMessage();
         recyclerView = view.findViewById(R.id.mChatView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         sendBtn = view.findViewById(R.id.btn_send_msg);
@@ -122,14 +134,82 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         sendBtn.setOnClickListener(this);
     }
 
-    private void getData() {
-        // ResponseInfoHelper.getInstance().deleteData();
-        data = ResponseInfoHelper.getInstance().getAllModelInfoByUserName(BmobManager.getInstance().getUser().getUserName());
-        if (data.keySet().size() <= 0) {
-            SLog.i(TAG, "getData" + data);
-            data.put("ERNIE-4.0-8K", new ArrayList<ResponseInfo>());
+    /**
+     * 其他会话页面点击打开，重新加载页面
+     */
+    public void reload(Session session) {
+        if (session == null) {
+            SLog.i(TAG, "reload session is null");
+            return;
         }
-        SLog.i(TAG, "getData" + data);
+        // 更新当前session修改时间
+        session.setUpdateTime(System.currentTimeMillis());
+        // 保存历史消息和会话
+        saveHistoryMessage();
+        // 更新当前session
+        mSession = session;
+        // 根据新sessionId获取历史消息
+        List<Message> messageList = MessageHelper.getInstance().getMessageListBySession(session.getSessionId());
+        SLog.i(TAG, "reload messageList" + messageList);
+        mMessageList.clear();
+        mMessageList.addAll(messageList);
+        SLog.i(TAG, "reload messageList" + messageList);
+        updateAdapterAll();
+    }
+
+    private void getData() {
+        // // ResponseInfoHelper.getInstance().deleteData();
+        // data = ResponseInfoHelper.getInstance().getAllModelInfoByUserName(BmobManager.getInstance().getUser().getUserName());
+        // if (data.keySet().size() <= 0) {
+        //     SLog.i(TAG, "getData" + data);
+        //     data.put("ERNIE-4.0-8K", new ArrayList<ResponseInfo>());
+        // }
+        // SLog.i(TAG, "getData" + data);
+        SLog.i(TAG, "getData");
+        /**
+         * 加载会话
+         */
+        if (mSessionId != null && mSession == null) {
+            SLog.i(TAG, "mSessionId is exist");
+            mSession = SessionHelper.getInstance().takeBySessionID(mSessionId);
+        } else {
+            SLog.i(TAG, "mSessionId is null");
+            List<Session> sessions = SessionHelper.getInstance().takeAllByUser(BmobManager.getInstance().getObjectId());
+            if (sessions != null && sessions.size() > 0) {
+                SLog.i(TAG, "sessions exist, take last session");
+                mSession = sessions.get(0);
+                // 根据新sessionId获取历史消息
+                List<Message> messageList = MessageHelper.getInstance().getMessageListBySession(mSession.getSessionId());
+                SLog.i(TAG, "from sqlite get messageList" + messageList);
+                mMessageList.clear();
+                mMessageList.addAll(messageList);
+                SLog.i(TAG, "reload messageList" + messageList);
+                updateAdapterAll();
+            } else {
+                SLog.i(TAG, "sessions no exist, create new Session");
+                mSession = new Session();
+                mSession.setName("" + new Date(System.currentTimeMillis()));
+                mSession.setDesc("hello ~");
+                mSession.setRobotId("");
+                mSession.setUserId(BmobManager.getInstance().getObjectId());
+                mSession.setUrl("");
+                mSession.setSessionId(UUIDUtil.getUUID());
+                mSession.setIsDel(false);
+                mSession.setCreateTime(System.currentTimeMillis());
+                mSession.setUpdateTime(System.currentTimeMillis());
+            }
+        }
+    }
+
+    /**
+     * 保存旧有的会话和历史消息
+     * reload
+     * destroy
+     */
+    private void saveHistoryMessage() {
+        SLog.i(TAG, "saveHistoryMessage");
+        SessionHelper.getInstance().save(mSession);
+        MessageHelper.getInstance().saveMessageList(mMessageList);
     }
 
     @Override
@@ -151,34 +231,47 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void hideSoftInput() {
-        if (getActivity().getCurrentFocus() != null) {
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-        }
-    }
-
     private void addPerson() {
-        ChatModel model = new ChatModel();
-        model.setId(UUIDUtil.getUUID());
-        model.setName("syz");
-        model.setImageUrl("");
-        model.setMessage(editText.getText().toString());
-        model.setType(PERSON_TEXT);
-        mList.add(model);
+        Message message = new Message();
+        message.setType(PERSON_TEXT);
+        message.setSessionId(mSession.getSessionId());
+        message.setMessage(editText.getText().toString());
+        message.setMessageId(SnowFlakeUtil.getSnowFlakeId() + "");
+        message.setStatus(ChatModel.START_SHOW);
+        message.setSendTime(System.currentTimeMillis());
+        mMessageList.add(message);
+
+
+        // ChatModel model = new ChatModel();
+        // model.setId(UUIDUtil.getUUID());
+        // model.setName("syz");
+        // model.setImageUrl("");
+        // model.setMessage(editText.getText().toString());
+        // model.setType(PERSON_TEXT);
+        // mList.add(model);
         updateAdapter();
     }
 
     private void addRobot() {
-        ChatModel model = new ChatModel();
-        model.setId(UUIDUtil.getUUID());
-        model.setName("");
-        model.setImageUrl("");
-        model.setMessage("");
-        model.setStatus(ChatModel.LOADING);
-        model.setType(ROBOT_TEXT);
-        mList.add(model);
+        Message message = new Message();
+        message.setType(ROBOT_TEXT);
+        message.setSessionId(mSession.getSessionId());
+        message.setMessage("");
+        message.setMessageId(SnowFlakeUtil.getSnowFlakeId() + "");
+        message.setStatus(LOADING);
+        message.setSendTime(System.currentTimeMillis()); // responseTime
+        mMessageList.add(message);
         updateAdapter();
+
+        // ChatModel model = new ChatModel();
+        // model.setId(UUIDUtil.getUUID());
+        // model.setName("");
+        // model.setImageUrl("");
+        // model.setMessage("");
+        // model.setStatus(ChatModel.LOADING);
+        // model.setType(ROBOT_TEXT);
+        // mMessageList.add(model);
+        // updateAdapter();
     }
 
     // TODO: callYiyan callEB
@@ -267,15 +360,23 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
      */
     private void showResponse(int type, String text) {
         SLog.i(TAG, "Robot showResponse:" + text);
-        ChatModel model = mList.get(mList.size() - 1);
-        model.setStatus(ChatModel.START_SHOW);
-        model.setMessage(text);
+        // ChatModel model = mMessageList.get(mMessageList.size() - 1);
+        Message message = mMessageList.get(mMessageList.size() - 1);
+        message.setStatus(START_SHOW);
+        message.setMessage(text);
+        message.setSendTime(System.currentTimeMillis());
         updateAdapter();
     }
 
     private void updateAdapter() {
-        mChatAdapter.updateDataList(mList);
+        mChatAdapter.updateDataList(mMessageList);
         // 滑动到底部
-        recyclerView.scrollToPosition(mList.size() - 1);
+        recyclerView.scrollToPosition(mMessageList.size() - 1);
+    }
+
+    private void updateAdapterAll() {
+        mChatAdapter.updateDataListAll(mMessageList);
+        // 滑动到底部
+        recyclerView.scrollToPosition(mMessageList.size() - 1);
     }
 }

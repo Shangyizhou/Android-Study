@@ -32,6 +32,8 @@ public class SessionDao extends AbstractDao<Session, Long> {
         public final static Property UserId = new Property(5, String.class, "userId", false, "USER_ID");
         public final static Property Url = new Property(6, String.class, "url", false, "URL");
         public final static Property IsDel = new Property(7, boolean.class, "isDel", false, "IS_DEL");
+        public final static Property CreateTime = new Property(8, long.class, "createTime", false, "CREATE_TIME");
+        public final static Property UpdateTime = new Property(9, long.class, "updateTime", false, "UPDATE_TIME");
     }
 
 
@@ -54,7 +56,9 @@ public class SessionDao extends AbstractDao<Session, Long> {
                 "\"ROBOT_ID\" TEXT NOT NULL ," + // 4: robotId
                 "\"USER_ID\" TEXT NOT NULL ," + // 5: userId
                 "\"URL\" TEXT NOT NULL ," + // 6: url
-                "\"IS_DEL\" INTEGER NOT NULL );"); // 7: isDel
+                "\"IS_DEL\" INTEGER NOT NULL ," + // 7: isDel
+                "\"CREATE_TIME\" INTEGER NOT NULL ," + // 8: createTime
+                "\"UPDATE_TIME\" INTEGER NOT NULL );"); // 9: updateTime
     }
 
     /** Drops the underlying database table. */
@@ -78,6 +82,8 @@ public class SessionDao extends AbstractDao<Session, Long> {
         stmt.bindString(6, entity.getUserId());
         stmt.bindString(7, entity.getUrl());
         stmt.bindLong(8, entity.getIsDel() ? 1L: 0L);
+        stmt.bindLong(9, entity.getCreateTime());
+        stmt.bindLong(10, entity.getUpdateTime());
     }
 
     @Override
@@ -95,6 +101,8 @@ public class SessionDao extends AbstractDao<Session, Long> {
         stmt.bindString(6, entity.getUserId());
         stmt.bindString(7, entity.getUrl());
         stmt.bindLong(8, entity.getIsDel() ? 1L: 0L);
+        stmt.bindLong(9, entity.getCreateTime());
+        stmt.bindLong(10, entity.getUpdateTime());
     }
 
     @Override
@@ -112,7 +120,9 @@ public class SessionDao extends AbstractDao<Session, Long> {
             cursor.getString(offset + 4), // robotId
             cursor.getString(offset + 5), // userId
             cursor.getString(offset + 6), // url
-            cursor.getShort(offset + 7) != 0 // isDel
+            cursor.getShort(offset + 7) != 0, // isDel
+            cursor.getLong(offset + 8), // createTime
+            cursor.getLong(offset + 9) // updateTime
         );
         return entity;
     }
@@ -127,6 +137,8 @@ public class SessionDao extends AbstractDao<Session, Long> {
         entity.setUserId(cursor.getString(offset + 5));
         entity.setUrl(cursor.getString(offset + 6));
         entity.setIsDel(cursor.getShort(offset + 7) != 0);
+        entity.setCreateTime(cursor.getLong(offset + 8));
+        entity.setUpdateTime(cursor.getLong(offset + 9));
      }
     
     @Override

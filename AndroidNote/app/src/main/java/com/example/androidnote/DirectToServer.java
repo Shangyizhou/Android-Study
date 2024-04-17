@@ -341,7 +341,7 @@ public class DirectToServer {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response != null) {
                     responseInfo.setResponseTime(System.currentTimeMillis());
-                    ChatFragment.data.get("ERNIE-4.0-8K").add(responseInfo);
+                    // ChatFragment.data.get("ERNIE-4.0-8K").add(responseInfo);
                     StringBuilder answer = new StringBuilder();
                     ResponseBody responseBody = response.body();
                     if (response != null) {

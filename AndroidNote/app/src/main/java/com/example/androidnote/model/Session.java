@@ -23,10 +23,14 @@ public class Session {
     private String url; // 访问的文心接口
     @NotNull
     private boolean isDel; // 是否不使用此历史会话
-    @Generated(hash = 2088468790)
+    @NotNull
+    private long createTime;
+    @NotNull
+    private long updateTime;
+    @Generated(hash = 945606436)
     public Session(Long id, @NotNull String sessionId, @NotNull String name,
             @NotNull String desc, @NotNull String robotId, @NotNull String userId,
-            @NotNull String url, boolean isDel) {
+            @NotNull String url, boolean isDel, long createTime, long updateTime) {
         this.id = id;
         this.sessionId = sessionId;
         this.name = name;
@@ -35,6 +39,8 @@ public class Session {
         this.userId = userId;
         this.url = url;
         this.isDel = isDel;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
     }
     @Generated(hash = 1317889643)
     public Session() {
@@ -86,5 +92,33 @@ public class Session {
     }
     public void setIsDel(boolean isDel) {
         this.isDel = isDel;
+    }
+    public long getCreateTime() {
+        return this.createTime;
+    }
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+    public long getUpdateTime() {
+        return this.updateTime;
+    }
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Session{" +
+                "id=" + id +
+                ", sessionId='" + sessionId + '\'' +
+                ", name='" + name + '\'' +
+                ", desc='" + desc + '\'' +
+                ", robotId='" + robotId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", url='" + url + '\'' +
+                ", isDel=" + isDel +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
     }
 }

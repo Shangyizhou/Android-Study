@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 
 import com.example.androidnote.R;
+import com.example.androidnote.model.Session;
 import com.google.android.material.tabs.TabLayout;
+import com.shangyizhou.develop.log.SLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +64,6 @@ public class ChatStartFragment extends Fragment {
     private List<String> titleList;
     private List<Fragment> fragmentList;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +98,15 @@ public class ChatStartFragment extends Fragment {
         }
 
         fragmentList.add(new ChatFragment());
-        fragmentList.add(new HistoryFragment());
+        fragmentList.add(new HistoryFragment(new HistoryFragment.onItemViewClickListener() {
+            @Override
+            public void onItemClick(Session session) {
+                SLog.i(TAG, "onItemClick: ChatFragment reload");
+                ChatFragment chatFragment = (ChatFragment) fragmentList.get(0);
+                chatFragment.reload(session);
+                viewPager.setCurrentItem(0);
+            }
+        }));
 
         MyPagerAdapter adapter = new MyPagerAdapter(getChildFragmentManager());
         //给viewPager设置adapter
