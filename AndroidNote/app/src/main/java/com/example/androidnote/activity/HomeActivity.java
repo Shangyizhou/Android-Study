@@ -114,7 +114,15 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
         // newsFragment = new NewsFragment();
         newsStartFragment = new NewsStartFragment();
         personFragment = new PersonFragment();
+        tv_ai.setTextColor(getResources().getColor(R.color.black));
         fragmentManagerHelper.switchFragment(chatStartFragment);
+    }
+
+    private void setAllGrey() {
+        tv_data.setTextColor(getResources().getColor(R.color.grey));
+        tv_ai.setTextColor(getResources().getColor(R.color.grey));
+        tv_news.setTextColor(getResources().getColor(R.color.grey));
+        tv_me.setTextColor(getResources().getColor(R.color.grey));
     }
 
     @Override
@@ -122,16 +130,23 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
         int id = v.getId();
         if (id == R.id.ll_ai) {
             SLog.i(TAG, "[onClick] ll_ai");
-            // fragmentManagerHelper.switchFragment(chatFragment);
+            setAllGrey();
+            tv_ai.setTextColor(getResources().getColor(R.color.black));
             fragmentManagerHelper.switchFragment(chatStartFragment);
         } else if (id == R.id.ll_news) {
             SLog.i(TAG, "[onClick] ll_news");
+            setAllGrey();
+            tv_news.setTextColor(getResources().getColor(R.color.black));
             fragmentManagerHelper.switchFragment(newsStartFragment);
         } else if (id == R.id.ll_data) {
             SLog.i(TAG, "[onClick] ll_data");
+            setAllGrey();
+            tv_data.setTextColor(getResources().getColor(R.color.black));
             fragmentManagerHelper.switchFragment(dataFragment);
         } else if (id == R.id.ll_me) {
             SLog.i(TAG, "[onClick] ll_me");
+            setAllGrey();
+            tv_me.setTextColor(getResources().getColor(R.color.black));
             fragmentManagerHelper.switchFragment(personFragment);
         }
     }

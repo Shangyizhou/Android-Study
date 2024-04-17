@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 当按钮状态为 selected 的时候显示的颜色 -->
+<!--    <item android:state_selected="true" android:color="@color/chat_robot_text_color"/>-->
+    <!-- 当按钮状态为 pressed 的时候显示的颜色 -->
+<!--    <item android:state_pressed="true" android:color="@color/chat_robot_text_color"/> &lt;!&ndash; 黑色 &ndash;&gt;-->
+    <!-- 默认情况下按钮显示的颜色 -->
+    <item android:color="#808080"/> <!-- 灰色 -->
+</selector>
