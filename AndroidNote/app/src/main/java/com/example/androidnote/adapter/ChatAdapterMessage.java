@@ -33,8 +33,9 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
     private int PERSON_TYPE = 4;
     private Map<Integer, Boolean> isDisplayed; // 用于记录每个项是否已经显示过
 
-    public ChatAdapterMessage() {
+    public ChatAdapterMessage(List<Message> data) {
         this.isDisplayed = new HashMap<>();
+        this.mData = data;
     }
 
     @Override
@@ -59,11 +60,13 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
             SLog.i("onCreateViewHolder", "ROBOT_TYPE");
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_chat_left_text_shadow, parent, false);
             RecyclerView.ViewHolder holder = new ChatAdapterMessage.RobotViewHolder(view);
+            // holder.setIsRecyclable(false);
             return holder;
         } else {
             SLog.i("onCreateViewHolder", "PERSON_TYPE");
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_chat_right_text_shadow, parent, false);
             RecyclerView.ViewHolder holder = new ChatAdapterMessage.PersonViewHolder(view);
+            // holder.setIsRecyclable(false);
             return holder;
         }
     }
@@ -128,18 +131,6 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
         return mData == null ? 0 : mData.size();
     }
 
-    public void updateDataList(Message message) {
-        this.mData.add(message);
-        // notifyDataSetChanged();
-        notifyItemChanged(mData.size() - 1);
-        // notifyDataSetChanged();
-    }
-
-    public void updateDataListAll(List<Message> data) {
-        this.mData = data;
-        notifyDataSetChanged();
-    }
-
     class RobotViewHolder extends RecyclerView.ViewHolder {
         TextView mTextView;
         ImageView mImageView;
@@ -161,6 +152,23 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
             super(itemView);
             mTextView = itemView.findViewById(R.id.tv_right_text);
             mImageView = itemView.findViewById(R.id.iv_right_photo);
+        }
+    }
+
+    public void updateAll(List<Message> messages) {
+        this.mData = messages;
+        SLog.i("ChatAdapterMessage updateAll", "" + mData);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+        super.onViewRecycled(holder);
+        SLog.i("onViewRecycled", "holder:" + holder);
+        if (holder instanceof ChatAdapterMessage.RobotViewHolder) {
+            // rotationAnimator.cancel();
+            ((ChatAdapterMessage.RobotViewHolder) holder).mLoading.setVisibility(View.GONE);
+            ((RobotViewHolder) holder).mTextView.setText("...");
         }
     }
 }

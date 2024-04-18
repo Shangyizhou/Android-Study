@@ -124,10 +124,14 @@ public class ChatStartFragment extends Fragment {
                 }
                 TextView textView = tab.getCustomView().findViewById(android.R.id.text1);
                 textView.setTextAppearance(getActivity(), R.style.TabLayoutTextSelected);
-                if (tab.getPosition() == 0) {
-                    addNewChat.setVisibility(View.VISIBLE);
-                } else {
-                    addNewChat.setVisibility(View.INVISIBLE);
+                if (addNewChat != null) {
+                    if (tab.getPosition() == 0) {
+                        addNewChat.setVisibility(View.VISIBLE);
+                    } else {
+                        addNewChat.setVisibility(View.INVISIBLE);
+                        HistoryFragment fragment = (HistoryFragment) fragmentList.get(tab.getPosition());
+                        fragment.updateSessionUi();
+                    }
                 }
             }
 

@@ -1,6 +1,5 @@
 package com.example.androidnote.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,18 +10,16 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.androidnote.DirectToServer;
 import com.example.androidnote.R;
-import com.example.androidnote.adapter.ChatAdapter;
 import com.example.androidnote.adapter.ChatAdapterMessage;
 import com.example.androidnote.db.helper.MessageHelper;
-import com.example.androidnote.db.helper.ResponseInfoHelper;
 import com.example.androidnote.db.helper.SessionHelper;
 import com.example.androidnote.manager.BmobManager;
+import com.example.androidnote.manager.SessionManager;
 import com.example.androidnote.model.ChatModel;
 import com.example.androidnote.model.Message;
 import com.example.androidnote.model.ResponseInfo;
@@ -59,7 +56,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     private String mParam1;
     private String mParam2;
     private String mSessionId;
-    private Session mSession;
+    private Session mCurrentSession;
+    private List<Session> mSessionsList;
 
     private static final int ROBOT_TEXT = 0;
     private static final int PERSON_TEXT = 1;
@@ -87,8 +85,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     }
 
     private Map<Integer, ChatModel> chatModelIndex = new HashMap<>();
-    private List<Message> mMessageList = new ArrayList<>();
-    ChatAdapterMessage mChatAdapter = new ChatAdapterMessage();
+    private List<Message> mMessageList;
+    ChatAdapterMessage mChatAdapter;
     private RecyclerView recyclerView;
     private Button sendBtn;
     private EditText editText;
@@ -121,11 +119,12 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     public void onDestroy() {
         super.onDestroy();
         SLog.i(TAG, "onDestroy");
-        saveHistoryMessage();
+        SessionManager.getInstance().saveHistoryMessage();
     }
 
     private void initView(View view) {
-        mChatAdapter = new ChatAdapterMessage();
+        mMessageList = new ArrayList<>();
+        mChatAdapter = new ChatAdapterMessage(mMessageList);
         recyclerView = view.findViewById(R.id.mChatView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         sendBtn = view.findViewById(R.id.btn_send_msg);
@@ -143,22 +142,16 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
             return;
         }
 
-        // 保存历史消息和会话
-        saveHistoryMessage();
-        // 更新当前session
-        mSession = session;
         if (!isNew) {
             // 根据新sessionId获取历史消息
-            List<Message> messageList = MessageHelper.getInstance().getMessageListBySession(mSession.getSessionId());
-            SLog.i(TAG, "reload messageList" + messageList);
-            mMessageList.clear();
-            mMessageList.addAll(messageList);
-            SLog.i(TAG, "reload messageList" + messageList);
+            // List<Message> messageList = MessageHelper.getInstance().getMessageListBySession(mCurrentSession.getSessionId());
+            mMessageList = SessionManager.getInstance().getSessionMessages(session);
+            SLog.i(TAG, "reload messageList" + mMessageList);
             updateAdapterAll();
         } else {
             SLog.i(TAG, "add new session need not database");
-            // 新页面，不需要Sqlite
-            mMessageList.clear();
+            mMessageList = SessionManager.getInstance().getSessionMessages(session);
+            SLog.i(TAG, mMessageList.size() + " reload messageList" + mMessageList);
             updateAdapterAll();
         }
     }
@@ -179,8 +172,11 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         session.setIsDel(false);
         session.setCreateTime(System.currentTimeMillis());
         session.setUpdateTime(System.currentTimeMillis());
+        SessionManager.getInstance().addNewSession(session);
 
-        reload(mSession, true);
+        // 更新当前session
+        mCurrentSession = session;
+        reload(mCurrentSession, true);
     }
 
     private void getData() {
@@ -192,53 +188,49 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         // }
         // SLog.i(TAG, "getData" + data);
         SLog.i(TAG, "getData");
+
         /**
          * 加载会话
+         * 内部封装了会话列表的获取
+         * 1.如果缓存没有则去数据库获取
+         * 2.如果数据库没有则创建一个新的会话
          */
-        if (mSessionId != null && mSession == null) {
-            SLog.i(TAG, "mSessionId is exist");
-            mSession = SessionHelper.getInstance().takeBySessionID(mSessionId);
-        } else {
-            SLog.i(TAG, "mSessionId is null");
-            List<Session> sessions = SessionHelper.getInstance().takeAllByUser(BmobManager.getInstance().getObjectId());
-            if (sessions != null && sessions.size() > 0) {
-                SLog.i(TAG, "sessions exist, take last session");
-                mSession = sessions.get(0);
-                // 根据新sessionId获取历史消息
-                List<Message> messageList = MessageHelper.getInstance().getMessageListBySession(mSession.getSessionId());
-                SLog.i(TAG, "from sqlite get messageList" + messageList);
-                mMessageList.clear();
-                mMessageList.addAll(messageList);
-                SLog.i(TAG, "reload messageList" + messageList);
-                updateAdapterAll();
-            } else {
-                SLog.i(TAG, "sessions no exist, create new Session");
-                SLog.i(TAG, "addNewSession ");
-                mSession = new Session();
-                mSession.setName("" + new Date(System.currentTimeMillis()));
-                mSession.setDesc("hello ~");
-                mSession.setRobotId("");
-                mSession.setUserId(BmobManager.getInstance().getObjectId());
-                mSession.setUrl("");
-                mSession.setSessionId(UUIDUtil.getUUID());
-                mSession.setIsDel(false);
-                mSession.setCreateTime(System.currentTimeMillis());
-                mSession.setUpdateTime(System.currentTimeMillis());
-            }
+        mSessionsList = SessionManager.getInstance().getSessionList();
+        if (mSessionsList != null && mSessionsList.size() > 0) {
+            SLog.i(TAG, "sessions exist, take last session");
+            mCurrentSession = SessionManager.getInstance().getLastSession();
+            mMessageList = SessionManager.getInstance().getSessionMessages(mCurrentSession);
+            SLog.i(TAG, "reload messageList" + mMessageList);
+            updateAdapterAll();
         }
-    }
 
-    /**
-     * 保存旧有的会话和历史消息
-     * reload
-     * destroy
-     */
-    private void saveHistoryMessage() {
-        SLog.i(TAG, "saveHistoryMessage");
-        // 更新当前session修改时间
-        mSession.setUpdateTime(System.currentTimeMillis());
-        SessionHelper.getInstance().save(mSession);
-        MessageHelper.getInstance().saveMessageList(mMessageList);
+        // if (mSessionId != null && mCurrentSession == null) {
+        //     SLog.i(TAG, "mSessionId is exist");
+        //     mCurrentSession = SessionHelper.getInstance().takeBySessionID(mSessionId);
+        // } else {
+        //     mSessionsList = SessionManager.getInstance().getSessionList();
+        //     if (mSessionsList != null && mSessionsList.size() > 0) {
+        //         SLog.i(TAG, "sessions exist, take last session");
+        //         mCurrentSession = SessionManager.getInstance().getLastSession();
+        //         mMessageList = SessionManager.getInstance().getSessionMessages(mCurrentSession);
+        //         SLog.i(TAG, "reload messageList" + mMessageList);
+        //         updateAdapterAll();
+        //     } else {
+        //         SLog.i(TAG, "sessions no exist, create new Session");
+        //         SLog.i(TAG, "need addNewSession ");
+        //         // mCurrentSession = new Session();
+        //         // mCurrentSession.setName("" + new Date(System.currentTimeMillis()));
+        //         // mCurrentSession.setDesc("hello ~");
+        //         // mCurrentSession.setRobotId("");
+        //         // mCurrentSession.setUserId(BmobManager.getInstance().getObjectId());
+        //         // mCurrentSession.setUrl("");
+        //         // mCurrentSession.setSessionId(UUIDUtil.getUUID());
+        //         // mCurrentSession.setIsDel(false);
+        //         // mCurrentSession.setCreateTime(System.currentTimeMillis());
+        //         // mCurrentSession.setUpdateTime(System.currentTimeMillis());
+        //         // SessionManager.getInstance().addNewSession(mCurrentSession);
+        //     }
+        // }
     }
 
     @Override
@@ -250,7 +242,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                 ToastUtil.getInstance().showToast("输入内容不能为空");
                 return;
             }
-            // 先加入Person的Text
             addPerson();
             addRobot();
             callYiyan();
@@ -263,78 +254,33 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     private void addPerson() {
         Message message = new Message();
         message.setType(PERSON_TEXT);
-        message.setSessionId(mSession.getSessionId());
+        message.setSessionId(mCurrentSession.getSessionId());
         message.setMessage(editText.getText().toString());
         message.setMessageId(SnowFlakeUtil.getSnowFlakeId() + "");
         message.setStatus(ChatModel.START_SHOW);
         message.setSendTime(System.currentTimeMillis());
         mMessageList.add(message);
 
-
-        // ChatModel model = new ChatModel();
-        // model.setId(UUIDUtil.getUUID());
-        // model.setName("syz");
-        // model.setImageUrl("");
-        // model.setMessage(editText.getText().toString());
-        // model.setType(PERSON_TEXT);
-        // mList.add(model);
         updateAdapter();
     }
 
     private void addRobot() {
         Message message = new Message();
         message.setType(ROBOT_TEXT);
-        message.setSessionId(mSession.getSessionId());
+        message.setSessionId(mCurrentSession.getSessionId());
         message.setMessage("");
         message.setMessageId(SnowFlakeUtil.getSnowFlakeId() + "");
         message.setStatus(LOADING);
         message.setSendTime(System.currentTimeMillis()); // responseTime
         mMessageList.add(message);
-        updateAdapter();
 
-        // ChatModel model = new ChatModel();
-        // model.setId(UUIDUtil.getUUID());
-        // model.setName("");
-        // model.setImageUrl("");
-        // model.setMessage("");
-        // model.setStatus(ChatModel.LOADING);
-        // model.setType(ROBOT_TEXT);
-        // mMessageList.add(model);
-        // updateAdapter();
+        updateAdapter();
     }
 
     // TODO: callYiyan callEB
     public void callYiyan() {
         callEBStream();
     }
-
-    // private void callEB() {
-    //     SLog.i(TAG, "sendBtn");
-    //     String inputText = editText.getText().toString();
-    //     if (TextUtils.isEmpty(inputText)) {
-    //         return;
-    //     }
-    //     showSpeak(PERSON_TEXT, inputText);
-    //     editText.setText("");
-    //     DirectToServer.callYiYan(inputText, new IResponse() {
-    //         @Override
-    //         public void onSuccess(String originJson) {
-    //             getActivity().runOnUiThread(new Runnable() {
-    //                 @Override
-    //                 public void run() {
-    //
-    //                     showSpeak(ROBOT_TEXT, originJson);
-    //                 }
-    //             });
-    //         }
-    //
-    //         @Override
-    //         public void onFailure(String errorMsg) {
-    //             SLog.e(TAG, "DirectToServer error");
-    //         }
-    //     });
-    // }
-
 
     // 历史对话，需要按照user,assistant
     static List<Map<String, String>> messages = new ArrayList<>();
@@ -371,7 +317,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        showResponse(ROBOT_TEXT, assistant.get("content"));
+                        showResponse(assistant.get("content"));
                     }
                 });
             }
@@ -383,13 +329,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    /**
-     * @param type 0:机器人 1:用户
-     * @param text
-     */
-    private void showResponse(int type, String text) {
+    private void showResponse(String text) {
         SLog.i(TAG, "Robot showResponse:" + text);
-        // ChatModel model = mMessageList.get(mMessageList.size() - 1);
         Message message = mMessageList.get(mMessageList.size() - 1);
         message.setStatus(START_SHOW);
         message.setMessage(text);
@@ -398,15 +339,18 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     }
 
     private void updateAdapter() {
-        SLog.i(TAG, "updateAdapter " + mMessageList);
-        mChatAdapter.updateDataList(mMessageList.get(mMessageList.size() - 1));
+        SLog.i(TAG, "updateAdapter item " + mMessageList);
+        // mChatAdapter.notifyItemChanged(mMessageList.size() - 1);
+        mChatAdapter.updateAll(mMessageList);
         // 滑动到底部
         recyclerView.scrollToPosition(mMessageList.size() - 1);
     }
 
     private void updateAdapterAll() {
         SLog.i(TAG, "updateAdapterAll " + mMessageList);
-        mChatAdapter.updateDataListAll(mMessageList);
+        // 更新所有
+        // mChatAdapter.notifyDataSetChanged();
+        mChatAdapter.updateAll(mMessageList);
         // 滑动到底部
         recyclerView.scrollToPosition(mMessageList.size() - 1);
     }

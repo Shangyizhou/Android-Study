@@ -57,7 +57,6 @@ public class HistoryAdapter extends RecyclerView.Adapter {
         SLog.i("updateDataList", "updateDataList: data=" + data);
         this.mData = data;
         notifyDataSetChanged();
-        // notifyItemChanged(data.size() - 1);
     }
 
     class HistoryViewHolder extends RecyclerView.ViewHolder {

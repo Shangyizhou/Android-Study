@@ -14,6 +14,7 @@ import com.example.androidnote.R;
 import com.example.androidnote.adapter.HistoryAdapter;
 import com.example.androidnote.db.helper.SessionHelper;
 import com.example.androidnote.manager.BmobManager;
+import com.example.androidnote.manager.SessionManager;
 import com.example.androidnote.model.Session;
 import com.shangyizhou.develop.log.SLog;
 
@@ -86,7 +87,6 @@ public class HistoryFragment extends Fragment {
         // return inflater.inflate(R.layout.fragment_h_istory, container, false);
         View view = inflater.inflate(R.layout.fragment_history, container, false);
         initView(view);
-        getData();
         return view;
     }
 
@@ -105,15 +105,28 @@ public class HistoryFragment extends Fragment {
         recyclerView.setAdapter(mHistoryAdapter);
     }
 
+    public void updateSessionUi() {
+        getData();
+    }
+
     private void getData() {
-        SLog.i(TAG, "getData: objectId = " + BmobManager.getInstance().getObjectId());
-        mSessions = SessionHelper.getInstance().takeAllByUser(BmobManager.getInstance().getObjectId());
-        SLog.i(TAG, "getData: objectId = " + mSessions);
+        // SLog.i(TAG, "getData: objectId = " + BmobManager.getInstance().getObjectId());
+        // mSessions = SessionHelper.getInstance().takeAllByUser(BmobManager.getInstance().getObjectId());
+        mSessions = SessionManager.getInstance().getSessionList();
+        SLog.i(TAG, "getData: getSessionList = " + mSessions);
         if (mSessions == null) {
             SLog.i(TAG, "getData: mSessions is null");
         }
         mHistoryAdapter.updateDataList(mSessions);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SLog.i(TAG, "onResume: ");
+        getData();
+    }
+
     public interface onItemViewClickListener {
         void onItemClick(Session session);
     }
