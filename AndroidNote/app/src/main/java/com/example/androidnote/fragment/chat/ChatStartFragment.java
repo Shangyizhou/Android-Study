@@ -1,4 +1,4 @@
-package com.example.androidnote.fragment;
+package com.example.androidnote.fragment.chat;
 
 import android.os.Bundle;
 
@@ -11,18 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.example.androidnote.R;
-import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.Session;
 import com.google.android.material.tabs.TabLayout;
-import com.shangyizhou.develop.helper.UUIDUtil;
 import com.shangyizhou.develop.log.SLog;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**

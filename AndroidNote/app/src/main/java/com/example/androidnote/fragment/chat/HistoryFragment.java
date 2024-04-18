@@ -1,4 +1,4 @@
-package com.example.androidnote.fragment;
+package com.example.androidnote.fragment.chat;
 
 import android.os.Bundle;
 
@@ -12,8 +12,6 @@ import android.view.ViewGroup;
 
 import com.example.androidnote.R;
 import com.example.androidnote.adapter.HistoryAdapter;
-import com.example.androidnote.db.helper.SessionHelper;
-import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.manager.SessionManager;
 import com.example.androidnote.model.Session;
 import com.shangyizhou.develop.log.SLog;

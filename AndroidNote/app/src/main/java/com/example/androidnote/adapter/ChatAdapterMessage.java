@@ -1,9 +1,5 @@
 package com.example.androidnote.adapter;
 
-import static com.example.androidnote.model.ChatModel.HAS_SHOW;
-import static com.example.androidnote.model.ChatModel.LOADING;
-import static com.example.androidnote.model.ChatModel.START_SHOW;
-
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.view.LayoutInflater;
@@ -16,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidnote.R;
-import com.example.androidnote.model.ChatModel;
 import com.example.androidnote.model.Message;
 import com.shangyizhou.develop.log.SLog;
 

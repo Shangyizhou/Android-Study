@@ -1,17 +1,12 @@
 package com.example.androidnote;
 
-import static org.slf4j.MDC.put;
-
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
-import com.example.androidnote.fragment.ChatFragment;
 import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.NewsList;
 import com.example.androidnote.model.ResponseInfo;
-import com.example.androidnote.model.ResponseToken;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.shangyizhou.develop.AppHolder;
@@ -19,18 +14,14 @@ import com.shangyizhou.develop.helper.UUIDUtil;
 import com.shangyizhou.develop.log.SLog;
 import com.shangyizhou.develop.net.IResponse;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import okhttp3.Call;

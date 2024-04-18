@@ -13,11 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.androidnote.R;
-import com.example.androidnote.activity.UserActivity;
 import com.example.androidnote.activity.user.UserInfoActivity;
 import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.IMUser;
-import com.shangyizhou.develop.helper.GlideUtil;
 import com.shangyizhou.develop.log.SLog;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -78,7 +76,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         return view;
     }
 
-    private static final String TAG = UserActivity.class.getSimpleName();
+    private static final String TAG = PersonFragment.class.getSimpleName();
     private CircleImageView iv_me_photo;
     private TextView tv_nickname;
     private LinearLayout ll_me_info;

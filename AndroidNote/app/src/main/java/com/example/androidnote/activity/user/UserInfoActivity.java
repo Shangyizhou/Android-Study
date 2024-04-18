@@ -27,15 +27,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.androidnote.R;
-import com.example.androidnote.activity.UserActivity;
-import com.example.androidnote.constant.Constants;
-import com.example.androidnote.db.helper.UserInfoHelper;
+
 import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.IMUser;
-import com.example.androidnote.model.User;
-import com.example.androidnote.model.UserInfo;
+
 import com.shangyizhou.develop.adapter.common.CommonAdapter;
 import com.shangyizhou.develop.adapter.common.CommonViewHolder;
 import com.shangyizhou.develop.base.BaseActivity;
@@ -64,7 +60,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserInfoActivity extends BaseActivity implements View.OnClickListener{
 
-    private static final String TAG = UserActivity.class.getSimpleName();
+    private static final String TAG = UserInfoActivity.class.getSimpleName();
     public static void startUp(Context context) {
         SLog.i(TAG, "[UserInfoActivity] startUp");
         Intent intent = new Intent(context, UserInfoActivity.class);

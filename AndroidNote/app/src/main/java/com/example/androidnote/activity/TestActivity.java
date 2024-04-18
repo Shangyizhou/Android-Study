@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,7 +19,6 @@ import com.baidu.speech.EventManager;
 import com.baidu.speech.EventManagerFactory;
 import com.baidu.speech.asr.SpeechConstant;
 import com.example.androidnote.R;
-import com.example.androidnote.activity.news.NewsActivity;
 import com.shangyizhou.develop.base.BaseActivity;
 import com.shangyizhou.develop.helper.PermissionUtils;
 import com.shangyizhou.develop.helper.ToastUtil;
@@ -139,13 +137,13 @@ public class TestActivity extends BaseActivity implements View.OnClickListener, 
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_to_chat) {
-            ChatActivity.startUp(TestActivity.this);
+            // ChatActivity.startUp(TestActivity.this);
         } else if (id == R.id.btn_to_data) {
             // DataActivity.startUp(TestActivity.this);
         } else if (id == R.id.btn_to_news) {
-            NewsActivity.startUp(TestActivity.this);
+            // NewsActivity.startUp(TestActivity.this);
         } else if (id == R.id.btn_to_user) {
-            UserActivity.startUp(TestActivity.this);
+            // UserActivity.startUp(TestActivity.this);
         } else if (id == R.id.btn_test_permission) {
             testPermission();
         }

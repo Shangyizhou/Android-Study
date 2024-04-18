@@ -1,29 +1,19 @@
 package com.example.androidnote.activity;
 
-import static com.google.android.material.internal.ViewUtils.dpToPx;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.androidnote.R;
-import com.example.androidnote.fragment.ChatFragment;
-import com.example.androidnote.fragment.ChatStartFragment;
+import com.example.androidnote.fragment.chat.ChatStartFragment;
 import com.example.androidnote.fragment.DataFragment;
-import com.example.androidnote.fragment.NewsFragment;
 import com.example.androidnote.fragment.NewsStartFragment;
 import com.example.androidnote.fragment.PersonFragment;
-import com.shangyizhou.develop.base.BaseActivity;
 import com.shangyizhou.develop.base.BaseUiActivity;
 import com.shangyizhou.develop.base.FragmentManagerHelper;
 import com.shangyizhou.develop.log.SLog;
