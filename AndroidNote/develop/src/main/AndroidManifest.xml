@@ -8,6 +8,12 @@
         <activity
             android:name=".base.BaseActivity"
             android:exported="false" />
+        <activity
+            android:name=".tts.BaseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".tts.SynthActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

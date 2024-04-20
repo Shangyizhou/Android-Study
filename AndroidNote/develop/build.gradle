@@ -27,6 +27,8 @@ android {
 }
 
 dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
     api rootProject.ext.dependencies["slf4j"]
     api rootProject.ext.dependencies["logback-core"]
     api rootProject.ext.dependencies["logback-classic"]
