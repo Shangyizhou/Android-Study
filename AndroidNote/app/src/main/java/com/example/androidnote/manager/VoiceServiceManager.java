@@ -10,7 +10,6 @@ import com.baidu.speech.EventManager;
 import com.baidu.speech.EventManagerFactory;
 import com.baidu.speech.asr.SpeechConstant;
 import com.example.androidnote.model.ASRresponse;
-import com.example.androidnote.model.AsrResponse;
 import com.google.gson.Gson;
 
 public class VoiceServiceManager implements EventListener{

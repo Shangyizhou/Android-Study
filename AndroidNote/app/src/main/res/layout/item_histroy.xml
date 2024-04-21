@@ -8,7 +8,7 @@
         android:id="@+id/iv_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@color/deep_blue"/>
+        android:src="@drawable/robot"/>
 
     <LinearLayout
         android:layout_width="wrap_content"

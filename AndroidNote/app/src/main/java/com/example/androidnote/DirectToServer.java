@@ -505,4 +505,72 @@ public class DirectToServer {
      */
 
 
+    /**
+     * 关键词提取
+     */
+
+
+    /**
+     * 获取token
+     */
+    public static String getAccessTokenCenterWord() {
+        if (!TextUtils.isEmpty(ACCESS_TOKEN) && EXPIRATION_TIME.getTime() > CREATE_TIME.getTime()) {
+            return ACCESS_TOKEN;
+        }
+
+        MediaType mediaType = MediaType.parse("application/json");
+        String url = "https://aip.baidubce.com/oauth/2.0/token?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&grant_type=client_credentials";
+        RequestBody body = RequestBody.create(mediaType, "");
+        Request.Builder request = new Request.Builder()
+                .url(url)
+                .method("POST", body)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
+        client.newCall(request.build()).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                SLog.i(TAG, "[getToken] onFailure");
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                SLog.i(TAG, response.body().toString());
+                if (response != null && response.body() != null) {
+                    String originJson = response.body().string(); // 缓冲区读取
+                    SLog.i(TAG, "[getToken] onResponse body: " + originJson);
+                    // ResponseToken responseToken = new Gson().fromJson(originJson, ResponseToken.class);
+                    // String token = responseToken.getAccessToken();
+                    // String refreshToken = responseToken.getRefresh_token();
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(originJson);
+                        String token = jsonObject.getString("access_token");
+                        String refreshToken = jsonObject.getString("refresh_token");
+                        if (TextUtils.isEmpty(token) || TextUtils.isEmpty(refreshToken)) {
+                            SLog.e(TAG, "token || refreshToken is null");
+                            return;
+                        }
+                        ACCESS_TOKEN = token;
+                        REFRESH_TOKEN = refreshToken;
+                        CREATE_TIME = new Date();
+                        EXPIRATION_TIME = new Date(Long.parseLong(jsonObject.getString("expires_in")) + CREATE_TIME.getTime());
+                        countDownLatch.countDown();
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
+
+        try {
+            countDownLatch.await();  // 等待获取token
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return ACCESS_TOKEN;
+    }
+
+
 }
