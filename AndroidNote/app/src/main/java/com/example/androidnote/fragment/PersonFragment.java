@@ -1,5 +1,8 @@
 package com.example.androidnote.fragment;
 
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -12,12 +15,17 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.androidnote.App;
 import com.example.androidnote.R;
+import com.example.androidnote.activity.AboutActivity;
+import com.example.androidnote.activity.LoginActivity;
 import com.example.androidnote.activity.user.UserInfoActivity;
 import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.IMUser;
+import com.shangyizhou.develop.helper.ToastUtil;
 import com.shangyizhou.develop.log.SLog;
 
+import cn.bmob.v3.BmobUser;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -83,19 +91,34 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
     private LinearLayout ll_share;
     private LinearLayout ll_setting;
     private LinearLayout ll_notice;
+    private LinearLayout ll_logout;
+    TextView tvVersion;
 
     private void initView(View view) {
         ll_me_info = view.findViewById(R.id.ll_me_info);
         ll_share = view.findViewById(R.id.ll_share);
         ll_setting = view.findViewById(R.id.ll_setting);
-        ll_notice = view.findViewById(R.id.ll_notice);
+        ll_notice = view.findViewById(R.id.ll_version);
         iv_me_photo = view.findViewById(R.id.iv_me_photo);
         tv_nickname = view.findViewById(R.id.tv_nickname);
+        ll_logout = view.findViewById(R.id.ll_logout);
 
         ll_me_info.setOnClickListener(this);
         ll_share.setOnClickListener(this);
         ll_setting.setOnClickListener(this);
         ll_notice.setOnClickListener(this);
+        ll_logout.setOnClickListener(this);
+
+        ll_setting.setVisibility(View.GONE);
+
+        tvVersion = view.findViewById(R.id.tv_version);
+        try {
+            PackageInfo pInfo = App.getApp().getPackageManager().getPackageInfo(App.getApp().getPackageName(), 0);
+            String version = pInfo.versionName;
+            tvVersion.setText(version);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -126,12 +149,29 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
             UserInfoActivity.startUp(getActivity());
         } else if (id == R.id.ll_share) {
             // 分享
+            AboutActivity.startUp(getActivity());
         } else if (id == R.id.ll_setting) {
             // 设置
-        } else if (id == R.id.ll_notice) {
+        } else if (id == R.id.ll_version) {
+            ToastUtil.getInstance().showToast(tvVersion.getText().toString());
             // 通知
+        } else if (id == R.id.ll_logout) {
+            // 退出登录
+            logout();
         }
     }
 
+    private void logout() {
+        //删除Token
+        // SpUtils.getInstance().deleteKey(Constants.SP_TOKEN);
+        //Bmob退出登录
+        BmobUser.logOut();
 
+        //跳转到登录页
+        Intent intent_login = new Intent();
+        intent_login.setClass(getActivity(), LoginActivity.class);
+        intent_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent_login);
+        getActivity().finish();
+    }
 }

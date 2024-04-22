@@ -1,6 +1,7 @@
 package com.shangyizhou.develop.helper;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,6 +18,8 @@ import androidx.loader.content.CursorLoader;
 import com.shangyizhou.develop.log.SLog;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -172,5 +175,59 @@ public class MediaUtil {
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mUriTempFile);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         mActivity.startActivityForResult(intent, CAMERA_CROP_RESULT);
+    }
+
+    /**
+     * 保存Bitmap到相册
+     *
+     * @param mContext
+     * @param mBitmap
+     */
+    public boolean saveBitmapToAlbum(Context mContext, Bitmap mBitmap) {
+        //根布局
+        File rootPath = new File(Environment.getExternalStorageDirectory() + "/Meet/");
+
+        if (!rootPath.exists()) {
+            rootPath.mkdirs();
+        }
+
+        File file = new File(rootPath, System.currentTimeMillis() + ".png");
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            //自带的保存方法
+            mBitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.flush();
+            out.close();
+            Toast.makeText(mContext, "保存成功", Toast.LENGTH_SHORT).show();
+            updateAlnum(mContext, file.getPath());
+            return true;
+        } catch (IOException e) {
+            Toast.makeText(mContext, "保存失败", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
+
+    /**
+     * 刷新图库
+     */
+    private void updateAlnum(Context mContext, String path) {
+        /**
+         * 存在兼容性的问题
+         */
+
+        try {
+            //通过广播刷新图库
+            mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(path)));
+
+            //通过数据库的方式插入
+            ContentValues values = new ContentValues(4);
+            values.put(MediaStore.Images.Media.TITLE, "");
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+            values.put(MediaStore.Images.Media.DATA, path);
+            values.put(MediaStore.Images.Media.DURATION, 0);
+            mContext.getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -7,7 +7,7 @@ ext {
             minSdkVersion    : 21,
             targetSdkVersion : 29,
             versionCode      : 8,
-            versionName      : "1.7"
+            versionName      : "1.0"
     ]
     //依赖 配置
     dependencies = [
@@ -41,7 +41,7 @@ ext {
 //            "search"         : 'com.amap.api:search:5.0.0',
 //            "bugly"          : 'com.tencent.bugly:crashreport:2.1.9',
 //            "buglyndk"       : 'com.tencent.bugly:nativecrashreport:3.0',
-//            "zxing"          : 'cn.yipianfengye.android:zxing-library:2.2',
+            "zxing"          : 'cn.yipianfengye.android:zxing-library:2.2',
 //            "videoplayer"    : 'cn.jzvd:jiaozivideoplayer:7.0.5'
             "ShadowDrawable"   : 'com.github.Liberuman:ShadowDrawable:0.1',
 

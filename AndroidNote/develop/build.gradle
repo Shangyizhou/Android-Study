@@ -48,6 +48,9 @@ dependencies {
     api rootProject.ext.dependencies["lottie"]
     api rootProject.ext.dependencies["easypermissions"]
     api rootProject.ext.dependencies["ShadowDrawable"]
+    api rootProject.ext.dependencies["zxing"]
+
+
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'

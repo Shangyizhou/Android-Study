@@ -4,6 +4,7 @@ import com.example.androidnote.db.helper.MessageHelper;
 import com.example.androidnote.db.helper.SessionHelper;
 import com.example.androidnote.model.Message;
 import com.example.androidnote.model.Session;
+import com.shangyizhou.develop.helper.DateHelper;
 import com.shangyizhou.develop.helper.UUIDUtil;
 import com.shangyizhou.develop.log.SLog;
 
@@ -50,8 +51,9 @@ public class SessionManager {
     private void addFirstSession() {
         SLog.i(TAG, "addFirstSession");
         Session session = new Session();
-        session.setName("" + new Date(System.currentTimeMillis()));
-        session.setDesc("hello ~");
+
+        session.setName(DateHelper.getInstance().getCurrentTime());
+        session.setDesc("hello world");
         session.setRobotId("");
         session.setUserId(BmobManager.getInstance().getObjectId());
         session.setUrl("");

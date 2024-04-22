@@ -22,6 +22,7 @@ import com.example.androidnote.model.ChatModel;
 import com.example.androidnote.model.Message;
 import com.example.androidnote.model.ResponseInfo;
 import com.example.androidnote.model.Session;
+import com.shangyizhou.develop.helper.DateHelper;
 import com.shangyizhou.develop.helper.SnowFlakeUtil;
 import com.shangyizhou.develop.helper.ToastUtil;
 import com.shangyizhou.develop.helper.UUIDUtil;
@@ -161,8 +162,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         }
         SLog.i(TAG, "addNewSession ");
         Session session = new Session();
-        session.setName("" + new Date(System.currentTimeMillis()));
-        session.setDesc("hello ~");
+        session.setName(DateHelper.getInstance().getCurrentTime());
+        session.setDesc("hello world");
         session.setRobotId("");
         session.setUserId(BmobManager.getInstance().getObjectId());
         session.setUrl("");

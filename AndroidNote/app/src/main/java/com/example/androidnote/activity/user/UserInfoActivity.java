@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -49,6 +50,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
@@ -115,7 +117,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private DatePicker mDatePicker;
 
     //星座选择框
-    private DialogView mConstellationDialog;
+    private DialogView2 mConstellationDialog;
     private RecyclerView mConstellationnView;
     private TextView tv_constellation_cancel;
     private CommonAdapter<String> mConstellationAdapter;
@@ -129,7 +131,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private List<String> mStatusList = new ArrayList<>();
 
     //爱好选择框
-    private DialogView mHobbyDialog;
+    private DialogView2 mHobbyDialog;
     private RecyclerView mHobbyView;
     private TextView tv_hobby_cancel;
     private CommonAdapter<String> mHobbyAdapter;
@@ -184,6 +186,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         initPhotoDialog();
         initSexDialog();
         initAgeDialog();
+        initConstellationDialog();
+        initHobbyDialog();
         initBirthdayDialog();
     }
 
@@ -306,12 +310,14 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         } else if (id == R.id.ll_user_age) {
             DialogManager.getInstance().show(mAgeDialog);
         } else if (id == R.id.ll_user_birthday) {
-            DialogManager.getInstance().show(mBirthdayDialog);
+            // DialogManager.getInstance().show(mBirthdayDialog);
+            //把日期对话框显示在界面上
+            dialog.show();
+        } else if (id == R.id.ll_user_constellation) {
+            DialogManager.getInstance().show(mConstellationDialog);
+        } else if (id == R.id.ll_user_hobby) {
+            DialogManager.getInstance().show(mHobbyDialog);
         }
-        // } else if (id == R.id.ll_user_constellation) {
-        //     DialogManager.getInstance().show(mConstellationDialog);
-        // } else if (id == R.id.ll_user_hobby) {
-        //     DialogManager.getInstance().show(mHobbyDialog);
         // } else if (id == R.id.ll_user_status) {
         //     DialogManager.getInstance().show(mStatusDialog);
         // }
@@ -340,7 +346,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onPermissionsAllGranted(int requestCode, List<String> perms, boolean isAllGranted) {
                 SLog.i(TAG, "授权成功" + String.valueOf(perms));
-                ToastUtil.getInstance().showToast("授权成功" + String.valueOf(perms));
+                ToastUtil.getInstance().showToast("授权成功" );
                 SLog.i(TAG, "授权成功" + String.valueOf(perms));
             }
 
@@ -462,8 +468,56 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     }
 
     /**
+     * 星座选择
+     */
+    private void initConstellationDialog() {
+
+        String[] cArray = getResources().getStringArray(R.array.ConstellatioArray);
+        for (int i = 0; i < cArray.length; i++) {
+            mConstellationList.add(cArray[i]);
+        }
+
+        mConstellationDialog = DialogManager.getInstance().initView(this, R.layout.dialog_select_constellation, Gravity.BOTTOM);
+        mConstellationnView = mConstellationDialog.findViewById(R.id.mConstellationnView);
+        tv_constellation_cancel = mConstellationDialog.findViewById(R.id.tv_cancel);
+
+        mConstellationnView.setLayoutManager(new GridLayoutManager(this, 4));
+        mConstellationnView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
+        mConstellationnView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mConstellationAdapter = new CommonAdapter<>(mConstellationList, new CommonAdapter.OnBindDataListener<String>() {
+            @Override
+            public void onBindViewHolder(final String model, CommonViewHolder hodler, int type, int position) {
+                hodler.setText(R.id.tv_age_text, model);
+
+                hodler.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DialogManager.getInstance().hide(mConstellationDialog);
+                        tv_user_constellation.setText(model);
+                    }
+                });
+            }
+
+            @Override
+            public int getLayoutId(int viewType) {
+                return R.layout.layout_me_age_item;
+            }
+        });
+        mConstellationnView.setAdapter(mConstellationAdapter);
+
+        tv_constellation_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogManager.getInstance().hide(mConstellationDialog);
+            }
+        });
+    }
+
+    /**
      * 生日选择
      */
+    private DatePickerDialog dialog;
+
     private void initBirthdayDialog() {
 
         //自定义主题
@@ -471,16 +525,78 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
         mBirthdayDialog = DialogManager.getInstance().initView(this, R.layout.dialog_select_birthday, Gravity.BOTTOM);
         mDatePicker = mBirthdayDialog.findViewById(R.id.mDatePicker);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mDatePicker.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
-                @Override
-                public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    String text = year + "年" + monthOfYear + 1 + "月" + dayOfMonth + "日";
-                    tv_user_birthday.setText(text);
-                }
-            });
-        }
+
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                String text = year + "年" + (monthOfYear+1) + "月" + dayOfMonth + "日";
+                tv_user_birthday.setText(text);
+            }
+        };
+
+        dialog = new DatePickerDialog(this, listener
+                , calendar.get(Calendar.YEAR)//年份
+                , calendar.get(Calendar.MONTH)//月份
+                , calendar.get(Calendar.DAY_OF_MONTH));//日子
+
+        // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        //     mDatePicker.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+        //         @Override
+        //         public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        //             String text = year + "年" + monthOfYear + 1 + "月" + dayOfMonth + "日";
+        //             tv_user_birthday.setText(text);
+        //         }
+        //     });
+        // }
     }
+
+    /**
+     * 爱好选择
+     */
+    private void initHobbyDialog() {
+
+        String[] hArray = getResources().getStringArray(R.array.HobbyArray);
+        for (int i = 0; i < hArray.length; i++) {
+            mHobbyList.add(hArray[i]);
+        }
+
+        mHobbyDialog = DialogManager.getInstance().initView(this, R.layout.dialog_select_constellation, Gravity.BOTTOM);
+        mHobbyView = mHobbyDialog.findViewById(R.id.mConstellationnView);
+        tv_hobby_cancel = mHobbyDialog.findViewById(R.id.tv_cancel);
+
+        mHobbyView.setLayoutManager(new GridLayoutManager(this, 4));
+        mHobbyView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
+        mHobbyView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mHobbyAdapter = new CommonAdapter<>(mHobbyList, new CommonAdapter.OnBindDataListener<String>() {
+            @Override
+            public void onBindViewHolder(final String model, CommonViewHolder hodler, int type, int position) {
+                hodler.setText(R.id.tv_age_text, model);
+
+                hodler.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DialogManager.getInstance().hide(mHobbyDialog);
+                        tv_user_hobby.setText(model);
+                    }
+                });
+            }
+
+            @Override
+            public int getLayoutId(int viewType) {
+                return R.layout.layout_me_age_item;
+            }
+        });
+        mHobbyView.setAdapter(mHobbyAdapter);
+
+        tv_hobby_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogManager.getInstance().hide(mHobbyDialog);
+            }
+        });
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
