@@ -34,16 +34,15 @@ package com.example.androidnote.model;
 public class YiYanRequest {
     public String requestID;
     public String timestamp;
-    public String robotID;
     public boolean stream = true;
     public boolean disable_search = false;
     public boolean enable_citation = false;
     public String userID = "";
+    public String system  = "";
     public YiYanMessage[] messages;
 
-    public YiYanRequest(String requestId, String robotID) {
+    public YiYanRequest(String requestId) {
         this.requestID = requestId;
-        this.robotID = robotID;
         this.timestamp = System.currentTimeMillis() + "";
     }
 
@@ -51,6 +50,14 @@ public class YiYanRequest {
         YiYanMessage yiYanMessage = new YiYanMessage(msg);
         messages = new YiYanMessage[1];
         messages[0] = yiYanMessage;
+    }
+
+    public String getSystem() {
+        return system;
+    }
+
+    public void setSystem(String system) {
+        this.system = system;
     }
 
     public class YiYanMessage {

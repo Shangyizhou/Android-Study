@@ -202,34 +202,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
             SLog.i(TAG, "reload messageList" + mMessageList);
             updateAdapterAll();
         }
-
-        // if (mSessionId != null && mCurrentSession == null) {
-        //     SLog.i(TAG, "mSessionId is exist");
-        //     mCurrentSession = SessionHelper.getInstance().takeBySessionID(mSessionId);
-        // } else {
-        //     mSessionsList = SessionManager.getInstance().getSessionList();
-        //     if (mSessionsList != null && mSessionsList.size() > 0) {
-        //         SLog.i(TAG, "sessions exist, take last session");
-        //         mCurrentSession = SessionManager.getInstance().getLastSession();
-        //         mMessageList = SessionManager.getInstance().getSessionMessages(mCurrentSession);
-        //         SLog.i(TAG, "reload messageList" + mMessageList);
-        //         updateAdapterAll();
-        //     } else {
-        //         SLog.i(TAG, "sessions no exist, create new Session");
-        //         SLog.i(TAG, "need addNewSession ");
-        //         // mCurrentSession = new Session();
-        //         // mCurrentSession.setName("" + new Date(System.currentTimeMillis()));
-        //         // mCurrentSession.setDesc("hello ~");
-        //         // mCurrentSession.setRobotId("");
-        //         // mCurrentSession.setUserId(BmobManager.getInstance().getObjectId());
-        //         // mCurrentSession.setUrl("");
-        //         // mCurrentSession.setSessionId(UUIDUtil.getUUID());
-        //         // mCurrentSession.setIsDel(false);
-        //         // mCurrentSession.setCreateTime(System.currentTimeMillis());
-        //         // mCurrentSession.setUpdateTime(System.currentTimeMillis());
-        //         // SessionManager.getInstance().addNewSession(mCurrentSession);
-        //     }
-        // }
     }
 
     @Override
@@ -312,7 +284,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                     }
                 }
                 messages.add(assistant);
-                SLog.i(TAG, String.valueOf(messages));
+                // SLog.i(TAG, String.valueOf(messages));
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -338,7 +310,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     }
 
     private void updateAdapter() {
-        SLog.i(TAG, "updateAdapter item " + mMessageList);
+        // SLog.i(TAG, "updateAdapter item " + mMessageList);
         // mChatAdapter.notifyItemChanged(mMessageList.size() - 1);
         mChatAdapter.updateAll(mMessageList);
         // 滑动到底部
@@ -346,7 +318,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     }
 
     private void updateAdapterAll() {
-        SLog.i(TAG, "updateAdapterAll " + mMessageList);
+        // SLog.i(TAG, "updateAdapterAll " + mMessageList);
         // 更新所有
         // mChatAdapter.notifyDataSetChanged();
         mChatAdapter.updateAll(mMessageList);

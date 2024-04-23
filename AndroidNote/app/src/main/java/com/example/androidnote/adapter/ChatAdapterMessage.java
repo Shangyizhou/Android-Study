@@ -72,7 +72,7 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ChatAdapterMessage.RobotViewHolder) {
-            SLog.i("onBindViewHolder", "position:" + position);
+            // SLog.i("onBindViewHolder", "position:" + position);
             Message message = mData.get(position);
             /**
              * Loading的时候只加载图片
@@ -88,7 +88,7 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
                 rotationAnimator.start();
                 ((ChatAdapterMessage.RobotViewHolder) holder).mLoading.setVisibility(View.VISIBLE);
             } else if (message.getStatus() == START_SHOW) {
-                SLog.i("onBindViewHolder", "START_SHOW");
+                // SLog.i("onBindViewHolder", "START_SHOW");
                 rotationAnimator.cancel();
                 ((ChatAdapterMessage.RobotViewHolder) holder).mLoading.setVisibility(View.GONE);
 
@@ -152,14 +152,14 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
 
     public void updateAll(List<Message> messages) {
         this.mData = messages;
-        SLog.i("ChatAdapterMessage updateAll", "" + mData);
+        // SLog.i("ChatAdapterMessage updateAll", "" + mData);
         notifyDataSetChanged();
     }
 
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
-        SLog.i("onViewRecycled", "holder:" + holder);
+        // SLog.i("onViewRecycled", "holder:" + holder);
         if (holder instanceof ChatAdapterMessage.RobotViewHolder) {
             // rotationAnimator.cancel();
             ((ChatAdapterMessage.RobotViewHolder) holder).mLoading.setVisibility(View.GONE);
