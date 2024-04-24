@@ -265,7 +265,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         }
         // 清空输入框
         editText.setText("");
-        DirectToServer.callYiYanERNIEStream(inputText, new IResponse() {
+        DirectToServer.callYiYanERNIELiteStream(inputText, new IResponse() {
             @Override
             public void onSuccess(String originJson) {
                 // 将回复的内容添加到消息中
