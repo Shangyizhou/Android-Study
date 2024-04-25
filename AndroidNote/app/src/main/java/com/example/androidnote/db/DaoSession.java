@@ -10,12 +10,14 @@ import org.greenrobot.greendao.internal.DaoConfig;
 
 import com.example.androidnote.model.Message;
 import com.example.androidnote.model.ResponseInfo;
+import com.example.androidnote.model.RobotModel;
 import com.example.androidnote.model.Session;
 import com.example.androidnote.model.User;
 import com.example.androidnote.model.UserInfo;
 
 import com.example.androidnote.db.MessageDao;
 import com.example.androidnote.db.ResponseInfoDao;
+import com.example.androidnote.db.RobotModelDao;
 import com.example.androidnote.db.SessionDao;
 import com.example.androidnote.db.UserDao;
 import com.example.androidnote.db.UserInfoDao;
@@ -31,12 +33,14 @@ public class DaoSession extends AbstractDaoSession {
 
     private final DaoConfig messageDaoConfig;
     private final DaoConfig responseInfoDaoConfig;
+    private final DaoConfig robotModelDaoConfig;
     private final DaoConfig sessionDaoConfig;
     private final DaoConfig userDaoConfig;
     private final DaoConfig userInfoDaoConfig;
 
     private final MessageDao messageDao;
     private final ResponseInfoDao responseInfoDao;
+    private final RobotModelDao robotModelDao;
     private final SessionDao sessionDao;
     private final UserDao userDao;
     private final UserInfoDao userInfoDao;
@@ -51,6 +55,9 @@ public class DaoSession extends AbstractDaoSession {
         responseInfoDaoConfig = daoConfigMap.get(ResponseInfoDao.class).clone();
         responseInfoDaoConfig.initIdentityScope(type);
 
+        robotModelDaoConfig = daoConfigMap.get(RobotModelDao.class).clone();
+        robotModelDaoConfig.initIdentityScope(type);
+
         sessionDaoConfig = daoConfigMap.get(SessionDao.class).clone();
         sessionDaoConfig.initIdentityScope(type);
 
@@ -62,12 +69,14 @@ public class DaoSession extends AbstractDaoSession {
 
         messageDao = new MessageDao(messageDaoConfig, this);
         responseInfoDao = new ResponseInfoDao(responseInfoDaoConfig, this);
+        robotModelDao = new RobotModelDao(robotModelDaoConfig, this);
         sessionDao = new SessionDao(sessionDaoConfig, this);
         userDao = new UserDao(userDaoConfig, this);
         userInfoDao = new UserInfoDao(userInfoDaoConfig, this);
 
         registerDao(Message.class, messageDao);
         registerDao(ResponseInfo.class, responseInfoDao);
+        registerDao(RobotModel.class, robotModelDao);
         registerDao(Session.class, sessionDao);
         registerDao(User.class, userDao);
         registerDao(UserInfo.class, userInfoDao);
@@ -76,6 +85,7 @@ public class DaoSession extends AbstractDaoSession {
     public void clear() {
         messageDaoConfig.clearIdentityScope();
         responseInfoDaoConfig.clearIdentityScope();
+        robotModelDaoConfig.clearIdentityScope();
         sessionDaoConfig.clearIdentityScope();
         userDaoConfig.clearIdentityScope();
         userInfoDaoConfig.clearIdentityScope();
@@ -87,6 +97,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public ResponseInfoDao getResponseInfoDao() {
         return responseInfoDao;
+    }
+
+    public RobotModelDao getRobotModelDao() {
+        return robotModelDao;
     }
 
     public SessionDao getSessionDao() {
