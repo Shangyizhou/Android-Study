@@ -32,7 +32,7 @@ public class RobotHelper {
     }
 
     public void save(List<RobotModel> models) {
-        SLog.i(TAG, "save: sessionList" + models);
+        SLog.i(TAG, "save: RobotModelList" + models);
         if (isDataBaseValid()) {
             for (RobotModel model : models) {
                 mRobotModelDao.insertOrReplace(model);
@@ -40,8 +40,16 @@ public class RobotHelper {
         }
     }
 
+    public void save(RobotModel model) {
+        SLog.i(TAG, "save: RobotModel" + model);
+        if (isDataBaseValid()) {
+            mRobotModelDao.insertOrReplace(model);
+        }
+    }
+
     /**
      * 取出某个模型
+     *
      * @param robotId
      * @return
      */

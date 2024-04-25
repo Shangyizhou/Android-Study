@@ -179,13 +179,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getData() {
-        // // ResponseInfoHelper.getInstance().deleteData();
-        // data = ResponseInfoHelper.getInstance().getAllModelInfoByUserName(BmobManager.getInstance().getUser().getUserName());
-        // if (data.keySet().size() <= 0) {
-        //     SLog.i(TAG, "getData" + data);
-        //     data.put("ERNIE-4.0-8K", new ArrayList<ResponseInfo>());
-        // }
-        // SLog.i(TAG, "getData" + data);
         SLog.i(TAG, "getData");
 
         /**

@@ -66,6 +66,12 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/create_robot_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"/>
+
         <LinearLayout
             android:id="@+id/ll_data"
             android:layout_width="match_parent"

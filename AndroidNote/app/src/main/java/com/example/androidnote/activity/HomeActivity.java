@@ -4,20 +4,32 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.androidnote.R;
+import com.example.androidnote.db.helper.RobotHelper;
 import com.example.androidnote.fragment.chat.ChatStartFragment;
 import com.example.androidnote.fragment.DataFragment;
 import com.example.androidnote.fragment.NewsStartFragment;
 import com.example.androidnote.fragment.PersonFragment;
+import com.example.androidnote.manager.BmobManager;
+import com.example.androidnote.model.RobotModel;
 import com.shangyizhou.develop.base.BaseUiActivity;
 import com.shangyizhou.develop.base.FragmentManagerHelper;
+import com.shangyizhou.develop.helper.UUIDUtil;
 import com.shangyizhou.develop.log.SLog;
+import com.shangyizhou.develop.ui.dialog.DialogManager;
+import com.shangyizhou.develop.ui.dialog.DialogView2;
 // import com.sxu.shadowdrawable.ShadowDrawable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 
@@ -25,7 +37,7 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
     private static final String TAG = HomeActivity.class.getSimpleName();
     FragmentManagerHelper fragmentManagerHelper;
 
-    //news
+    // news
     private ImageView iv_news;
     private TextView tv_news;
     private LinearLayout ll_news;
@@ -46,13 +58,15 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
     private DataFragment dataFragment = null;
 
 
-    //我的
+    // 我的
     private ImageView iv_me;
     private TextView tv_me;
     private LinearLayout ll_me;
     private PersonFragment personFragment = null;
 
     private Disposable disposable;
+
+    private DialogView2 createRobot;
 
     public static void startUp(Context context) {
         SLog.i(TAG, "[HomeActivity] startUp");
@@ -92,9 +106,56 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
         ll_ai.setOnClickListener(this);
 
         initFragment();
+        initCreateRobotView();
     }
 
-    private void initFragment () {
+    EditText editName;
+    EditText editDesc;
+    EditText editStartSpeak;
+    EditText editQuery1;
+    EditText editQuery2;
+    EditText editQuery3;
+    Button btnCreate;
+    List<String> queryList = new ArrayList<>();
+    Button btnCreateHome;
+
+    private void initCreateRobotView() {
+        createRobot = DialogManager.getInstance().initView(this, R.layout.dialog_create_robot, Gravity.BOTTOM);
+        editName = findViewById(R.id.edit_name);
+        editDesc = findViewById(R.id.edit_desc);
+        editStartSpeak = findViewById(R.id.edit_start_spek);
+        editQuery1 = findViewById(R.id.edit_query_1);
+        editQuery2 = findViewById(R.id.edit_query_2);
+        editQuery3 = findViewById(R.id.edit_query_3);
+        btnCreate = findViewById(R.id.create_robot);
+        btnCreateHome = findViewById(R.id.create_robot_home);
+        btnCreateHome.setOnClickListener(this);
+        btnCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RobotModel model = new RobotModel();
+                queryList.add(editQuery1.getText().toString());
+                queryList.add(editQuery2.getText().toString());
+                queryList.add(editQuery3.getText().toString());
+
+                // 设置model属性
+                model.setTitle(editName.getText().toString());
+                model.setDesc(editDesc.getText().toString());
+                model.setRobotId(UUIDUtil.getUUID());
+                model.setOwnerId(BmobManager.getInstance().getObjectId());
+                model.setBeginSay(editStartSpeak.getText().toString());
+                model.setQuestions(queryList);
+                model.setCreateTime(System.currentTimeMillis());
+                model.setUpdateTime(System.currentTimeMillis());
+                model.setImageUrl("");
+
+                RobotHelper.getInstance().save(model);
+                createRobot.hide();
+            }
+        });
+    }
+
+    private void initFragment() {
         fragmentManagerHelper = new FragmentManagerHelper(getSupportFragmentManager(), R.id.mMainLayout);
 
 
@@ -138,6 +199,9 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
             setAllGrey();
             tv_me.setTextColor(getResources().getColor(R.color.black));
             fragmentManagerHelper.switchFragment(personFragment);
+        } else if (id == R.id.create_robot_home) {
+            SLog.i(TAG, "[onClick] create_robot_home");
+            createRobot.show();
         }
     }
 }
