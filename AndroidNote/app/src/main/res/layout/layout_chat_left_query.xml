@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_query_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_chat"
+        android:gravity="left"
+        android:text="你可以做什么？"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape_edit_bg"
+        android:textSize="15sp"
+        android:padding="10dp" />
+
+    <TextView
+        android:id="@+id/tv_query_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_query_1"
+        android:gravity="left"
+        android:text="你可以做什么？"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape_edit_bg"
+        android:textSize="15sp"
+        android:padding="10dp" />
+
+    <TextView
+        android:id="@+id/tv_query_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_query_2"
+        android:gravity="left"
+        android:text="你可以做什么？"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape_edit_bg"
+        android:textSize="15sp"
+        android:padding="10dp" />
+
+</LinearLayout>

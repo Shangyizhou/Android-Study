@@ -19,8 +19,6 @@ public class SessionManager {
 
     private static List<Session> sessionsList;
     private static HashMap<Session, List<Message>> messageMap;
-    private static Session mCurrentSession;
-
     private SessionManager() {
         init();
     }
@@ -80,6 +78,7 @@ public class SessionManager {
 
     /**
      * 从数据库加载某会话的历史消息
+     * 此会话若没有则新建一个历史消息列表到hashmap
      * @param session
      */
     private void loadSessionMessage(Session session) {
@@ -132,6 +131,8 @@ public class SessionManager {
 
     /**
      * 从缓存获取某会话的历史消息
+     * 1.缓存不存在这个会话，则会从数据库加载
+     * 2.如果是新会话，应该则之前先调用 addNewSession
      */
     public List<Message> getSessionMessages(Session session) {
         if (messageMap == null) {

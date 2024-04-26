@@ -6,10 +6,13 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Generated;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
-public class RobotModel {
+public class RobotModel implements Serializable {
+    private static final long serialVersionUID = 1L; // 或者你可以选择一个特定的值
+
     @Id(autoincrement = true)
     Long id;
     private String robotId;

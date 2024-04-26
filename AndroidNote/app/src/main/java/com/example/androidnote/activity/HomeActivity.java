@@ -63,10 +63,7 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
     private TextView tv_me;
     private LinearLayout ll_me;
     private PersonFragment personFragment = null;
-
-    private Disposable disposable;
-
-    private DialogView2 createRobot;
+    private DialogView2 createRobotDialog;
 
     public static void startUp(Context context) {
         SLog.i(TAG, "[HomeActivity] startUp");
@@ -105,8 +102,11 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
         ll_me.setOnClickListener(this);
         ll_ai.setOnClickListener(this);
 
-        initFragment();
+        btnCreateHome = findViewById(R.id.create_robot_home);
+        btnCreateHome.setOnClickListener(this);
+
         initCreateRobotView();
+        initFragment();
     }
 
     EditText editName;
@@ -120,16 +120,14 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
     Button btnCreateHome;
 
     private void initCreateRobotView() {
-        createRobot = DialogManager.getInstance().initView(this, R.layout.dialog_create_robot, Gravity.BOTTOM);
-        editName = findViewById(R.id.edit_name);
-        editDesc = findViewById(R.id.edit_desc);
-        editStartSpeak = findViewById(R.id.edit_start_spek);
-        editQuery1 = findViewById(R.id.edit_query_1);
-        editQuery2 = findViewById(R.id.edit_query_2);
-        editQuery3 = findViewById(R.id.edit_query_3);
-        btnCreate = findViewById(R.id.create_robot);
-        btnCreateHome = findViewById(R.id.create_robot_home);
-        btnCreateHome.setOnClickListener(this);
+        createRobotDialog = DialogManager.getInstance().initView(this, R.layout.dialog_create_robot, Gravity.BOTTOM);
+        editName = createRobotDialog.findViewById(R.id.edit_name);
+        editDesc = createRobotDialog.findViewById(R.id.edit_desc);
+        editStartSpeak = createRobotDialog.findViewById(R.id.edit_start_spek);
+        editQuery1 = createRobotDialog.findViewById(R.id.edit_query_1);
+        editQuery2 = createRobotDialog.findViewById(R.id.edit_query_2);
+        editQuery3 = createRobotDialog.findViewById(R.id.edit_query_3);
+        btnCreate = createRobotDialog.findViewById(R.id.create_robot_dialog);
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,7 +148,12 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
                 model.setImageUrl("");
 
                 RobotHelper.getInstance().save(model);
-                createRobot.hide();
+                createRobotDialog.hide();
+
+                Bundle bundle = new Bundle();
+                bundle.putString("model", "create");
+                bundle.putSerializable("robot_data", model);
+                ChatActivity.startUp(HomeActivity.this, bundle);
             }
         });
     }
@@ -201,7 +204,7 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
             fragmentManagerHelper.switchFragment(personFragment);
         } else if (id == R.id.create_robot_home) {
             SLog.i(TAG, "[onClick] create_robot_home");
-            createRobot.show();
+            createRobotDialog.show();
         }
     }
 }

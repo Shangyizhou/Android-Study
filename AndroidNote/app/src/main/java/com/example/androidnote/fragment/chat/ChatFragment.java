@@ -85,6 +85,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
 
     private Map<Integer, ChatModel> chatModelIndex = new HashMap<>();
     private List<Message> mMessageList;
+    private List<String> mQueryList;
     ChatAdapterMessage mChatAdapter;
     private RecyclerView recyclerView;
     private Button sendBtn;
@@ -303,17 +304,13 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     }
 
     private void updateAdapter() {
-        // SLog.i(TAG, "updateAdapter item " + mMessageList);
-        // mChatAdapter.notifyItemChanged(mMessageList.size() - 1);
+
         mChatAdapter.updateAll(mMessageList);
         // 滑动到底部
         recyclerView.scrollToPosition(mMessageList.size() - 1);
     }
 
     private void updateAdapterAll() {
-        // SLog.i(TAG, "updateAdapterAll " + mMessageList);
-        // 更新所有
-        // mChatAdapter.notifyDataSetChanged();
         mChatAdapter.updateAll(mMessageList);
         // 滑动到底部
         recyclerView.scrollToPosition(mMessageList.size() - 1);

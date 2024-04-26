@@ -1,17 +1,21 @@
 package com.example.androidnote.adapter;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidnote.R;
+import com.example.androidnote.activity.ChatActivity;
 import com.example.androidnote.model.Message;
 import com.shangyizhou.develop.log.SLog;
 
@@ -21,6 +25,7 @@ import java.util.Map;
 
 public class ChatAdapterMessage extends RecyclerView.Adapter {
     private List<Message> mData;
+    public static List<String> mQuery;
     private int NORMAL_TYPE = 0;
     private int HEADER_TYPE = 1;
     private int FOOTER_TYPE = 2;
@@ -57,13 +62,14 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
             RecyclerView.ViewHolder holder = new ChatAdapterMessage.RobotViewHolder(view);
             // holder.setIsRecyclable(false);
             return holder;
-        } else {
+        } else if (viewType == PERSON_TYPE) {
             SLog.i("onCreateViewHolder", "PERSON_TYPE");
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_chat_right_text_shadow, parent, false);
             RecyclerView.ViewHolder holder = new ChatAdapterMessage.PersonViewHolder(view);
             // holder.setIsRecyclable(false);
             return holder;
         }
+        return null;
     }
     private ObjectAnimator rotationAnimator = null;
     public static final int  LOADING = 0;
@@ -86,14 +92,17 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
                 rotationAnimator.setRepeatCount(ObjectAnimator.INFINITE);
                 // 开始动画
                 rotationAnimator.start();
-                ((ChatAdapterMessage.RobotViewHolder) holder).mLoading.setVisibility(View.VISIBLE);
+                ((RobotViewHolder) holder).mLoading.setVisibility(View.VISIBLE);
+                ((RobotViewHolder) holder).mLinearLayout.setVisibility(View.GONE);
             } else if (message.getStatus() == START_SHOW) {
                 // SLog.i("onBindViewHolder", "START_SHOW");
-                rotationAnimator.cancel();
-                ((ChatAdapterMessage.RobotViewHolder) holder).mLoading.setVisibility(View.GONE);
-
-                // 显示动画或其他操作
-                ((ChatAdapterMessage.RobotViewHolder) holder).mImageView.setImageResource(R.drawable.robot);
+                if (rotationAnimator != null) {
+                    rotationAnimator.cancel();
+                }
+                ((RobotViewHolder) holder).mImageView.setImageResource(R.drawable.robot);
+                if (position == mData.size() - 1) {
+                    ((RobotViewHolder) holder).mLinearLayout.setVisibility(View.VISIBLE);
+                }
 
                 String text = (mData.get(position)).getMessage();
                 ValueAnimator animator = ValueAnimator.ofInt(0, text.length());
@@ -101,7 +110,33 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
                         int progress = (int) animation.getAnimatedValue();
-                        ((ChatAdapterMessage.RobotViewHolder) holder).mTextView.setText(text.substring(0, progress));
+                        ((RobotViewHolder) holder).mTextView.setText(text.substring(0, progress));
+                    }
+                });
+
+                animator.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        // 动画结束时展示View，这里假设你想要展示的View是mImageView
+                        SLog.i("onBindViewHolder", "START_SHOW mLinearLayout");
+                        // todo:设置text
+                        TextView textView1 = ((RobotViewHolder) holder).mLinearLayout.findViewById(R.id.tv_query_1);
+                        TextView textView2 = ((RobotViewHolder) holder).mLinearLayout.findViewById(R.id.tv_query_2);
+                        TextView textView3 = ((RobotViewHolder) holder).mLinearLayout.findViewById(R.id.tv_query_3);
+
+                        textView1.setText(mQuery.get(0));
+                        textView2.setText(mQuery.get(1));
+                        textView3.setText(mQuery.get(2));
+
+                        textView1.setOnClickListener(new View.OnClickListener(){
+                            @Override
+                            public void onClick(View v) {
+                                // 获取query
+                            }
+                        });
+
+                        ((RobotViewHolder) holder).mLinearLayout.setVisibility(View.VISIBLE);
                     }
                 });
                 animator.setDuration(1500); // 设置动画持续时间
@@ -112,12 +147,13 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
                 // 显示动画或其他操作
                 ((ChatAdapterMessage.RobotViewHolder) holder).mTextView.setText(mData.get(position).getMessage());
                 ((ChatAdapterMessage.RobotViewHolder) holder).mImageView.setImageResource(R.drawable.robot);
+                ((RobotViewHolder) holder).mLinearLayout.setVisibility(View.GONE);
             }
             return;
         }
 
-        if (holder instanceof ChatAdapterMessage.PersonViewHolder) {
-            ((ChatAdapterMessage.PersonViewHolder) holder).mTextView.setText(mData.get(position).getMessage());
+        if (holder instanceof PersonViewHolder) {
+            ((PersonViewHolder) holder).mTextView.setText(mData.get(position).getMessage());
         }
     }
 
@@ -131,11 +167,14 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
         ImageView mImageView;
         ImageView mLoading;
 
+        LinearLayout mLinearLayout; // 新增的LinearLayout成员变量
+
         public RobotViewHolder(View itemView) {
             super(itemView);
             mTextView = itemView.findViewById(R.id.tv_left_text);
             mImageView = itemView.findViewById(R.id.iv_left_photo);
             mLoading = itemView.findViewById(R.id.iv_left_loading);
+            mLinearLayout = itemView.findViewById(R.id.ll_query);
         }
     }
 
@@ -159,9 +198,7 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
-        // SLog.i("onViewRecycled", "holder:" + holder);
         if (holder instanceof ChatAdapterMessage.RobotViewHolder) {
-            // rotationAnimator.cancel();
             ((ChatAdapterMessage.RobotViewHolder) holder).mLoading.setVisibility(View.GONE);
             ((RobotViewHolder) holder).mTextView.setText("...");
         }
