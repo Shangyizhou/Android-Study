@@ -19,13 +19,14 @@ import com.example.androidnote.activity.ChatActivity;
 import com.example.androidnote.model.Message;
 import com.shangyizhou.develop.log.SLog;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ChatAdapterMessage extends RecyclerView.Adapter {
     private List<Message> mData;
-    public static List<String> mQuery;
+    public static List<String> mQuery = new ArrayList<>();
     private int NORMAL_TYPE = 0;
     private int HEADER_TYPE = 1;
     private int FOOTER_TYPE = 2;
@@ -77,32 +78,31 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
     public static final int  HAS_SHOW = 2;
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof ChatAdapterMessage.RobotViewHolder) {
-            // SLog.i("onBindViewHolder", "position:" + position);
+        if (holder instanceof RobotViewHolder) {
+            final RobotViewHolder robotViewHolder = (ChatAdapterMessage.RobotViewHolder) holder;
             Message message = mData.get(position);
             /**
-             * Loading的时候只加载图片
-             * START_SHOW的时候才加入hashmap
+             * LOADING状态：发送之后，网路数据没有到来，加载loading图片
+             * START_SHOW状态：网络数据到来之后，动画加载text
+             * HAS_SHOW状态：已经加载过了
              */
             if (message.getStatus() == LOADING) {
                 SLog.i("onBindViewHolder", "LOADING");
                 // 创建旋转动画
-                rotationAnimator = ObjectAnimator.ofFloat(((ChatAdapterMessage.RobotViewHolder) holder).mLoading, "rotation", 0f, 360f);
+                rotationAnimator = ObjectAnimator.ofFloat(robotViewHolder.mLoading, "rotation", 0f, 360f);
                 rotationAnimator.setDuration(1000);
                 rotationAnimator.setRepeatCount(ObjectAnimator.INFINITE);
                 // 开始动画
                 rotationAnimator.start();
-                ((RobotViewHolder) holder).mLoading.setVisibility(View.VISIBLE);
-                ((RobotViewHolder) holder).mLinearLayout.setVisibility(View.GONE);
+                robotViewHolder.mLoading.setVisibility(View.VISIBLE);
+                robotViewHolder.mLinearLayout.setVisibility(View.GONE);
             } else if (message.getStatus() == START_SHOW) {
-                // SLog.i("onBindViewHolder", "START_SHOW");
                 if (rotationAnimator != null) {
                     rotationAnimator.cancel();
                 }
-                ((RobotViewHolder) holder).mImageView.setImageResource(R.drawable.robot);
-                if (position == mData.size() - 1) {
-                    ((RobotViewHolder) holder).mLinearLayout.setVisibility(View.VISIBLE);
-                }
+                robotViewHolder.mLinearLayout.setVisibility(View.GONE);
+                robotViewHolder.mImageView.setImageResource(R.drawable.robot);
+
 
                 String text = (mData.get(position)).getMessage();
                 ValueAnimator animator = ValueAnimator.ofInt(0, text.length());
@@ -120,14 +120,18 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
                         super.onAnimationEnd(animation);
                         // 动画结束时展示View，这里假设你想要展示的View是mImageView
                         SLog.i("onBindViewHolder", "START_SHOW mLinearLayout");
-                        // todo:设置text
-                        TextView textView1 = ((RobotViewHolder) holder).mLinearLayout.findViewById(R.id.tv_query_1);
-                        TextView textView2 = ((RobotViewHolder) holder).mLinearLayout.findViewById(R.id.tv_query_2);
-                        TextView textView3 = ((RobotViewHolder) holder).mLinearLayout.findViewById(R.id.tv_query_3);
-
+                        TextView textView1 = robotViewHolder.mLinearLayout.findViewById(R.id.tv_query_1);
+                        TextView textView2 = robotViewHolder.mLinearLayout.findViewById(R.id.tv_query_2);
+                        TextView textView3 = robotViewHolder.mLinearLayout.findViewById(R.id.tv_query_3);
+                        if (mQuery == null || mQuery.size() < 3) {
+                            return;
+                        }
                         textView1.setText(mQuery.get(0));
                         textView2.setText(mQuery.get(1));
                         textView3.setText(mQuery.get(2));
+                        if (position == mData.size() - 1) {
+                            robotViewHolder.mLinearLayout.setVisibility(View.VISIBLE);
+                        }
 
                         textView1.setOnClickListener(new View.OnClickListener(){
                             @Override
@@ -136,7 +140,7 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
                             }
                         });
 
-                        ((RobotViewHolder) holder).mLinearLayout.setVisibility(View.VISIBLE);
+                        robotViewHolder.mLinearLayout.setVisibility(View.VISIBLE);
                     }
                 });
                 animator.setDuration(1500); // 设置动画持续时间
@@ -144,10 +148,11 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
                 message.setStatus(HAS_SHOW);
             } else if (message.getStatus() == HAS_SHOW) {
                 SLog.i("onBindViewHolder", "HAS_SHOW");
+                robotViewHolder.mLinearLayout.setVisibility(View.GONE);
                 // 显示动画或其他操作
-                ((ChatAdapterMessage.RobotViewHolder) holder).mTextView.setText(mData.get(position).getMessage());
-                ((ChatAdapterMessage.RobotViewHolder) holder).mImageView.setImageResource(R.drawable.robot);
-                ((RobotViewHolder) holder).mLinearLayout.setVisibility(View.GONE);
+                robotViewHolder.mTextView.setText(mData.get(position).getMessage());
+                robotViewHolder.mImageView.setImageResource(R.drawable.robot);
+                robotViewHolder.mLinearLayout.setVisibility(View.GONE);
             }
             return;
         }

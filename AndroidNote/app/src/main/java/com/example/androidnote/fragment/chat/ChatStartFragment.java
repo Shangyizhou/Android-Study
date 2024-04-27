@@ -97,7 +97,6 @@ public class ChatStartFragment extends Fragment {
                 SLog.i(TAG, "onItemClick: ChatFragment reload");
                 ChatFragment chatFragment = (ChatFragment) fragmentList.get(0);
                 chatFragment.addNewSession();
-                // viewPager.setCurrentItem(0);
             }
         });
 

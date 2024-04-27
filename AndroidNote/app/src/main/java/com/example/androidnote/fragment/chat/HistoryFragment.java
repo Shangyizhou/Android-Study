@@ -89,7 +89,7 @@ public class HistoryFragment extends Fragment {
     }
 
     private void initView(View view) {
-        mHistoryAdapter = new HistoryAdapter();
+        mHistoryAdapter = new HistoryAdapter(getActivity());
         mHistoryAdapter.setOnItemClickListener(new HistoryAdapter.onItemViewClickListener() {
             @Override
             public void onItemClick(View view, int position) {

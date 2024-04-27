@@ -54,7 +54,7 @@ public class RobotHelper {
      * @return
      */
     public RobotModel takeByRobotID(String robotId) {
-        SLog.i(TAG, "take: session");
+        SLog.i(TAG, "take: robot");
         if (isDataBaseValid()) {
             return mRobotModelDao.queryBuilder()
                     .where(RobotModelDao.Properties.RobotId.eq(robotId))

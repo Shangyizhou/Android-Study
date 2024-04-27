@@ -66,9 +66,11 @@ public class ChatActivity extends BaseUiActivity implements View.OnClickListener
         super.onCreateChildren(bundle);
         setContentView(R.layout.activity_chat);
         Intent intent = getIntent();
-        startMode = intent.getStringExtra("model");
-        if (startMode.equals("create")) {
-            mCurrentRobot = (RobotModel) intent.getSerializableExtra("robot_data");
+        if (intent != null) {
+            startMode = intent.getStringExtra("model");
+            if (startMode.equals("create")) {
+                mCurrentRobot = (RobotModel) intent.getSerializableExtra("robot_data");
+            }
         }
         initView();
         getData();
@@ -128,7 +130,7 @@ public class ChatActivity extends BaseUiActivity implements View.OnClickListener
             mSessionsList = SessionManager.getInstance().getSessionList();
             if (mSessionsList != null && mSessionsList.size() > 0) {
                 SLog.i(TAG, "sessions exist, take last session");
-                mCurrentSession = SessionManager.getInstance().getLastSession();
+                mCurrentSession = SessionManager.getInstance().getSessionByRobotId(mCurrentRobot.getRobotId());
                 mMessageList = SessionManager.getInstance().getSessionMessages(mCurrentSession);
                 SLog.i(TAG, "reload messageList" + mMessageList);
                 updateAdapterAll();
@@ -159,29 +161,6 @@ public class ChatActivity extends BaseUiActivity implements View.OnClickListener
         } else if (id == R.id.et_input_msg) {
             // TODO: 点击输入框，隐藏软键盘
 
-        }
-    }
-
-    /**
-     * 其他会话页面点击打开，重新加载页面
-     */
-    public void reload(Session session, boolean isNew) {
-        if (session == null) {
-            SLog.i(TAG, "reload session is null");
-            return;
-        }
-
-        if (!isNew) {
-            // 根据新sessionId获取历史消息
-            // List<Message> messageList = MessageHelper.getInstance().getMessageListBySession(mCurrentSession.getSessionId());
-            mMessageList = SessionManager.getInstance().getSessionMessages(session);
-            SLog.i(TAG, "reload messageList" + mMessageList);
-            updateAdapterAll();
-        } else {
-            SLog.i(TAG, "add new session need not database");
-            mMessageList = SessionManager.getInstance().getSessionMessages(session);
-            SLog.i(TAG, mMessageList.size() + " reload messageList" + mMessageList);
-            updateAdapterAll();
         }
     }
 
@@ -305,10 +284,5 @@ public class ChatActivity extends BaseUiActivity implements View.OnClickListener
         mChatAdapter.updateAll(mMessageList);
         // 滑动到底部
         recyclerView.scrollToPosition(mMessageList.size() - 1);
-    }
-
-    public class ChatMessage {
-        public List<Message> messageList;
-        public List<String> queryList;
     }
 }

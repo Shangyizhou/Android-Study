@@ -48,7 +48,6 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
     private ImageView iv_ai;
     private TextView tv_ai;
     private LinearLayout ll_ai;
-    // private ChatFragment chatFragment = null;
     ChatStartFragment chatStartFragment = null;
 
     // data
@@ -56,7 +55,6 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
     private TextView tv_data;
     private LinearLayout ll_data;
     private DataFragment dataFragment = null;
-
 
     // 我的
     private ImageView iv_me;
@@ -154,13 +152,13 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
                 bundle.putString("model", "create");
                 bundle.putSerializable("robot_data", model);
                 ChatActivity.startUp(HomeActivity.this, bundle);
+                // fragmentManagerHelper.switchFragment(chatStartFragment);
             }
         });
     }
 
     private void initFragment() {
         fragmentManagerHelper = new FragmentManagerHelper(getSupportFragmentManager(), R.id.mMainLayout);
-
 
         // chatFragment = new ChatFragment();
         chatStartFragment = new ChatStartFragment();

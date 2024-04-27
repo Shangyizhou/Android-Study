@@ -1,5 +1,7 @@
 package com.example.androidnote.manager;
 
+import static com.example.androidnote.constant.Constants.DEFAULT_ROBOT_ID;
+
 import com.example.androidnote.db.helper.MessageHelper;
 import com.example.androidnote.db.helper.SessionHelper;
 import com.example.androidnote.model.Message;
@@ -9,7 +11,6 @@ import com.shangyizhou.develop.helper.UUIDUtil;
 import com.shangyizhou.develop.log.SLog;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -51,8 +52,8 @@ public class SessionManager {
         Session session = new Session();
 
         session.setName(DateHelper.getInstance().getCurrentTime());
-        session.setDesc("hello world");
-        session.setRobotId("");
+        session.setDesc("Default Robot Chat");
+        session.setRobotId(DEFAULT_ROBOT_ID);
         session.setUserId(BmobManager.getInstance().getObjectId());
         session.setUrl("");
         session.setSessionId(UUIDUtil.getUUID());
@@ -154,10 +155,23 @@ public class SessionManager {
         for (Session session : sessionsList) {
             if (lastSession == null) {
                 lastSession = session;
-            } else if (session.getCreateTime() > lastSession.getCreateTime()) {
+            } else if (session.getCreateTime() < lastSession.getCreateTime()) {
                 lastSession = session;
             }
         }
         return lastSession;
+    }
+
+    public Session getSessionByRobotId(String robotId) {
+        if (sessionsList == null) {
+            loadSessionList();
+        }
+
+        for (Session session : sessionsList) {
+            if (session.getRobotId().equals(robotId)) {
+                return session;
+            }
+        }
+        return null;
     }
 }
