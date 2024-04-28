@@ -19,30 +19,6 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/ll_news"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@color/chat_robot_text_bg_color"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/iv_news"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/tv_news"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:text="新闻"
-                android:textColor="@drawable/home_btn_select" />
-
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/ll_ai"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -61,16 +37,70 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:text="AI"
+                android:text="聊天"
                 android:textColor="@drawable/home_btn_select" />
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/ll_square"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@color/chat_robot_text_bg_color"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_square"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_square"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="发现"
+                android:textColor="@drawable/home_btn_select" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_news"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@color/chat_robot_text_bg_color"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/iv_news"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_news"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="新闻"
+                android:textColor="@drawable/home_btn_select" />
+
+        </LinearLayout>
+
+
+
         <Button
             android:id="@+id/create_robot_home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+"/>
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/create_robot" />
 
         <LinearLayout
             android:id="@+id/ll_data"

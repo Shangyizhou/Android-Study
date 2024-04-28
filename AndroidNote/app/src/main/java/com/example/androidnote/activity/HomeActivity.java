@@ -18,6 +18,7 @@ import com.example.androidnote.fragment.chat.ChatStartFragment;
 import com.example.androidnote.fragment.DataFragment;
 import com.example.androidnote.fragment.NewsStartFragment;
 import com.example.androidnote.fragment.PersonFragment;
+import com.example.androidnote.fragment.chat.SquareFragment;
 import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.RobotModel;
 import com.shangyizhou.develop.base.BaseUiActivity;
@@ -63,6 +64,12 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
     private PersonFragment personFragment = null;
     private DialogView2 createRobotDialog;
 
+    // 我的
+    private ImageView iv_square;
+    private TextView tv_square;
+    private LinearLayout ll_square;
+    private SquareFragment squareFragment = null;
+
     public static void startUp(Context context) {
         SLog.i(TAG, "[HomeActivity] startUp");
         Intent intent = new Intent(context, HomeActivity.class);
@@ -95,10 +102,15 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
         tv_me = (TextView) findViewById(R.id.tv_me);
         ll_me = (LinearLayout) findViewById(R.id.ll_me);
 
+        iv_square = (ImageView) findViewById(R.id.iv_square);
+        tv_square = (TextView) findViewById(R.id.tv_square);
+        ll_square = (LinearLayout) findViewById(R.id.ll_square);
+
         ll_news.setOnClickListener(this);
         ll_data.setOnClickListener(this);
         ll_me.setOnClickListener(this);
         ll_ai.setOnClickListener(this);
+        ll_square.setOnClickListener(this);
 
         btnCreateHome = findViewById(R.id.create_robot_home);
         btnCreateHome.setOnClickListener(this);
@@ -160,12 +172,11 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
     private void initFragment() {
         fragmentManagerHelper = new FragmentManagerHelper(getSupportFragmentManager(), R.id.mMainLayout);
 
-        // chatFragment = new ChatFragment();
         chatStartFragment = new ChatStartFragment();
         dataFragment = new DataFragment();
-        // newsFragment = new NewsFragment();
         newsStartFragment = new NewsStartFragment();
         personFragment = new PersonFragment();
+        squareFragment = new SquareFragment();
         tv_ai.setTextColor(getResources().getColor(R.color.black));
         fragmentManagerHelper.switchFragment(chatStartFragment);
     }
@@ -175,6 +186,7 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
         tv_ai.setTextColor(getResources().getColor(R.color.grey));
         tv_news.setTextColor(getResources().getColor(R.color.grey));
         tv_me.setTextColor(getResources().getColor(R.color.grey));
+        tv_square.setTextColor(getResources().getColor(R.color.grey));
     }
 
     @Override
@@ -203,6 +215,11 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
         } else if (id == R.id.create_robot_home) {
             SLog.i(TAG, "[onClick] create_robot_home");
             createRobotDialog.show();
+        } else if (id == R.id.ll_square) {
+            SLog.i(TAG, "[onClick] create_robot_home");
+            setAllGrey();
+            tv_square.setTextColor(getResources().getColor(R.color.black));
+            fragmentManagerHelper.switchFragment(squareFragment);
         }
     }
 }

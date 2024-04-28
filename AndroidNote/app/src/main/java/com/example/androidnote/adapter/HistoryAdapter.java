@@ -94,6 +94,7 @@ public class HistoryAdapter extends RecyclerView.Adapter {
                         }
                     } else {
                         RobotModel model = RobotHelper.getInstance().takeByRobotID(robotId);
+                        SLog.i(TAG, "model = " + model);
                         Bundle bundle = new Bundle();
                         bundle.putString("model", "load");
                         bundle.putSerializable("robot_data", model);

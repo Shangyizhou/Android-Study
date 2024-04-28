@@ -73,4 +73,14 @@ public class RobotHelper {
         }
         return null;
     }
+
+    public List<RobotModel> takeAll() {
+        if (isDataBaseValid()) {
+            return mRobotModelDao.queryBuilder()
+                    .where(RobotModelDao.Properties.IsDel.eq(false))
+                    .orderDesc(RobotModelDao.Properties.CreateTime)
+                    .list();
+        }
+        return null;
+    }
 }

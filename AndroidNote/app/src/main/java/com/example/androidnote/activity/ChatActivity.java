@@ -21,6 +21,7 @@ import com.example.androidnote.model.Message;
 import com.example.androidnote.model.ResponseInfo;
 import com.example.androidnote.model.RobotModel;
 import com.example.androidnote.model.Session;
+import com.shangyizhou.develop.base.BaseActivity;
 import com.shangyizhou.develop.base.BaseUiActivity;
 import com.shangyizhou.develop.helper.DateHelper;
 import com.shangyizhou.develop.helper.SnowFlakeUtil;
@@ -37,7 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ChatActivity extends BaseUiActivity implements View.OnClickListener {
+public class ChatActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = ChatActivity.class.getSimpleName();
 
     private List<Message> mMessageList;
@@ -63,14 +64,15 @@ public class ChatActivity extends BaseUiActivity implements View.OnClickListener
 
     @Override
     protected void onCreateChildren(Bundle bundle) {
-        super.onCreateChildren(bundle);
+        // super.onCreateChildren(bundle);
         setContentView(R.layout.activity_chat);
         Intent intent = getIntent();
         if (intent != null) {
             startMode = intent.getStringExtra("model");
-            if (startMode.equals("create")) {
-                mCurrentRobot = (RobotModel) intent.getSerializableExtra("robot_data");
-            }
+            // if (startMode.equals("create")) {
+            //     mCurrentRobot = (RobotModel) intent.getSerializableExtra("robot_data");
+            // }
+            mCurrentRobot = (RobotModel) intent.getSerializableExtra("robot_data");
         }
         initView();
         getData();

@@ -1,5 +1,7 @@
 package com.example.androidnote.model;
 
+import com.example.androidnote.manager.BmobManager;
+
 import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
@@ -123,5 +125,35 @@ public class RobotModel implements Serializable {
     public void setUpdateTime(long updateTime) {
         this.updateTime = updateTime;
     }
-    
+
+    @Override
+    public String toString() {
+        return "RobotModel{" +
+                "id=" + id +
+                ", robotId='" + robotId + '\'' +
+                ", ownerId='" + ownerId + '\'' +
+                ", title='" + title + '\'' +
+                ", desc='" + desc + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", beginSay='" + beginSay + '\'' +
+                ", isDel=" + isDel +
+                ", questions=" + questions +
+                ", sendTime=" + sendTime +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
+
+    public Session createSession() {
+        Session session = new Session();
+        session.setUserId(BmobManager.getInstance().getObjectId());
+        session.setName(this.title);
+        session.setDesc(this.desc);
+        session.setRobotId(this.robotId);
+        session.setUrl(this.imageUrl);
+        session.setIsDel(false);
+        session.setCreateTime(System.currentTimeMillis());
+        session.setUpdateTime(System.currentTimeMillis());
+        return session;
+    }
 }

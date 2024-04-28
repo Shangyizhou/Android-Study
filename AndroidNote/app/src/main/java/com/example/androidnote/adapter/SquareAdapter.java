@@ -1,5 +1,6 @@
 package com.example.androidnote.adapter;
 import android.animation.ObjectAnimator;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +11,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidnote.R;
+import com.example.androidnote.activity.ChatActivity;
+import com.example.androidnote.db.helper.RobotHelper;
+import com.example.androidnote.db.helper.SessionHelper;
+import com.example.androidnote.manager.SessionManager;
 import com.example.androidnote.model.ChatModel;
 import com.example.androidnote.model.RobotModel;
+import com.example.androidnote.model.Session;
+import com.shangyizhou.develop.log.SLog;
 
 import java.util.List;
 
@@ -33,7 +40,7 @@ public class SquareAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof RobotViewHolder) {
-            ((RobotViewHolder) holder).mImageView.setImageResource(R.drawable.ic_launcher_background);
+            ((RobotViewHolder) holder).mImageView.setImageResource(R.drawable.robot);
             ((RobotViewHolder) holder).title.setText(mData.get(position).getTitle());
             ((RobotViewHolder) holder).desc.setText(mData.get(position).getDesc());
         }
@@ -63,11 +70,26 @@ public class SquareAdapter extends RecyclerView.Adapter {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mOnItemClickListener != null) {
-                        mOnItemClickListener.onItemClick(itemView, getAdapterPosition());
+                    // if (mOnItemClickListener != null) {
+                    //     mOnItemClickListener.onItemClick(itemView, getAdapterPosition());
+                    // }
+                    RobotModel model = mData.get(getAdapterPosition());
+                    Session session = SessionManager.getInstance().getSessionByRobotId(model.getRobotId());
+                    if (session == null) {
+                        session = model.createSession();
+                        SessionHelper.getInstance().save(session);
                     }
+                    Bundle bundle = new Bundle();
+                    bundle.putString("model", "load");
+                    bundle.putSerializable("robot_data", model);
+                    ChatActivity.startUp(itemView.getContext(), bundle);
                 }
             });
         }
+    }
+
+    public void updateAll(List<RobotModel> data) {
+        this.mData = data;
+        notifyDataSetChanged();
     }
 }

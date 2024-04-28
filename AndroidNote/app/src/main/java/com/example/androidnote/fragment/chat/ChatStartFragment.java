@@ -102,7 +102,6 @@ public class ChatStartFragment extends Fragment {
 
         titleList.add("聊天");
         titleList.add("历史");
-        titleList.add("广场");
         // 设置标题
         /**
          * 记得要先设置默认的 app:tabTextAppearance="@style/TabLayoutTextStyle"
@@ -157,7 +156,6 @@ public class ChatStartFragment extends Fragment {
                 viewPager.setCurrentItem(0);
             }
         }));
-        fragmentList.add(new SquareFragment());
 
         MyPagerAdapter adapter = new MyPagerAdapter(getChildFragmentManager());
         //给viewPager设置adapter
