@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.androidnote.DirectToServer;
+import com.example.androidnote.net.DirectToServer;
 import com.example.androidnote.R;
 import com.example.androidnote.adapter.NewsAdapter;
 import com.example.androidnote.model.News;
