@@ -25,6 +25,9 @@ public class YiYanHandler {
 
         String result = "\"result\"";
         String tips = "\"tips\"";
+        if (!res.contains(result) || !res.contains(tips)) {
+            return "格式不合法";
+        }
         String resultStr = res.substring(result.length() + 2, res.indexOf(tips) - 2);
         String tipsStr = res.substring(res.indexOf(tips) + tips.length() + 2, res.length() - 1);
 

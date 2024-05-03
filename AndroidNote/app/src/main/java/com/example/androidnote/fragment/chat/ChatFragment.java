@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.androidnote.DirectToServer;
+import com.example.androidnote.net.DirectToServer;
 import com.example.androidnote.R;
 import com.example.androidnote.adapter.ChatAdapterMessage;
 import com.example.androidnote.manager.BmobManager;
@@ -33,7 +33,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

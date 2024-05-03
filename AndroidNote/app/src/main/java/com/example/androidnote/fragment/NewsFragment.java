@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.androidnote.DirectToServer;
+import com.example.androidnote.net.DirectToServer;
 import com.example.androidnote.R;
 import com.example.androidnote.adapter.NewsAdapter;
 import com.example.androidnote.model.News;
@@ -44,15 +44,6 @@ public class NewsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NewsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static NewsFragment newInstance(String param) {
         NewsFragment fragment = new NewsFragment();
         Bundle args = new Bundle();
