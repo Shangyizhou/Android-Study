@@ -136,13 +136,16 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
                         TextView textView1 = robotViewHolder.mLinearLayout.findViewById(R.id.tv_query_1);
                         TextView textView2 = robotViewHolder.mLinearLayout.findViewById(R.id.tv_query_2);
                         TextView textView3 = robotViewHolder.mLinearLayout.findViewById(R.id.tv_query_3);
-                        mQuery = YiYanHandler.getTips();
+                        if (mData.size() > 1) {
+                            mQuery = YiYanHandler.getTips();
+                        }
                         if (mQuery == null || mQuery.size() < 3) {
                             return;
                         }
                         textView1.setText(mQuery.get(0));
                         textView2.setText(mQuery.get(1));
                         textView3.setText(mQuery.get(2));
+                        mQuery.clear();
                         if (position == mData.size() - 1) {
                             robotViewHolder.mLinearLayout.setVisibility(View.VISIBLE);
                         }
@@ -242,8 +245,10 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
         if (holder instanceof ChatAdapterMessage.RobotViewHolder) {
-            ((ChatAdapterMessage.RobotViewHolder) holder).mLoading.setVisibility(View.GONE);
-            ((RobotViewHolder) holder).mTextView.setText("...");
+            final RobotViewHolder robotViewHolder = (RobotViewHolder) holder;
+            robotViewHolder.mLoading.setVisibility(View.GONE);
+            robotViewHolder.mTextView.setText("...");
+            robotViewHolder.mLinearLayout.setVisibility(View.GONE);
         }
     }
 }

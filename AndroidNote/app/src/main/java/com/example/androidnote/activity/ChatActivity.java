@@ -202,14 +202,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         updateAdapter();
     }
 
-    private void addRobotQuery() {
-        mQueryList = mCurrentRobot.getQuestions();
-    }
-
-    private void addPersonByQuery(String query) {
-        updateAdapter();
-    }
-
     private void addRobotStartSpeak() {
         Message message = new Message();
         message.setType(ROBOT_TEXT);
@@ -222,7 +214,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         ChatAdapterMessage.mQuery = mCurrentRobot.getQuestions();
         updateAdapter();
     }
-
 
     private void addRobot() {
         Message message = new Message();
