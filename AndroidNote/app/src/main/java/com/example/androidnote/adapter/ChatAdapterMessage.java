@@ -17,7 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.androidnote.R;
 import com.example.androidnote.activity.ChatActivity;
 import com.example.androidnote.model.Message;
+import com.example.androidnote.net.YiYanHandler;
 import com.shangyizhou.develop.log.SLog;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +36,16 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
     private int ROBOT_TYPE = 3;
     private int PERSON_TYPE = 4;
     private Map<Integer, Boolean> isDisplayed; // 用于记录每个项是否已经显示过
+
+    private OnItemClickListener onItemClickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(String text);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     public ChatAdapterMessage(List<Message> data) {
         this.isDisplayed = new HashMap<>();
@@ -123,6 +136,7 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
                         TextView textView1 = robotViewHolder.mLinearLayout.findViewById(R.id.tv_query_1);
                         TextView textView2 = robotViewHolder.mLinearLayout.findViewById(R.id.tv_query_2);
                         TextView textView3 = robotViewHolder.mLinearLayout.findViewById(R.id.tv_query_3);
+                        mQuery = YiYanHandler.getTips();
                         if (mQuery == null || mQuery.size() < 3) {
                             return;
                         }
@@ -137,6 +151,30 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
                             @Override
                             public void onClick(View v) {
                                 // 获取query
+                                if (onItemClickListener != null) {
+                                    onItemClickListener.onItemClick(textView1.getText().toString());
+                                    robotViewHolder.mLinearLayout.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+                        textView2.setOnClickListener(new View.OnClickListener(){
+                            @Override
+                            public void onClick(View v) {
+                                // 获取query
+                                if (onItemClickListener != null) {
+                                    onItemClickListener.onItemClick(textView2.getText().toString());
+                                    robotViewHolder.mLinearLayout.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+                        textView3.setOnClickListener(new View.OnClickListener(){
+                            @Override
+                            public void onClick(View v) {
+                                // 获取query
+                                if (onItemClickListener != null) {
+                                    onItemClickListener.onItemClick(textView3.getText().toString());
+                                    robotViewHolder.mLinearLayout.setVisibility(View.GONE);
+                                }
                             }
                         });
 

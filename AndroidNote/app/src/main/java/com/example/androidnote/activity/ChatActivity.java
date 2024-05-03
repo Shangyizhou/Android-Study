@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,8 +28,12 @@ import com.shangyizhou.develop.helper.SnowFlakeUtil;
 import com.shangyizhou.develop.helper.ToastUtil;
 import com.shangyizhou.develop.helper.UUIDUtil;
 import com.shangyizhou.develop.log.SLog;
+import com.shangyizhou.develop.model.EventIdCenter;
+import com.shangyizhou.develop.model.MessageEvent;
 import com.shangyizhou.develop.net.IResponse;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -97,6 +102,13 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         editText = findViewById(R.id.et_input_msg);
         recyclerView.setAdapter(mChatAdapter);
         sendBtn.setOnClickListener(this);
+
+        mChatAdapter.setOnItemClickListener(new ChatAdapterMessage.OnItemClickListener() {
+            @Override
+            public void onItemClick(String text) {
+                editText.setText(text);
+            }
+        });
     }
 
     private void getData() {
@@ -146,6 +158,18 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         SessionManager.getInstance().saveHistoryMessage();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        if (event == null || event.message == null) {
+            SLog.e(TAG, "【onMessageEvent】event is null");
+            return;
+        }
+        switch (event.name) {
+            case EventIdCenter.EVENT_TEXT_CLICK:
+                SLog.i(TAG, "EVENT_TEXT_CLICK");
+                break;
+        }
+    }
 
     @Override
     public void onClick(View v) {
@@ -287,4 +311,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         // 滑动到底部
         recyclerView.scrollToPosition(mMessageList.size() - 1);
     }
+
+
 }

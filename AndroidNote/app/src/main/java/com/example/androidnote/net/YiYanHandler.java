@@ -5,14 +5,16 @@ import android.content.Context;
 import com.example.androidnote.App;
 import com.shangyizhou.develop.log.SLog;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class YiYanHandler {
     private static final String TAG = YiYanHandler.class.getSimpleName();
-    public static String[] mTips;
+    private static ArrayList<String> mTips = new ArrayList<>();
     public static String process(Context context, String line) {
         SLog.i(TAG, "process: " + line);
-
+        // 清空数据
+        mTips.clear();
         // 使用正则表达式替换所有空白字符
         String res = line.replaceAll("\\s", "");
         res = res.replace("```json", "");
@@ -40,9 +42,13 @@ public class YiYanHandler {
         String[] parts = tipsStr.split("&");
         for (String part : parts) {
             SLog.i(TAG, "process part: " + part);
+            mTips.add(part);
         }
-        mTips = parts;
 
         return resultStr;
+    }
+
+    public static ArrayList<String> getTips() {
+        return mTips;
     }
 }
