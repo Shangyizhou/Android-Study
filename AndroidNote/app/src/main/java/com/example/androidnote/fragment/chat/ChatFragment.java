@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.androidnote.net.DirectToServer;
+import com.example.androidnote.DirectToServer;
 import com.example.androidnote.R;
 import com.example.androidnote.adapter.ChatAdapterMessage;
 import com.example.androidnote.manager.BmobManager;
@@ -22,7 +22,6 @@ import com.example.androidnote.model.ChatModel;
 import com.example.androidnote.model.Message;
 import com.example.androidnote.model.ResponseInfo;
 import com.example.androidnote.model.Session;
-import com.example.androidnote.net.YiYanHandler;
 import com.shangyizhou.develop.helper.DateHelper;
 import com.shangyizhou.develop.helper.SnowFlakeUtil;
 import com.shangyizhou.develop.helper.ToastUtil;
@@ -34,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -279,11 +279,10 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                 }
                 messages.add(assistant);
                 // SLog.i(TAG, String.valueOf(messages));
-                String res = YiYanHandler.process(getActivity(), assistant.get("content"));
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        showResponse(res);
+                        showResponse(assistant.get("content"));
                     }
                 });
             }

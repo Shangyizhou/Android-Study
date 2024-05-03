@@ -11,7 +11,7 @@ import android.widget.EditText;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.androidnote.net.DirectToServer;
+import com.example.androidnote.DirectToServer;
 import com.example.androidnote.R;
 import com.example.androidnote.adapter.ChatAdapterMessage;
 import com.example.androidnote.manager.BmobManager;
@@ -21,8 +21,9 @@ import com.example.androidnote.model.Message;
 import com.example.androidnote.model.ResponseInfo;
 import com.example.androidnote.model.RobotModel;
 import com.example.androidnote.model.Session;
-import com.example.androidnote.net.YiYanHandler;
 import com.shangyizhou.develop.base.BaseActivity;
+import com.shangyizhou.develop.base.BaseUiActivity;
+import com.shangyizhou.develop.helper.DateHelper;
 import com.shangyizhou.develop.helper.SnowFlakeUtil;
 import com.shangyizhou.develop.helper.ToastUtil;
 import com.shangyizhou.develop.helper.UUIDUtil;
@@ -249,12 +250,11 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                     }
                 }
                 messages.add(assistant);
-                String res = YiYanHandler.process(getApplication(), assistant.get("content"));
-
+                // SLog.i(TAG, String.valueOf(messages));
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        showResponse(res);
+                        showResponse(assistant.get("content"));
                     }
                 });
             }
