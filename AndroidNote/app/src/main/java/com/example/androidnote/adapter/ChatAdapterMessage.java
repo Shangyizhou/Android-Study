@@ -136,21 +136,37 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
                         TextView textView1 = robotViewHolder.mLinearLayout.findViewById(R.id.tv_query_1);
                         TextView textView2 = robotViewHolder.mLinearLayout.findViewById(R.id.tv_query_2);
                         TextView textView3 = robotViewHolder.mLinearLayout.findViewById(R.id.tv_query_3);
+                        textView1.setVisibility(View.VISIBLE);
+                        textView2.setVisibility(View.VISIBLE);
+                        textView3.setVisibility(View.VISIBLE);
+
                         if (mData.size() > 1) {
                             mQuery = YiYanHandler.getTips();
                         }
-                        if (mQuery == null || mQuery.size() < 3) {
+                        if (mQuery == null || mQuery.size() > 3) {
                             return;
                         }
-                        textView1.setText(mQuery.get(0));
-                        textView2.setText(mQuery.get(1));
-                        textView3.setText(mQuery.get(2));
+
+                        if (mQuery.size() == 1) {
+                            textView1.setText(mQuery.get(0));
+                            textView2.setVisibility(View.GONE);
+                            textView3.setVisibility(View.GONE);
+                        } else if (mQuery.size() == 2) {
+                            textView1.setText(mQuery.get(0));
+                            textView2.setText(mQuery.get(1));
+                            textView3.setVisibility(View.GONE);
+                        } else if (mQuery.size() == 3) {
+                            textView1.setText(mQuery.get(0));
+                            textView2.setText(mQuery.get(1));
+                            textView3.setText(mQuery.get(2));
+                        }
+
                         mQuery.clear();
                         if (position == mData.size() - 1) {
                             robotViewHolder.mLinearLayout.setVisibility(View.VISIBLE);
                         }
 
-                        textView1.setOnClickListener(new View.OnClickListener(){
+                        textView1.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 // 获取query
@@ -160,7 +176,7 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
                                 }
                             }
                         });
-                        textView2.setOnClickListener(new View.OnClickListener(){
+                        textView2.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 // 获取query
@@ -170,7 +186,7 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
                                 }
                             }
                         });
-                        textView3.setOnClickListener(new View.OnClickListener(){
+                        textView3.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 // 获取query

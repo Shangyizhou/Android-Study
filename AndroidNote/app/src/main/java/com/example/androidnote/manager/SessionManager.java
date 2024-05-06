@@ -114,6 +114,7 @@ public class SessionManager {
      * 创建新会话
      */
     public void addNewSession(Session session) {
+        SessionHelper.getInstance().save(session);
         if (session != null && sessionsList != null) {
             sessionsList.add(session);
         }
@@ -139,8 +140,11 @@ public class SessionManager {
         if (messageMap == null) {
             messageMap = new HashMap<>();
             loadSessionMessage(session);
-        } else if (messageMap.get(session) == null) {
-            loadSessionMessage(session);
+        }
+
+        if (messageMap.get(session) == null) {
+            List<Message> messageList = MessageHelper.getInstance().getMessageListBySession(session.getSessionId());
+            messageMap.put(session, messageList);
         }
         return messageMap.get(session);
     }
