@@ -146,8 +146,12 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                 SLog.i(TAG, "sessions exist, take last session");
                 mCurrentSession = SessionManager.getInstance().getSessionByRobotId(mCurrentRobot.getRobotId());
                 mMessageList = SessionManager.getInstance().getSessionMessages(mCurrentSession);
-                SLog.i(TAG, "reload messageList" + mMessageList);
-                updateAdapterAll();
+                if (mMessageList.size() == 0) {
+                    addRobotStartSpeak();
+                } else {
+                    SLog.i(TAG, "reload messageList" + mMessageList);
+                    updateAdapterAll();
+                }
             }
         }
     }
