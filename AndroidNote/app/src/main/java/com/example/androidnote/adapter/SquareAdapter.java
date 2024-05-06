@@ -78,6 +78,7 @@ public class SquareAdapter extends RecyclerView.Adapter {
                     if (session == null) {
                         session = model.createSession();
                         SessionHelper.getInstance().save(session);
+                        SessionManager.getInstance().addNewSession(session);
                     }
                     Bundle bundle = new Bundle();
                     bundle.putString("model", "load");

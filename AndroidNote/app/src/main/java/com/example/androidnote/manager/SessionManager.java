@@ -141,6 +141,9 @@ public class SessionManager {
             // 还未从数据库加载会话
             loadSessionList();
         }
+        for (Session session : sessionsList) {
+            SLog.i(TAG, session.toString());
+        }
         return sessionsList;
     }
 
