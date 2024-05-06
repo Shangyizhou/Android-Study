@@ -28,9 +28,12 @@ import com.shangyizhou.develop.base.FragmentManagerHelper;
 import com.shangyizhou.develop.helper.ToastUtil;
 import com.shangyizhou.develop.helper.UUIDUtil;
 import com.shangyizhou.develop.log.SLog;
+import com.shangyizhou.develop.model.EventIdCenter;
 import com.shangyizhou.develop.ui.dialog.DialogManager;
 import com.shangyizhou.develop.ui.dialog.DialogView2;
 // import com.sxu.shadowdrawable.ShadowDrawable;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -162,6 +165,8 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
                 model.setImageUrl("");
 
                 RobotHelper.getInstance().save(model);
+                // 通知SquareFragment刷新社区机器人
+                EventBus.getDefault().post(EventIdCenter.SQUARE_FRAGMENT_UPDATE_DATA);
                 createRobotDialog.hide();
 
                 Bundle bundle = new Bundle();
