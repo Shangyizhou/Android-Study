@@ -1,6 +1,7 @@
 package com.example.androidnote.model;
 
 import com.example.androidnote.manager.BmobManager;
+import com.shangyizhou.develop.helper.UUIDUtil;
 
 import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
@@ -146,6 +147,7 @@ public class RobotModel implements Serializable {
 
     public Session createSession() {
         Session session = new Session();
+        session.setSessionId(UUIDUtil.getUUID());
         session.setUserId(BmobManager.getInstance().getObjectId());
         session.setName(this.title);
         session.setDesc(this.desc);

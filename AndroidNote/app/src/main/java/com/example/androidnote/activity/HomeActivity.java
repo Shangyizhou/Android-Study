@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +25,7 @@ import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.RobotModel;
 import com.shangyizhou.develop.base.BaseUiActivity;
 import com.shangyizhou.develop.base.FragmentManagerHelper;
+import com.shangyizhou.develop.helper.ToastUtil;
 import com.shangyizhou.develop.helper.UUIDUtil;
 import com.shangyizhou.develop.log.SLog;
 import com.shangyizhou.develop.ui.dialog.DialogManager;
@@ -73,6 +76,7 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
     public static void startUp(Context context) {
         SLog.i(TAG, "[HomeActivity] startUp");
         Intent intent = new Intent(context, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK); // Login界面跳转进入后，当前任务战都会被清除
         context.startActivity(intent);
     }
 
@@ -221,5 +225,35 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
             tv_square.setTextColor(getResources().getColor(R.color.black));
             fragmentManagerHelper.switchFragment(squareFragment);
         }
+    }
+
+    private boolean isExit = false;
+
+    /**
+     * 双击返回键退出
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (isExit) {
+                this.finish();
+            } else {
+                ToastUtil.getInstance().showToast("再按一次退出");
+                isExit = true;
+                /**
+                 * 两秒内连续按两次
+                 */
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isExit = false;
+                    }
+                }, 2000);
+            }
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 }

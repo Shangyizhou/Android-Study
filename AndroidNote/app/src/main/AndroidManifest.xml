@@ -72,8 +72,11 @@
         <activity
             android:name=".activity.news.ContentActivity"
             android:exported="false" />
+
+        <!-- 设置其为singleTask，方便一键退出app-->
         <activity
             android:name=".activity.HomeActivity"
+            android:launchMode="singleTask"
             android:exported="false" />
         <activity
             android:name=".activity.test.TestActivity"
@@ -86,8 +89,7 @@
             android:exported="false" />
         <activity
             android:name=".activity.LoginActivity"
-            android:exported="true"
-            android:launchMode="singleTask">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

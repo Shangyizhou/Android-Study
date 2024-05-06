@@ -16,12 +16,8 @@
     <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
-    <connection id="a17a4668-e7e2-4da6-a08f-5067040d5baf">
-      <console name="Connection" type="STANDARD" schema="main" session="Main"><![CDATA[select * from ROBOT_MODEL;
-
-select * from MESSAGE;
-
-select * from SESSION;]]></console>
+    <connection id="2d0b0e16-be46-4780-bf28-4a6e8812f60f">
+      <console name="Connection" type="STANDARD" schema="" session="Main" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
@@ -31,23 +27,13 @@ select * from SESSION;]]></console>
     <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
-    <connection id="a17a4668-e7e2-4da6-a08f-5067040d5baf" />
+    <connection id="2d0b0e16-be46-4780-bf28-4a6e8812f60f" />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
-    <filter-actions connection-id="a17a4668-e7e2-4da6-a08f-5067040d5baf" dataset="main.SESSION" active-filter-id="EMPTY_FILTER" />
-    <filter-actions connection-id="a17a4668-e7e2-4da6-a08f-5067040d5baf" dataset="main.USER_INFO" active-filter-id="" />
-    <filter-actions connection-id="a17a4668-e7e2-4da6-a08f-5067040d5baf" dataset="main.ROBOT_MODEL" active-filter-id="EMPTY_FILTER">
-      <filter id="663f01a6-41b4-4ceb-9505-cad4f423df0a" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
-        <condition column="_id" operator="=" value="" active="true" />
-      </filter>
-    </filter-actions>
-    <filter-actions connection-id="a17a4668-e7e2-4da6-a08f-5067040d5baf" dataset="main.RESPONSE_INFO" active-filter-id="EMPTY_FILTER" />
-    <filter-actions connection-id="a17a4668-e7e2-4da6-a08f-5067040d5baf" dataset="main.MESSAGE" active-filter-id="EMPTY_FILTER">
-      <filter id="35692000-21be-4b00-8bd4-3f4e244a87b7" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
-        <condition column="_id" operator="=" value="" active="true" />
-      </filter>
-    </filter-actions>
-    <filter-actions connection-id="a17a4668-e7e2-4da6-a08f-5067040d5baf" dataset="main.android_metadata" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="2d0b0e16-be46-4780-bf28-4a6e8812f60f" dataset="main.SESSION" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="2d0b0e16-be46-4780-bf28-4a6e8812f60f" dataset="main.RESPONSE_INFO" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="2d0b0e16-be46-4780-bf28-4a6e8812f60f" dataset="main.ROBOT_MODEL" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="2d0b0e16-be46-4780-bf28-4a6e8812f60f" dataset="main.MESSAGE" active-filter-id="EMPTY_FILTER" />
   </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />
@@ -69,7 +55,7 @@ select * from SESSION;]]></console>
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
-      <connection id="a17a4668-e7e2-4da6-a08f-5067040d5baf" active="true" signed="true">
+      <connection id="2d0b0e16-be46-4780-bf28-4a6e8812f60f" active="true" signed="true">
         <database>
           <name value="Connection" />
           <description value="" />
@@ -94,9 +80,6 @@ select * from SESSION;]]></console>
         </database>
         <properties>
           <auto-commit value="false" />
-          <properties>
-            <property key="serverTimezone" value="Asia/Shanghai" />
-          </properties>
         </properties>
         <ssh-settings>
           <active value="false" />
@@ -115,7 +98,7 @@ select * from SESSION;]]></console>
           <client-key-file value="" />
         </ssl-settings>
         <details>
-          <charset value="GBK" />
+          <charset value="UTF-8" />
           <session-management value="true" />
           <ddl-file-binding value="true" />
           <database-logging value="true" />

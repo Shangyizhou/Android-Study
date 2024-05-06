@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.androidnote.db.helper.SessionHelper;
 import com.example.androidnote.net.DirectToServer;
 import com.example.androidnote.R;
 import com.example.androidnote.adapter.ChatAdapterMessage;
