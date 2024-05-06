@@ -21,6 +21,7 @@ import com.example.androidnote.activity.AboutActivity;
 import com.example.androidnote.activity.LoginActivity;
 import com.example.androidnote.activity.user.UserInfoActivity;
 import com.example.androidnote.manager.BmobManager;
+import com.example.androidnote.manager.SessionManager;
 import com.example.androidnote.model.IMUser;
 import com.shangyizhou.develop.helper.ToastUtil;
 import com.shangyizhou.develop.log.SLog;
@@ -163,15 +164,14 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
 
     private void logout() {
         //删除Token
-        // SpUtils.getInstance().deleteKey(Constants.SP_TOKEN);
         //Bmob退出登录
         BmobUser.logOut();
+        SessionManager.getInstance().resetSession();
 
         //跳转到登录页
         Intent intent_login = new Intent();
         intent_login.setClass(getActivity(), LoginActivity.class);
-        intent_login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent_login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent_login);
-        getActivity().finish();
     }
 }

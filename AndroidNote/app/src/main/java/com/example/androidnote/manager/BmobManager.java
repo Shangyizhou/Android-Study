@@ -73,7 +73,6 @@ public class BmobManager {
         });
     }
 
-    private LoginCallback loginCallback;
     /**
      * 账号密码登录
      */
@@ -100,6 +99,10 @@ public class BmobManager {
                 }
             }
         });
+    }
+
+    public void logout() {
+        BmobUser.logOut();
     }
 
     /**

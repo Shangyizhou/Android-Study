@@ -95,7 +95,8 @@ public class RegisterActivity extends BaseActivity {
                             @Override
                             public void run() {
                                 dialog.dismiss();
-                                LoginActivity.startUp(RegisterActivity.this);                           }
+                                LoginActivity.startUp(RegisterActivity.this);
+                            }
                         });
                     }
                 }, 1500);

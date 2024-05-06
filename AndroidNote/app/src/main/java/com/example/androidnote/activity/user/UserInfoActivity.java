@@ -229,7 +229,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-        getData();getData();
+        getData();
     }
 
     @Override

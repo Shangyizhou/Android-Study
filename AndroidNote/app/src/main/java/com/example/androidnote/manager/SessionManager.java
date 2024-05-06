@@ -24,6 +24,16 @@ public class SessionManager {
         init();
     }
 
+    /**
+     * 注销的时候使用
+     */
+    public void resetSession() {
+        saveHistoryMessage();
+
+        sessionsList = null;
+        messageMap = null;
+    }
+
     public static SessionManager getInstance() {
         if (instance == null) {
             synchronized (SessionManager.class) {
@@ -102,6 +112,9 @@ public class SessionManager {
         SLog.i(TAG, "saveHistoryMessage");
         // 更新当前session修改时间
         // mCurrentSession.setUpdateTime(System.currentTimeMillis());
+        if (sessionsList == null) {
+            return;
+        }
         SessionHelper.getInstance().save(sessionsList);
 
         // 根据messageMap保存所有会话历史消息

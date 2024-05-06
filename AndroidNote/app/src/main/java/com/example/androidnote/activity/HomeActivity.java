@@ -166,7 +166,7 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
 
                 RobotHelper.getInstance().save(model);
                 // 通知SquareFragment刷新社区机器人
-                EventBus.getDefault().post(EventIdCenter.SQUARE_FRAGMENT_UPDATE_DATA);
+                EventBus.getDefault().postSticky(EventIdCenter.SQUARE_FRAGMENT_UPDATE_DATA);
                 createRobotDialog.hide();
 
                 Bundle bundle = new Bundle();
