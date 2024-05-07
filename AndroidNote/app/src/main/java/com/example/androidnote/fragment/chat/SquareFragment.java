@@ -2,6 +2,8 @@ package com.example.androidnote.fragment.chat;
 
 import android.os.Bundle;
 
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -49,7 +51,8 @@ public class SquareFragment extends Fragment {
     private SquareAdapter adapter;
     private List<RobotModel> robotModelList = new ArrayList<>();;
 
-
+    Toolbar toolbar;
+    SearchView searchView;
     public SquareFragment() {
         // Required empty public constructor
     }
@@ -89,6 +92,8 @@ public class SquareFragment extends Fragment {
     }
 
     private void initView(View view) {
+        toolbar = view.findViewById(R.id.toolbar);
+        searchView = view.findViewById(R.id.search_view);
         recyclerView = view.findViewById(R.id.recycle_view);
         adapter = new SquareAdapter(new OnItemViewClickListener() {
             @Override
@@ -96,8 +101,31 @@ public class SquareFragment extends Fragment {
 
             }
         });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                search(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                search(newText);
+                return true;
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+    }
+
+    private void search(String text) {
+        List<RobotModel> searchList = new ArrayList<>();
+        for (RobotModel model : robotModelList) {
+            if (model.getTitle().contains(text)) {
+                searchList.add(model);
+            }
+        }
+        updateWhenSearch(searchList);
     }
 
     private void getData() {
@@ -114,6 +142,12 @@ public class SquareFragment extends Fragment {
 
     private void updateAdapter() {
         adapter.updateAll(robotModelList);
+        // 滑动到底部
+        recyclerView.scrollToPosition(0);
+    }
+
+    private void updateWhenSearch(List<RobotModel> searchList) {
+        adapter.updateAll(searchList);
         // 滑动到底部
         recyclerView.scrollToPosition(0);
     }
