@@ -138,6 +138,7 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
 
     private void initCreateRobotView() {
         createRobotDialog = DialogManager.getInstance().initView(this, R.layout.dialog_create_robot, Gravity.BOTTOM);
+        createRobotDialog.setHeightMatchParent();
         editName = createRobotDialog.findViewById(R.id.edit_name);
         editDesc = createRobotDialog.findViewById(R.id.edit_desc);
         editStartSpeak = createRobotDialog.findViewById(R.id.edit_start_spek);

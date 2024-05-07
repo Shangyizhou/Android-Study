@@ -16,7 +16,7 @@
     <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
-    <connection id="2d0b0e16-be46-4780-bf28-4a6e8812f60f">
+    <connection id="8dbce8a7-bb5e-47b4-b859-cf08e8451ba5">
       <console name="Connection" type="STANDARD" schema="" session="Main" />
     </connection>
   </component>
@@ -27,14 +27,7 @@
     <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
-    <connection id="2d0b0e16-be46-4780-bf28-4a6e8812f60f" />
-  </component>
-  <component name="DBNavigator.Project.DatasetFilterManager">
-    <filter-actions connection-id="2d0b0e16-be46-4780-bf28-4a6e8812f60f" dataset="main.SESSION" active-filter-id="EMPTY_FILTER" />
-    <filter-actions connection-id="2d0b0e16-be46-4780-bf28-4a6e8812f60f" dataset="main.USER" active-filter-id="" />
-    <filter-actions connection-id="2d0b0e16-be46-4780-bf28-4a6e8812f60f" dataset="main.RESPONSE_INFO" active-filter-id="EMPTY_FILTER" />
-    <filter-actions connection-id="2d0b0e16-be46-4780-bf28-4a6e8812f60f" dataset="main.ROBOT_MODEL" active-filter-id="EMPTY_FILTER" />
-    <filter-actions connection-id="2d0b0e16-be46-4780-bf28-4a6e8812f60f" dataset="main.MESSAGE" active-filter-id="EMPTY_FILTER" />
+    <connection id="8dbce8a7-bb5e-47b4-b859-cf08e8451ba5" />
   </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />
@@ -56,7 +49,7 @@
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
-      <connection id="2d0b0e16-be46-4780-bf28-4a6e8812f60f" active="true" signed="true">
+      <connection id="8dbce8a7-bb5e-47b4-b859-cf08e8451ba5" active="true" signed="true">
         <database>
           <name value="Connection" />
           <description value="" />

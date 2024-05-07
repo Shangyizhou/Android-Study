@@ -22,6 +22,7 @@ import com.example.androidnote.model.ChatModel;
 import com.example.androidnote.model.Message;
 import com.example.androidnote.model.ResponseInfo;
 import com.example.androidnote.model.Session;
+import com.example.androidnote.net.YiYanHandler;
 import com.shangyizhou.develop.helper.DateHelper;
 import com.shangyizhou.develop.helper.SnowFlakeUtil;
 import com.shangyizhou.develop.helper.ToastUtil;
@@ -130,6 +131,13 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         editText = view.findViewById(R.id.et_input_msg);
         recyclerView.setAdapter(mChatAdapter);
         sendBtn.setOnClickListener(this);
+
+        mChatAdapter.setOnItemClickListener(new ChatAdapterMessage.OnItemClickListener() {
+            @Override
+            public void onItemClick(String text) {
+                editText.setText(text);
+            }
+        });
     }
 
     /**
@@ -277,11 +285,13 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                     }
                 }
                 messages.add(assistant);
+                String res = YiYanHandler.process(getActivity(), assistant.get("content"));
+
                 // SLog.i(TAG, String.valueOf(messages));
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        showResponse(assistant.get("content"));
+                        showResponse(res);
                     }
                 });
             }

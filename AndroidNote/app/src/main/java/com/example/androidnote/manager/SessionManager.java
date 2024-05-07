@@ -61,7 +61,8 @@ public class SessionManager {
         SLog.i(TAG, "addFirstSession");
         Session session = new Session();
 
-        session.setName(DateHelper.getInstance().getCurrentTime());
+        // session.setName(DateHelper.getInstance().getCurrentTime());
+        session.setName("默认对话");
         session.setDesc("Default Robot Chat");
         session.setRobotId(DEFAULT_ROBOT_ID);
         session.setUserId(BmobManager.getInstance().getObjectId());

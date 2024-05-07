@@ -83,12 +83,15 @@ public class HistoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         // return inflater.inflate(R.layout.fragment_h_istory, container, false);
+        SLog.i(TAG, "onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_history, container, false);
         initView(view);
+        getData();
         return view;
     }
 
     private void initView(View view) {
+        SLog.i(TAG, "initView: ");
         mHistoryAdapter = new HistoryAdapter(getActivity());
         mHistoryAdapter.setOnItemClickListener(new HistoryAdapter.onItemViewClickListener() {
             @Override
@@ -115,14 +118,16 @@ public class HistoryFragment extends Fragment {
         if (mSessions == null) {
             SLog.i(TAG, "getData: mSessions is null");
         }
-        mHistoryAdapter.updateDataList(mSessions);
+        // mHistoryAdapter.updateDataList(mSessions);
+        if (mHistoryAdapter != null) {
+            mHistoryAdapter.updateDataList(mSessions);
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         SLog.i(TAG, "onResume: ");
-        getData();
     }
 
     public interface onItemViewClickListener {

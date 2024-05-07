@@ -16,4 +16,12 @@ public class DialogView2 extends Dialog {
         layoutParams.gravity = gravity;
         window.setAttributes(layoutParams);
     }
+
+    public void setHeightMatchParent() {
+        Window window = getWindow();
+        WindowManager.LayoutParams layoutParams = window.getAttributes();
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(layoutParams);
+    }
 }

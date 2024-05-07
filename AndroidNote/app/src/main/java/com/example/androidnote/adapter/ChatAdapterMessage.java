@@ -143,7 +143,7 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
                         if (mData.size() > 1) {
                             mQuery = YiYanHandler.getTips();
                         }
-                        if (mQuery == null || mQuery.size() > 3) {
+                        if (mQuery == null || mQuery.size() > 3 || mQuery.size() == 0) {
                             return;
                         }
 
@@ -161,6 +161,7 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
                             textView3.setText(mQuery.get(2));
                         }
 
+                        SLog.i("ChatAdapterMessage", mQuery.toString());
                         mQuery.clear();
                         if (position == mData.size() - 1) {
                             robotViewHolder.mLinearLayout.setVisibility(View.VISIBLE);
