@@ -60,7 +60,7 @@
             android:layout_marginTop="13dp"
             android:layout_marginLeft="70dp"
             android:layout_toRightOf="@+id/tab_layout"
-            android:background="@drawable/new_chat_2" />
+            android:background="@drawable/new_chat_2"/>
 
     </RelativeLayout>
 

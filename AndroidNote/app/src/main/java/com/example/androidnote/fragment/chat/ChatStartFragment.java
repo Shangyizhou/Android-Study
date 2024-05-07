@@ -121,7 +121,7 @@ public class ChatStartFragment extends Fragment {
                 textView.setTextAppearance(getActivity(), R.style.TabLayoutTextSelected);
                 if (addNewChat != null) {
                     if (tab.getPosition() == 0) {
-                        addNewChat.setVisibility(View.VISIBLE);
+                        addNewChat.setVisibility(View.INVISIBLE);
                     } else if (tab.getPosition() == 1) {
                         addNewChat.setVisibility(View.INVISIBLE);
                         HistoryFragment fragment = (HistoryFragment) fragmentList.get(tab.getPosition());
