@@ -30,7 +30,10 @@ public class RobotManager {
 
     public void init() {
         SLog.i(TAG, "init");
+
     }
+
+
 
     /**
      * 获取所有公开的Robot

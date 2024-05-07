@@ -1,10 +1,18 @@
 package com.example.androidnote.db.helper;
 
+import static com.example.androidnote.constant.Constants.DEFAULT_USER_ID;
+import static com.example.androidnote.constant.Constants.INIT_ROBOT_MODEL;
+
 import com.example.androidnote.db.DaoManager;
 import com.example.androidnote.db.RobotModelDao;
+import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.RobotModel;
+import com.shangyizhou.develop.helper.SPUtil;
+import com.shangyizhou.develop.helper.UUIDUtil;
 import com.shangyizhou.develop.log.SLog;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RobotHelper {
@@ -14,6 +22,7 @@ public class RobotHelper {
 
     public RobotHelper() {
         mRobotModelDao = DaoManager.getInstance().getDaoSession().getRobotModelDao();
+        init();
     }
 
     public static RobotHelper getInstance() {
@@ -83,4 +92,71 @@ public class RobotHelper {
         }
         return null;
     }
+    List<RobotModel> modelList = new ArrayList<>();
+    List<String> queryList = new ArrayList<>();
+
+
+    String[] titles = {
+            "数据库学习机器人",
+            "操作系统学习机器人",
+            "数据结构与算法学习机器人",
+            "计算机网络学习机器人",
+            "JAVA语言学习机器人",
+            "C++语言学习机器人",
+            "Golang语言学习机器人"
+    };
+
+    String[] descs = {
+            "数据库学习辅助机器人，帮助理解数据库的概念和使用",
+            "操作系统学习辅助机器人，帮助理解操作系统的概念和使用",
+            "数据结构与算法学习辅助机器人，帮助理解数据结构与算法的概念和算法实现",
+            "计算机网络学习辅助机器人，帮助理解计算机网络的概念和各类网络协议实现",
+            "JAVA语言学习机器人，帮助理解JAVA编程语言的使用和相关高级语法",
+            "C++语言学习机器人，帮助理解C++编程语言的使用和相关高级语法",
+            "Golang语言学习机器人，帮助理解Go编程语言的使用和相关高级语法"
+    };
+
+    String[][] questions = {
+            {"数据库是什么", "数据库的分类", "数据库可以做什么"},
+            {"操作系统是什么", "操作系统的分类", "操作系统可以做什么"},
+            {"数据结构是什么", "什么是时间复杂度", "什么是空间复杂度"},
+            {"计算机网络是什么", "计算机网络有哪些协议", "TCP和UDP区别是什么"},
+            {"JAVA是什么", "什么是JDK", "JAVA开发可以做什么"},
+            {"C++语言是什么", "C++和C语言区别", "C++开发可以做什么"},
+            {"Go语言是什么", "Go语言和Java语言的区别", "Go语言开发可以做什么"},
+    };
+
+    String[] beginSays = {
+            "您好，我是数据库学习辅助机器人，可以帮助您理解数据库的概念和使用，有什么要问我的呀",
+            "您好，我是操作系统学习辅助机器人，可以帮助您理解操作系统的概念和使用，有什么要问我的呀",
+            "您好，我是数据结构与算法学习辅助机器人，可以帮助您理解数据结构与算法的概念和使用，有什么要问我的呀",
+            "您好，我是计算机网络学习辅助机器人，可以帮助您计算机网络的概念，有什么要问我的呀",
+            "您好，我是JAVA编程语言学习辅助机器人，可以帮助您学习使用JAVA语言来开发程序，有什么要问我的呀",
+            "您好，我是C++编程语言学习辅助机器人，可以帮助您学习使用C++语言来开发程序，有什么要问我的呀",
+            "您好，我是Golang编程语言学习辅助机器人，可以帮助您学习使用Golang语言来开发程序，有什么要问我的呀"
+    };
+
+    public void init() {
+        if (SPUtil.getInstance().getBooleanData(INIT_ROBOT_MODEL, false)) {
+            return;
+        }
+        for (int i = 0; i < titles.length; i++) {
+            RobotModel model = new RobotModel();
+            List<String> queryList = Arrays.asList(questions[i]);
+            model.setTitle(titles[i]);
+            model.setDesc(descs[i]);
+            model.setRobotId(UUIDUtil.getUUID());
+            model.setOwnerId(DEFAULT_USER_ID);
+            model.setBeginSay(beginSays[i]);
+            model.setQuestions(queryList);
+            model.setCreateTime(System.currentTimeMillis());
+            model.setUpdateTime(System.currentTimeMillis());
+            model.setImageUrl("");
+
+            save(model);
+        }
+        SPUtil.getInstance().saveBooleanData(INIT_ROBOT_MODEL, true);
+    }
+
+
 }

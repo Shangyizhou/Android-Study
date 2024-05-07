@@ -162,7 +162,10 @@ public class ChatAdapterMessage extends RecyclerView.Adapter {
                         }
 
                         SLog.i("ChatAdapterMessage", mQuery.toString());
-                        mQuery.clear();
+                        if (mQuery instanceof ArrayList) {
+                            mQuery.clear();
+                        }
+                        // mQuery.clear();
                         if (position == mData.size() - 1) {
                             robotViewHolder.mLinearLayout.setVisibility(View.VISIBLE);
                         }
