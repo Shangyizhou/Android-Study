@@ -39,6 +39,9 @@
         android:theme="@style/Theme.AndroidNote"
         tools:targetApi="31">
         <activity
+            android:name=".activity.DataActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ChatActivity"
             android:exported="false" />
         <activity
@@ -71,13 +74,11 @@
             android:exported="false" />
         <activity
             android:name=".activity.news.ContentActivity"
-            android:exported="false" />
-
-        <!-- 设置其为singleTask，方便一键退出app-->
+            android:exported="false" /> <!-- 设置其为singleTask，方便一键退出app -->
         <activity
             android:name=".activity.HomeActivity"
-            android:launchMode="singleTask"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTask" />
         <activity
             android:name=".activity.test.TestActivity"
             android:exported="false" />

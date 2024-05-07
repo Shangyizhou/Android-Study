@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.example.androidnote.App;
 import com.example.androidnote.R;
 import com.example.androidnote.activity.AboutActivity;
+import com.example.androidnote.activity.DataActivity;
 import com.example.androidnote.activity.LoginActivity;
 import com.example.androidnote.activity.user.UserInfoActivity;
 import com.example.androidnote.manager.BmobManager;
@@ -93,6 +94,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
     private LinearLayout ll_setting;
     private LinearLayout ll_notice;
     private LinearLayout ll_logout;
+    private LinearLayout ll_data;
     TextView tvVersion;
 
     private void initView(View view) {
@@ -103,12 +105,14 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         iv_me_photo = view.findViewById(R.id.iv_me_photo);
         tv_nickname = view.findViewById(R.id.tv_nickname);
         ll_logout = view.findViewById(R.id.ll_logout);
+        ll_data = view.findViewById(R.id.ll_data);
 
         ll_me_info.setOnClickListener(this);
         ll_share.setOnClickListener(this);
         ll_setting.setOnClickListener(this);
         ll_notice.setOnClickListener(this);
         ll_logout.setOnClickListener(this);
+        ll_data.setOnClickListener(this);
 
         ll_setting.setVisibility(View.GONE);
 
@@ -159,6 +163,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         } else if (id == R.id.ll_logout) {
             // 退出登录
             logout();
+        } else if (id == R.id.ll_data) {
+            DataActivity.startUp(getActivity());
         }
     }
 
