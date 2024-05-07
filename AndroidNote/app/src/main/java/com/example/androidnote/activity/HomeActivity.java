@@ -20,7 +20,8 @@ import com.example.androidnote.fragment.chat.ChatStartFragment;
 import com.example.androidnote.fragment.DataFragment;
 import com.example.androidnote.fragment.NewsStartFragment;
 import com.example.androidnote.fragment.PersonFragment;
-import com.example.androidnote.fragment.chat.SquareFragment;
+import com.example.androidnote.fragment.SquareFragment;
+import com.example.androidnote.fragment.square.SquareStartFragment;
 import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.RobotModel;
 import com.shangyizhou.develop.base.BaseUiActivity;
@@ -37,8 +38,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.disposables.Disposable;
 
 public class HomeActivity extends BaseUiActivity implements View.OnClickListener {
     private static final String TAG = HomeActivity.class.getSimpleName();
@@ -74,7 +73,8 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
     private ImageView iv_square;
     private TextView tv_square;
     private LinearLayout ll_square;
-    private SquareFragment squareFragment = null;
+    // private SquareFragment squareFragment = null;
+    private SquareStartFragment squareStartFragment = null;
 
     public static void startUp(Context context) {
         SLog.i(TAG, "[HomeActivity] startUp");
@@ -186,7 +186,8 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
         dataFragment = new DataFragment();
         newsStartFragment = new NewsStartFragment();
         personFragment = new PersonFragment();
-        squareFragment = new SquareFragment();
+        // squareFragment = new SquareFragment();
+        squareStartFragment = new SquareStartFragment();
         tv_ai.setTextColor(getResources().getColor(R.color.black));
         fragmentManagerHelper.switchFragment(chatStartFragment);
     }
@@ -229,7 +230,7 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
             SLog.i(TAG, "[onClick] create_robot_home");
             setAllGrey();
             tv_square.setTextColor(getResources().getColor(R.color.black));
-            fragmentManagerHelper.switchFragment(squareFragment);
+            fragmentManagerHelper.switchFragment(squareStartFragment);
         }
     }
 

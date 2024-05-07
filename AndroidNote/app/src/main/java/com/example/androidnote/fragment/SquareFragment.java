@@ -1,27 +1,24 @@
-package com.example.androidnote.fragment.chat;
+package com.example.androidnote.fragment;
 
 import android.os.Bundle;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.androidnote.R;
 import com.example.androidnote.adapter.OnItemViewClickListener;
 import com.example.androidnote.adapter.SquareAdapter;
 import com.example.androidnote.db.helper.RobotHelper;
-import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.manager.SessionManager;
 import com.example.androidnote.model.RobotModel;
-import com.shangyizhou.develop.helper.UUIDUtil;
+import com.google.android.material.tabs.TabLayout;
 import com.shangyizhou.develop.log.SLog;
 import com.shangyizhou.develop.model.EventIdCenter;
 import com.shangyizhou.develop.model.MessageEvent;
@@ -53,6 +50,7 @@ public class SquareFragment extends Fragment {
 
     Toolbar toolbar;
     SearchView searchView;
+    TabLayout tabLayout;
     public SquareFragment() {
         // Required empty public constructor
     }
@@ -92,9 +90,10 @@ public class SquareFragment extends Fragment {
     }
 
     private void initView(View view) {
-        toolbar = view.findViewById(R.id.toolbar);
+        // toolbar = view.findViewById(R.id.toolbar);
         searchView = view.findViewById(R.id.search_view);
         recyclerView = view.findViewById(R.id.recycle_view);
+        tabLayout = view.findViewById(R.id.tab_layout);
         adapter = new SquareAdapter(new OnItemViewClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -129,6 +128,7 @@ public class SquareFragment extends Fragment {
     }
 
     private void getData() {
+        SLog.i(TAG, "getData");
         robotModelList = RobotHelper.getInstance().takeAll();
         updateAdapter();
     }
