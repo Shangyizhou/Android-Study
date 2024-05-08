@@ -2,6 +2,9 @@ package com.example.androidnote.db.helper;
 
 import static com.example.androidnote.constant.Constants.DEFAULT_USER_ID;
 import static com.example.androidnote.constant.Constants.INIT_ROBOT_MODEL;
+import static com.example.androidnote.constant.Constants.ROBOT_MODEL_BASIC;
+import static com.example.androidnote.constant.Constants.ROBOT_MODEL_LANGUAGE;
+import static com.example.androidnote.constant.Constants.ROBOT_MODEL_NORMAL;
 
 import com.example.androidnote.db.DaoManager;
 import com.example.androidnote.db.RobotModelDao;
@@ -92,6 +95,17 @@ public class RobotHelper {
         }
         return null;
     }
+
+    public List<RobotModel> takeAllByType(String type) {
+        if (isDataBaseValid()) {
+            return mRobotModelDao.queryBuilder()
+                    .where(RobotModelDao.Properties.IsDel.eq(false))
+                    .where(RobotModelDao.Properties.Type.eq(type))
+                    .orderDesc(RobotModelDao.Properties.CreateTime)
+                    .list();
+        }
+        return null;
+    }
     List<RobotModel> modelList = new ArrayList<>();
     List<String> queryList = new ArrayList<>();
 
@@ -136,6 +150,16 @@ public class RobotHelper {
             "您好，我是Golang编程语言学习辅助机器人，可以帮助您学习使用Golang语言来开发程序，有什么要问我的呀"
     };
 
+    String[] types = {
+        ROBOT_MODEL_BASIC,
+        ROBOT_MODEL_BASIC,
+        ROBOT_MODEL_BASIC,
+        ROBOT_MODEL_BASIC,
+        ROBOT_MODEL_LANGUAGE,
+        ROBOT_MODEL_LANGUAGE,
+        ROBOT_MODEL_LANGUAGE,
+    };
+
     public void init() {
         if (SPUtil.getInstance().getBooleanData(INIT_ROBOT_MODEL, false)) {
             return;
@@ -152,6 +176,7 @@ public class RobotHelper {
             model.setCreateTime(System.currentTimeMillis());
             model.setUpdateTime(System.currentTimeMillis());
             model.setImageUrl("");
+            model.setType(types[i]);
 
             save(model);
         }

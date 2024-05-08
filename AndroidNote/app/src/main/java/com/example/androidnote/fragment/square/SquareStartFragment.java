@@ -1,5 +1,14 @@
 package com.example.androidnote.fragment.square;
 
+import static com.example.androidnote.constant.Constants.ROBOT_MODEL_ANDROID;
+import static com.example.androidnote.constant.Constants.ROBOT_MODEL_BACK;
+import static com.example.androidnote.constant.Constants.ROBOT_MODEL_BASIC;
+import static com.example.androidnote.constant.Constants.ROBOT_MODEL_CAREER;
+import static com.example.androidnote.constant.Constants.ROBOT_MODEL_CODE;
+import static com.example.androidnote.constant.Constants.ROBOT_MODEL_FRONT;
+import static com.example.androidnote.constant.Constants.ROBOT_MODEL_LANGUAGE;
+import static com.example.androidnote.constant.Constants.ROBOT_MODEL_NORMAL;
+
 import android.os.Bundle;
 
 import androidx.appcompat.widget.SearchView;
@@ -84,7 +93,6 @@ public class SquareStartFragment extends Fragment {
     TabLayout tabLayout;
     ViewPager viewPager;
     ImageView search;
-    private List<String> titleList;
     private List<Fragment> fragmentList;
     private void initView(View view) {
         tabLayout = view.findViewById(R.id.tab_layout);
@@ -98,24 +106,17 @@ public class SquareStartFragment extends Fragment {
         });
     }
 
+    String[] titles = {"通用", "就业", "语言", "考研", "代码", "安卓", "后端", "前端" };
+    String[] types = new String[]{ROBOT_MODEL_NORMAL, ROBOT_MODEL_CAREER, ROBOT_MODEL_LANGUAGE, ROBOT_MODEL_BASIC, ROBOT_MODEL_CODE, ROBOT_MODEL_ANDROID, ROBOT_MODEL_BACK, ROBOT_MODEL_FRONT};
     private void getData() {
-        titleList = new ArrayList<>();
         fragmentList = new ArrayList<>();
-        titleList.add("通用");
-        titleList.add("就业");
-        titleList.add("语言");
-        titleList.add("考研");
-        titleList.add("代码");
-        titleList.add("安卓");
-        titleList.add("后端");
-        titleList.add("前端");
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         // 设置标题
         /**
          * 记得要先设置默认的 app:tabTextAppearance="@style/TabLayoutTextStyle"
          */
-        for (int i = 0; i < titleList.size(); i++) {
-            tabLayout.addTab(tabLayout.newTab().setText(titleList.get(i)));
+        for (int i = 0; i < titles.length; i++) {
+            tabLayout.addTab(tabLayout.newTab().setText(titles[i]));
         }
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -146,14 +147,13 @@ public class SquareStartFragment extends Fragment {
             }
         });
 
-        fragmentList.add(new SquareFragment());
-        fragmentList.add(new SquareFragment());
-        fragmentList.add(new SquareFragment());
-        fragmentList.add(new SquareFragment());
-        fragmentList.add(new SquareFragment());
-        fragmentList.add(new SquareFragment());
-        fragmentList.add(new SquareFragment());
-        fragmentList.add(new SquareFragment());
+        for (String s : types) {
+            Bundle args = new Bundle();
+            args.putString("type", s);
+            SquareFragment fragment = new SquareFragment();
+            fragment.setArguments(args);
+            fragmentList.add(fragment);
+        }
 
         MyPagerAdapter adapter = new MyPagerAdapter(getChildFragmentManager());
         //给viewPager设置adapter
@@ -180,7 +180,7 @@ public class SquareStartFragment extends Fragment {
         }
         @Override
         public CharSequence getPageTitle(int position) {
-            return titleList.get(position);//页卡标题
+            return titles[position];//页卡标题
         }
     }
 }

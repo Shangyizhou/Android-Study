@@ -24,10 +24,15 @@
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
+    <open-files>
+      <object connection-id="8dbce8a7-bb5e-47b4-b859-cf08e8451ba5" object-ref="schemas/main/tables/ROBOT_MODEL" />
+    </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="8dbce8a7-bb5e-47b4-b859-cf08e8451ba5" />
+  </component>
+  <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="8dbce8a7-bb5e-47b4-b859-cf08e8451ba5" dataset="main.ROBOT_MODEL" active-filter-id="EMPTY_FILTER" />
   </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />

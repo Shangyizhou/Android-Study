@@ -1,5 +1,7 @@
 package com.example.androidnote.activity;
 
+import static com.example.androidnote.constant.Constants.ROBOT_MODEL_NORMAL;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -164,6 +166,7 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
                 model.setCreateTime(System.currentTimeMillis());
                 model.setUpdateTime(System.currentTimeMillis());
                 model.setImageUrl("");
+                model.setType(ROBOT_MODEL_NORMAL);
 
                 RobotHelper.getInstance().save(model);
                 // 通知SquareFragment刷新社区机器人

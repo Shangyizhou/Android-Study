@@ -24,6 +24,7 @@ public class RobotModel implements Serializable {
     private String desc;
     private String imageUrl;
     private String beginSay;
+    private String type;
     private boolean isDel = false;
     @Convert(columnType = String.class, converter = StringConverter.class)
     private List<String> questions;
@@ -33,10 +34,10 @@ public class RobotModel implements Serializable {
     long createTime;
     @NotNull
     long updateTime;
-    @Generated(hash = 543954103)
+    @Generated(hash = 945252005)
     public RobotModel(Long id, String robotId, String ownerId, String title,
-            String desc, String imageUrl, String beginSay, boolean isDel,
-            List<String> questions, long sendTime, long createTime,
+            String desc, String imageUrl, String beginSay, String type,
+            boolean isDel, List<String> questions, long sendTime, long createTime,
             long updateTime) {
         this.id = id;
         this.robotId = robotId;
@@ -45,6 +46,7 @@ public class RobotModel implements Serializable {
         this.desc = desc;
         this.imageUrl = imageUrl;
         this.beginSay = beginSay;
+        this.type = type;
         this.isDel = isDel;
         this.questions = questions;
         this.sendTime = sendTime;
@@ -157,5 +159,11 @@ public class RobotModel implements Serializable {
         session.setCreateTime(System.currentTimeMillis());
         session.setUpdateTime(System.currentTimeMillis());
         return session;
+    }
+    public String getType() {
+        return this.type;
+    }
+    public void setType(String type) {
+        this.type = type;
     }
 }

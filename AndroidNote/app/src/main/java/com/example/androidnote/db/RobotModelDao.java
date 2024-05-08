@@ -34,11 +34,12 @@ public class RobotModelDao extends AbstractDao<RobotModel, Long> {
         public final static Property Desc = new Property(4, String.class, "desc", false, "DESC");
         public final static Property ImageUrl = new Property(5, String.class, "imageUrl", false, "IMAGE_URL");
         public final static Property BeginSay = new Property(6, String.class, "beginSay", false, "BEGIN_SAY");
-        public final static Property IsDel = new Property(7, boolean.class, "isDel", false, "IS_DEL");
-        public final static Property Questions = new Property(8, String.class, "questions", false, "QUESTIONS");
-        public final static Property SendTime = new Property(9, long.class, "sendTime", false, "SEND_TIME");
-        public final static Property CreateTime = new Property(10, long.class, "createTime", false, "CREATE_TIME");
-        public final static Property UpdateTime = new Property(11, long.class, "updateTime", false, "UPDATE_TIME");
+        public final static Property Type = new Property(7, String.class, "type", false, "TYPE");
+        public final static Property IsDel = new Property(8, boolean.class, "isDel", false, "IS_DEL");
+        public final static Property Questions = new Property(9, String.class, "questions", false, "QUESTIONS");
+        public final static Property SendTime = new Property(10, long.class, "sendTime", false, "SEND_TIME");
+        public final static Property CreateTime = new Property(11, long.class, "createTime", false, "CREATE_TIME");
+        public final static Property UpdateTime = new Property(12, long.class, "updateTime", false, "UPDATE_TIME");
     }
 
     private final StringConverter questionsConverter = new StringConverter();
@@ -62,11 +63,12 @@ public class RobotModelDao extends AbstractDao<RobotModel, Long> {
                 "\"DESC\" TEXT," + // 4: desc
                 "\"IMAGE_URL\" TEXT," + // 5: imageUrl
                 "\"BEGIN_SAY\" TEXT," + // 6: beginSay
-                "\"IS_DEL\" INTEGER NOT NULL ," + // 7: isDel
-                "\"QUESTIONS\" TEXT," + // 8: questions
-                "\"SEND_TIME\" INTEGER NOT NULL ," + // 9: sendTime
-                "\"CREATE_TIME\" INTEGER NOT NULL ," + // 10: createTime
-                "\"UPDATE_TIME\" INTEGER NOT NULL );"); // 11: updateTime
+                "\"TYPE\" TEXT," + // 7: type
+                "\"IS_DEL\" INTEGER NOT NULL ," + // 8: isDel
+                "\"QUESTIONS\" TEXT," + // 9: questions
+                "\"SEND_TIME\" INTEGER NOT NULL ," + // 10: sendTime
+                "\"CREATE_TIME\" INTEGER NOT NULL ," + // 11: createTime
+                "\"UPDATE_TIME\" INTEGER NOT NULL );"); // 12: updateTime
     }
 
     /** Drops the underlying database table. */
@@ -113,15 +115,20 @@ public class RobotModelDao extends AbstractDao<RobotModel, Long> {
         if (beginSay != null) {
             stmt.bindString(7, beginSay);
         }
-        stmt.bindLong(8, entity.getIsDel() ? 1L: 0L);
+ 
+        String type = entity.getType();
+        if (type != null) {
+            stmt.bindString(8, type);
+        }
+        stmt.bindLong(9, entity.getIsDel() ? 1L: 0L);
  
         List questions = entity.getQuestions();
         if (questions != null) {
-            stmt.bindString(9, questionsConverter.convertToDatabaseValue(questions));
+            stmt.bindString(10, questionsConverter.convertToDatabaseValue(questions));
         }
-        stmt.bindLong(10, entity.getSendTime());
-        stmt.bindLong(11, entity.getCreateTime());
-        stmt.bindLong(12, entity.getUpdateTime());
+        stmt.bindLong(11, entity.getSendTime());
+        stmt.bindLong(12, entity.getCreateTime());
+        stmt.bindLong(13, entity.getUpdateTime());
     }
 
     @Override
@@ -162,15 +169,20 @@ public class RobotModelDao extends AbstractDao<RobotModel, Long> {
         if (beginSay != null) {
             stmt.bindString(7, beginSay);
         }
-        stmt.bindLong(8, entity.getIsDel() ? 1L: 0L);
+ 
+        String type = entity.getType();
+        if (type != null) {
+            stmt.bindString(8, type);
+        }
+        stmt.bindLong(9, entity.getIsDel() ? 1L: 0L);
  
         List questions = entity.getQuestions();
         if (questions != null) {
-            stmt.bindString(9, questionsConverter.convertToDatabaseValue(questions));
+            stmt.bindString(10, questionsConverter.convertToDatabaseValue(questions));
         }
-        stmt.bindLong(10, entity.getSendTime());
-        stmt.bindLong(11, entity.getCreateTime());
-        stmt.bindLong(12, entity.getUpdateTime());
+        stmt.bindLong(11, entity.getSendTime());
+        stmt.bindLong(12, entity.getCreateTime());
+        stmt.bindLong(13, entity.getUpdateTime());
     }
 
     @Override
@@ -188,11 +200,12 @@ public class RobotModelDao extends AbstractDao<RobotModel, Long> {
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // desc
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // imageUrl
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // beginSay
-            cursor.getShort(offset + 7) != 0, // isDel
-            cursor.isNull(offset + 8) ? null : questionsConverter.convertToEntityProperty(cursor.getString(offset + 8)), // questions
-            cursor.getLong(offset + 9), // sendTime
-            cursor.getLong(offset + 10), // createTime
-            cursor.getLong(offset + 11) // updateTime
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // type
+            cursor.getShort(offset + 8) != 0, // isDel
+            cursor.isNull(offset + 9) ? null : questionsConverter.convertToEntityProperty(cursor.getString(offset + 9)), // questions
+            cursor.getLong(offset + 10), // sendTime
+            cursor.getLong(offset + 11), // createTime
+            cursor.getLong(offset + 12) // updateTime
         );
         return entity;
     }
@@ -206,11 +219,12 @@ public class RobotModelDao extends AbstractDao<RobotModel, Long> {
         entity.setDesc(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setImageUrl(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setBeginSay(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setIsDel(cursor.getShort(offset + 7) != 0);
-        entity.setQuestions(cursor.isNull(offset + 8) ? null : questionsConverter.convertToEntityProperty(cursor.getString(offset + 8)));
-        entity.setSendTime(cursor.getLong(offset + 9));
-        entity.setCreateTime(cursor.getLong(offset + 10));
-        entity.setUpdateTime(cursor.getLong(offset + 11));
+        entity.setType(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setIsDel(cursor.getShort(offset + 8) != 0);
+        entity.setQuestions(cursor.isNull(offset + 9) ? null : questionsConverter.convertToEntityProperty(cursor.getString(offset + 9)));
+        entity.setSendTime(cursor.getLong(offset + 10));
+        entity.setCreateTime(cursor.getLong(offset + 11));
+        entity.setUpdateTime(cursor.getLong(offset + 12));
      }
     
     @Override
