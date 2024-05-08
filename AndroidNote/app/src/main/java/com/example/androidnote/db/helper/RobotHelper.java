@@ -2,7 +2,9 @@ package com.example.androidnote.db.helper;
 
 import static com.example.androidnote.constant.Constants.DEFAULT_USER_ID;
 import static com.example.androidnote.constant.Constants.INIT_ROBOT_MODEL;
+import static com.example.androidnote.constant.Constants.ROBOT_MODEL_BACK;
 import static com.example.androidnote.constant.Constants.ROBOT_MODEL_BASIC;
+import static com.example.androidnote.constant.Constants.ROBOT_MODEL_CAREER;
 import static com.example.androidnote.constant.Constants.ROBOT_MODEL_LANGUAGE;
 import static com.example.androidnote.constant.Constants.ROBOT_MODEL_NORMAL;
 
@@ -111,26 +113,44 @@ public class RobotHelper {
 
 
     String[] titles = {
+            "后端就业相关辅助机器人",
+            "前端就业相关辅助机器人",
+            "JAVA就业分析机器人",
             "数据库学习机器人",
             "操作系统学习机器人",
             "数据结构与算法学习机器人",
             "计算机网络学习机器人",
             "JAVA语言学习机器人",
             "C++语言学习机器人",
-            "Golang语言学习机器人"
+            "Golang语言学习机器人",
+            "后端学习小组",
+            "JAVA后端技术小组",
+            "Golang后端技术小组",
+            "C++后端技术小组",
     };
 
     String[] descs = {
+            "后端就业相关辅助机器人",
+            "前端就业相关辅助机器人",
+            "JAVA就业分析机器人",
             "数据库学习辅助机器人，帮助理解数据库的概念和使用",
             "操作系统学习辅助机器人，帮助理解操作系统的概念和使用",
             "数据结构与算法学习辅助机器人，帮助理解数据结构与算法的概念和算法实现",
             "计算机网络学习辅助机器人，帮助理解计算机网络的概念和各类网络协议实现",
             "JAVA语言学习机器人，帮助理解JAVA编程语言的使用和相关高级语法",
             "C++语言学习机器人，帮助理解C++编程语言的使用和相关高级语法",
-            "Golang语言学习机器人，帮助理解Go编程语言的使用和相关高级语法"
+            "Golang语言学习机器人，帮助理解Go编程语言的使用和相关高级语法",
+            "后端学习小组",
+            "JAVA后端技术小组",
+            "Golang后端技术小组",
+            "C++后端技术小组",
     };
 
     String[][] questions = {
+            {"今年后端就业怎么样", "后端一般是哪些技术栈", "前端和后端区别是什么"},
+            {"今年前端就业怎么样", "前端一般是哪些技术栈", "前端和后端区别是什么"},
+            {"今年JAVA就业怎么样", "JAVA就业一般是哪些方向", "JAVA和Golang是不是都可以做后端"},
+
             {"数据库是什么", "数据库的分类", "数据库可以做什么"},
             {"操作系统是什么", "操作系统的分类", "操作系统可以做什么"},
             {"数据结构是什么", "什么是时间复杂度", "什么是空间复杂度"},
@@ -138,19 +158,37 @@ public class RobotHelper {
             {"JAVA是什么", "什么是JDK", "JAVA开发可以做什么"},
             {"C++语言是什么", "C++和C语言区别", "C++开发可以做什么"},
             {"Go语言是什么", "Go语言和Java语言的区别", "Go语言开发可以做什么"},
+
+            {"如何学习后端", "哪些语言适合后端", "后端开发都有哪些技术栈"},
+            {"如何学习后端", "Go语言和Java语言的区别", "JAVA后端开发的SSM框架是什么"},
+            {"如何学习后端", "Golang的Gin框架是什么", "Golang有类似JAVA的后端开发框架嘛"},
+            {"如何学习后端", "C++开发如何使用MySQL和Redis", "C++后端开发的缺点"},
     };
 
     String[] beginSays = {
+            "您好，我是后端就业辅助机器人，有什么要问我的呀",
+            "您好，我是前端就业辅助机器人，有什么要问我的呀",
+            "您好，我是JAVA就业辅助机器人，可有什么要问我的呀",
+
             "您好，我是数据库学习辅助机器人，可以帮助您理解数据库的概念和使用，有什么要问我的呀",
             "您好，我是操作系统学习辅助机器人，可以帮助您理解操作系统的概念和使用，有什么要问我的呀",
             "您好，我是数据结构与算法学习辅助机器人，可以帮助您理解数据结构与算法的概念和使用，有什么要问我的呀",
             "您好，我是计算机网络学习辅助机器人，可以帮助您计算机网络的概念，有什么要问我的呀",
+
             "您好，我是JAVA编程语言学习辅助机器人，可以帮助您学习使用JAVA语言来开发程序，有什么要问我的呀",
             "您好，我是C++编程语言学习辅助机器人，可以帮助您学习使用C++语言来开发程序，有什么要问我的呀",
-            "您好，我是Golang编程语言学习辅助机器人，可以帮助您学习使用Golang语言来开发程序，有什么要问我的呀"
+            "您好，我是Golang编程语言学习辅助机器人，可以帮助您学习使用Golang语言来开发程序，有什么要问我的呀",
+
+            "您好，我是后端小组学习辅助机器人，有什么要问我的呀",
+            "您好，我是JAVA后端小组学习辅助机器人，有什么要问我的呀",
+            "您好，我是Golang后端小组学习辅助机器人，有什么要问我的呀",
+            "您好，我是C++后端小组学习辅助机器人，有什么要问我的呀"
     };
 
     String[] types = {
+        ROBOT_MODEL_CAREER,
+        ROBOT_MODEL_CAREER,
+        ROBOT_MODEL_CAREER,
         ROBOT_MODEL_BASIC,
         ROBOT_MODEL_BASIC,
         ROBOT_MODEL_BASIC,
@@ -158,6 +196,10 @@ public class RobotHelper {
         ROBOT_MODEL_LANGUAGE,
         ROBOT_MODEL_LANGUAGE,
         ROBOT_MODEL_LANGUAGE,
+        ROBOT_MODEL_BACK,
+        ROBOT_MODEL_BACK,
+        ROBOT_MODEL_BACK,
+        ROBOT_MODEL_BACK,
     };
 
     public void init() {
