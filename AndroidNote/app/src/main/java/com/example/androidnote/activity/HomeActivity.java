@@ -228,7 +228,7 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
             fragmentManagerHelper.switchFragment(personFragment);
         } else if (id == R.id.create_robot_home) {
             SLog.i(TAG, "[onClick] create_robot_home");
-            createRobotDialog.show();
+            CreateRobotActivity.startUp(this);
         } else if (id == R.id.ll_square) {
             SLog.i(TAG, "[onClick] create_robot_home");
             setAllGrey();

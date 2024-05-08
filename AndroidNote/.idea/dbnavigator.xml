@@ -24,9 +24,7 @@
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="8dbce8a7-bb5e-47b4-b859-cf08e8451ba5" object-ref="schemas/main/tables/ROBOT_MODEL" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="8dbce8a7-bb5e-47b4-b859-cf08e8451ba5" />
