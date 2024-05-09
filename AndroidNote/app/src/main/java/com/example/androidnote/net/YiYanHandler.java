@@ -89,7 +89,10 @@ public class YiYanHandler {
         return resultStr;
     }
 
-    public static String processQuery(Context context, String line) {
+    public static String mQueryStr;
+    public static String mAdviceStr;
+    public static String mBookStr;
+    public static void processQuery(Context context, String line) {
         SLog.i(TAG, "processQuery: " + line);
         // 清空数据
         mTips.clear();
@@ -109,7 +112,7 @@ public class YiYanHandler {
         String advice = "\"advice\"";
         String book = "\"book\"";
         if (!res.contains(query) || !res.contains(advice) || !res.contains(book))  {
-            return "格式不合法";
+            return;
         }
         String queryStr = res.substring(query.length() + 2, res.indexOf(advice) - 2);
         String adviceStr = res.substring(res.indexOf(advice) + advice.length() + 2, res.indexOf(book) - 2);
@@ -123,7 +126,9 @@ public class YiYanHandler {
         SLog.i(TAG, "process adviceStr: " + adviceStr);
         SLog.i(TAG, "process bookStr: " + bookStr);
 
-        return "resultStr";
+        mQueryStr = queryStr;
+        mAdviceStr = adviceStr;
+        mBookStr = bookStr;
     }
 
     public static ArrayList<String> getTips() {

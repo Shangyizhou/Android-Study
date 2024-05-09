@@ -86,6 +86,12 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             mCurrentRobot = (RobotModel) intent.getSerializableExtra("robot_data");
         }
         initView();
+    }
+
+    @Override
+    protected void onResume() {
+        SLog.i(TAG, "[ChatActivity] onResume");
+        super.onResume();
         getData();
     }
 
@@ -111,6 +117,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         sendBtn.setOnClickListener(this);
         parseBtn.setOnClickListener(this);
+        parseBtn.setVisibility(View.VISIBLE);
 
         mChatAdapter.setOnItemClickListener(new ChatAdapterMessage.OnItemClickListener() {
             @Override
@@ -119,10 +126,15 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             }
         });
     }
-
+    private boolean isInit = false;
     private void getData() {
         SLog.i(TAG, "getData");
-
+        if (isInit) {
+            SLog.i(TAG, "has init");
+            mCurrentSession = SessionManager.getInstance().getSessionByRobotId(mCurrentRobot.getRobotId());
+            mMessageList = SessionManager.getInstance().getSessionMessages(mCurrentSession);
+            updateAdapterAll();
+        }
         if (startMode.equals("create")) {
             /**
              * 新建会话
@@ -142,6 +154,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             mCurrentSession = session;
             // 加入一个新的开场白
             addRobotStartSpeak();
+            isInit = true;
         } else if (startMode.equals("load")) {
             /**
              * 加载会话
@@ -161,6 +174,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                     updateAdapterAll();
                 }
             }
+            isInit = true;
         }
     }
 
@@ -267,7 +281,10 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
 
         String jsonQuery = new Gson().toJson(queryList);
         SLog.i(TAG, "jsonQuery: " + jsonQuery);
-        callEBStream(jsonQuery, YIYAN_HANDLER_QUERY);
+        // callEBStream(jsonQuery, YIYAN_HANDLER_QUERY);
+        Bundle bundle = new Bundle();
+        bundle.putString("query", jsonQuery);
+        ParseActivity.startUp(this, bundle);
     }
 
     // 历史对话，需要按照user,assistant
@@ -297,7 +314,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                 if (type.equals(YIYAN_HANDLER_NORMAL)) {
                      res = YiYanHandler.process(getApplication(), assistant.get("content"));
                 } else if (type.equals(YIYAN_HANDLER_QUERY)) {
-                    res = YiYanHandler.processQuery(getApplication(), assistant.get("content"));
+                    YiYanHandler.processQuery(getApplication(), assistant.get("content"));
+                    ParseActivity.startUp(ChatActivity.this);
                     return;
                 }
                 // SLog.i(TAG, String.valueOf(messages));
