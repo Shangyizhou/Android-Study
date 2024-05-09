@@ -1,5 +1,8 @@
 package com.example.androidnote.activity;
 
+import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_NORMAL;
+import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_QUERY;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +27,7 @@ import com.example.androidnote.model.ResponseInfo;
 import com.example.androidnote.model.RobotModel;
 import com.example.androidnote.model.Session;
 import com.example.androidnote.net.YiYanHandler;
+import com.google.gson.Gson;
 import com.shangyizhou.develop.base.BaseActivity;
 import com.shangyizhou.develop.helper.SnowFlakeUtil;
 import com.shangyizhou.develop.helper.ToastUtil;
@@ -67,6 +71,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
     private RobotModel mCurrentRobot;
     private List<String> mQueryList;
 
+    private Button parseBtn;
+
     @Override
     protected void onCreateChildren(Bundle bundle) {
         // super.onCreateChildren(bundle);
@@ -98,11 +104,13 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         mMessageList = new ArrayList<>();
         mChatAdapter = new ChatAdapterMessage(mMessageList);
         recyclerView = findViewById(R.id.mChatView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        parseBtn = findViewById(R.id.ai_parse);
         sendBtn = findViewById(R.id.btn_send_msg);
         editText = findViewById(R.id.et_input_msg);
         recyclerView.setAdapter(mChatAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         sendBtn.setOnClickListener(this);
+        parseBtn.setOnClickListener(this);
 
         mChatAdapter.setOnItemClickListener(new ChatAdapterMessage.OnItemClickListener() {
             @Override
@@ -191,6 +199,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         } else if (id == R.id.et_input_msg) {
             // TODO: 点击输入框，隐藏软键盘
 
+        } else if (id == R.id.ai_parse) {
+            callYiyanForQuery();
         }
     }
 
@@ -235,13 +245,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
 
     // TODO: callYiyan callEB
     public void callYiyan() {
-        callEBStream();
-    }
-
-    // 历史对话，需要按照user,assistant
-    static List<Map<String, String>> messages = new ArrayList<>();
-
-    private void callEBStream() {
         SLog.i(TAG, "sendBtn");
         // 获取输入的问题
         String inputText = editText.getText().toString();
@@ -250,7 +253,28 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         }
         // 清空输入框
         editText.setText("");
-        DirectToServer.callYiYanERNIELiteStream(inputText, new IResponse() {
+        callEBStream(inputText, YIYAN_HANDLER_NORMAL);
+    }
+
+    public void callYiyanForQuery() {
+        List<String> queryList = new ArrayList<>();
+        List<Message> messageList = SessionManager.getInstance().getSessionMessages(mCurrentSession);
+        for (Message message : messageList) {
+            if (message.getType() == 1) {
+                queryList.add(message.getMessage());
+            }
+        }
+
+        String jsonQuery = new Gson().toJson(queryList);
+        SLog.i(TAG, "jsonQuery: " + jsonQuery);
+        callEBStream(jsonQuery, YIYAN_HANDLER_QUERY);
+    }
+
+    // 历史对话，需要按照user,assistant
+    static List<Map<String, String>> messages = new ArrayList<>();
+
+    private void callEBStream(String text, String type) {
+        DirectToServer.callYiYanERNIELiteStream(text, type, new IResponse() {
             @Override
             public void onSuccess(String originJson) {
                 // 将回复的内容添加到消息中
@@ -269,12 +293,19 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                     }
                 }
                 messages.add(assistant);
-                String res = YiYanHandler.process(getApplication(), assistant.get("content"));
+                String res = "";
+                if (type.equals(YIYAN_HANDLER_NORMAL)) {
+                     res = YiYanHandler.process(getApplication(), assistant.get("content"));
+                } else if (type.equals(YIYAN_HANDLER_QUERY)) {
+                    res = YiYanHandler.processQuery(getApplication(), assistant.get("content"));
+                    return;
+                }
                 // SLog.i(TAG, String.valueOf(messages));
+                String finalRes = res;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        showResponse(res);
+                        showResponse(finalRes);
                     }
                 });
             }
@@ -284,6 +315,16 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                 SLog.e(TAG, "DirectToServer error");
             }
         });
+    }
+
+    private void process(String type) {
+        if (!TextUtils.isEmpty(type)) {
+            if (type.equals(YIYAN_HANDLER_NORMAL)) {
+
+            } else if (type.equals(YIYAN_HANDLER_QUERY)) {
+
+            }
+        }
     }
 
     private void showResponse(String text) {

@@ -1,5 +1,8 @@
 package com.example.androidnote.net;
 
+import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_NORMAL;
+import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_QUERY;
+
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -299,7 +302,7 @@ public class DirectToServer {
      * @param message
      * @param callback
      */
-    public static void callYiYanERNIELiteStream(String message, IResponse callback) {
+    public static void callYiYanERNIELiteStream(String message, String type, IResponse callback) {
         ResponseInfo responseInfo = new ResponseInfo();
         requestId = UUIDUtil.getUUID();
         responseInfo.setUserName(BmobManager.getInstance().getUser().getUserName());
@@ -312,7 +315,11 @@ public class DirectToServer {
         JsonObject msg = new JsonObject();
         msg.addProperty("role", "user");
         // msg.addProperty("content", promptTemplate + message + "\n");
-        msg.addProperty("content", promptTemplate + message + "\n");
+        if (type.equals(YIYAN_HANDLER_NORMAL)) {
+            msg.addProperty("content", promptTemplate + message + "\n");
+        } else if (type.equals(YIYAN_HANDLER_QUERY)) {
+            msg.addProperty("content", promptParseMessage + message + "\n");
+        }
 
         // 将消息放入JSON数组中
         JsonArray msgArray = new JsonArray();
@@ -447,10 +454,10 @@ public class DirectToServer {
      * 关键词提取
      */
 
+
     /**
      * ERNIE-Speed-8K https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/ernie_speed
      */
-
 
     /**
      * 获取token
@@ -609,6 +616,73 @@ public class DirectToServer {
             "# Intialization：\n" +
             "\n" +
             "作为程序设计课程智能问答机器人这个角色，获取学生的提问，根据学生的提问和自身的数据库得到结果并分析出学生接下可能会提问的三个问题，将答案和可能会提出的三个问题按照【Output Format】输出。\n" +
+            "\n" +
+            "用户提问：";
+
+    public static String promptParseMessage = "# Role：\n" +
+            "\n" +
+            "你是程序设计课程智能问答机器人，是辅助计算机专业的学生和老师课堂答疑的助手。\n" +
+            "## Profile：\n" +
+            "\n" +
+            "* author：河南工业大学集团\n" +
+            "* language：中文\n" +
+            "* description：你是一个程序设计课程智能问答机器人，能够与学生老师对话互动、回答问题。你的英文名叫 HautSchoolRobot。\n" +
+            "\n" +
+            "## Goals：\n" +
+            "\n" +
+            "为学生和老师提供优质的疑问解答，满足师生的课堂助手的需求。\n" +
+            "\n" +
+            "## Skills\n" +
+            "\n" +
+            "- 你有一个技能，即只能按照 JSON 格式输出回答，且只按照【Output Format】的格式输出 JSON 回答 \n" +
+            "- 你精通数据挖掘和问题分析，你可以通过学生的提问中判断此学生的高频问题是什么\n" +
+            "- 你精通数据挖掘和问题分析，你可以根据学生的问题给出对应的学习指导。\n" +
+            "- 你可以根据自己给出的指导和建议，给提出问题的学生推荐学习材料书籍。\n" +
+            "## Constrains：\n" +
+            "\n" +
+            "- 你会接收到学生的提问列表，它以 JSON 数组的格式存在，里面只有一个 query_list 字段，它是这个学生的问题数组\n" +
+            "- 你需要总结出学生的高频问题，将其放到 query 字段中。\n" +
+            "- 你需要针对学生遇到的问题，给出建议，将其放到 advice 字段那种。\n" +
+            "- 你需要针对学生的问题，给出建议他学习的相关书本资料，放到 book 字段中。\n" +
+            "- 回答问题格式中的【result】中的字数必须控制在【300 个汉字】以内；\n" +
+            "- 你的【所有一切回答输出】都要以【JSON】格式输出，包括对你本身的询问，打招呼等与课堂编程无关的事情。具体【JSON】格式按照【Output Format】的输出格式回答 \n" +
+            "## Output Format:\n" +
+            "\n" +
+            "```json\n" +
+            "{\n" +
+            "\t\"query\": \"必填项，该学生的高频问题\",\n" +
+            "\t\"advice\": \"必填项。该字段是针对学生的问题给出的指导建议\",\n" +
+            "\t\"book\": \"必填项。该字段是针对学生困惑的地方给出的学习书本\"\n" +
+            "}\n" +
+            "```\n" +
+            "## Example 示例：\n" +
+            "\n" +
+            "问答示例：\n" +
+            "问题：\n" +
+            "\n" +
+            "```json\n" +
+            "{\n" +
+            "\t\"query_list\": [\"什么是操作系统\", \"操作系统的分类\", \"什么是Linux操作系统\", \"如何使用Linux\", \"如何借助Linux操作系统提供的API进行开发\"]\n" +
+            "}\n" +
+            "```\n" +
+            "\n" +
+            "输出：\n" +
+            "```json\n" +
+            "{\n" +
+            "\t\"query\": \"看起来你对操作系统相关的提问最多，针对Linux操作系统的学习和开发有许多的疑问\",\n" +
+            "\t\"advice\": \"建议你针对操作系统的概念和分类做系统的学习，在有基本的了解之后再细细学习Linux操作系统。可以先学习Linux操作系统的使用，比如Ubuntu操作系统，然后学习如何使用Linux操作系统提供的API做Linux环境下的开发。\",\n" +
+            "\t\"book\": \"《UNIX环境编程》、《深入理解操作系统》\"\n" +
+            "}\n" +
+            "```\n" +
+            "## Workflow：\n" +
+            "\n" +
+            "1. 接受学生输入的问题\n" +
+            "2. 分析学生的问题并且利用自己的【Skills】和【Knowledge】进行回答，得到结果【query】,【advice】,【book】\n" +
+            "4. 最终将上述得到的【query】,【advice】,【book】 按照【Output Format】输出格式进行输出\n" +
+            "\n" +
+            "# Intialization：\n" +
+            "\n" +
+            "作为程序设计课程智能问答机器人这个角色，获取学生的提问，根据学生的提问一步步详细分析推理，分析地道道学生的高频问题并生成针对此问题的学习建议以及推荐的相关书籍，按照【Output Format】输出。\n" +
             "\n" +
             "用户提问：";
 

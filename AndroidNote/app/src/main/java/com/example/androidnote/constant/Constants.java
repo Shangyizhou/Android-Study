@@ -17,4 +17,11 @@ public class Constants {
     public static final String ROBOT_MODEL_FRONT = "robot_model_head";
     public static final String ROBOT_MODEL_BACK = "robot_model_back";
     public static final String ROBOT_MODEL_CODE = "robot_model_code";
+
+    /**
+     * 针对一言回答的不同处理
+     */
+    public static final String YIYAN_HANDLER_NORMAL = "yiyan_handler_intent";
+    public static final String YIYAN_HANDLER_INTENT = "yiyan_handler_intent";
+    public static final String YIYAN_HANDLER_QUERY = "yiyan_handler_query";
 }

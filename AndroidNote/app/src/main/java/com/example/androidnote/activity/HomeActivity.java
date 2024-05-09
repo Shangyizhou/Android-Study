@@ -2,6 +2,7 @@ package com.example.androidnote.activity;
 
 import static com.example.androidnote.constant.Constants.ROBOT_MODEL_NORMAL;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.example.androidnote.R;
 import com.example.androidnote.db.helper.RobotHelper;
 import com.example.androidnote.fragment.chat.ChatStartFragment;
@@ -28,6 +31,7 @@ import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.RobotModel;
 import com.shangyizhou.develop.base.BaseUiActivity;
 import com.shangyizhou.develop.base.FragmentManagerHelper;
+import com.shangyizhou.develop.helper.PermissionUtils;
 import com.shangyizhou.develop.helper.ToastUtil;
 import com.shangyizhou.develop.helper.UUIDUtil;
 import com.shangyizhou.develop.log.SLog;
@@ -124,10 +128,45 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
         btnCreateHome = findViewById(R.id.create_robot_home);
         btnCreateHome.setOnClickListener(this);
 
-        initCreateRobotView();
         initFragment();
+        requestPermission();
+    }
+    private String[] mRequirePermissions = {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+    };
+
+    private static final int REQUEST_PERMISSION_CODE = 200;
+    private void requestPermission() {
+        // 判断是否有权限
+        if (!PermissionUtils.hasPermissions(this, mRequirePermissions)) {
+            // 申请权限
+            PermissionUtils.requestPermissions(this, REQUEST_PERMISSION_CODE, mRequirePermissions);
+        }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        PermissionUtils.onRequestPermissionsResult(requestCode, permissions, grantResults, new PermissionUtils.PermissionCallbacks() {
+            @Override
+            public void onPermissionsAllGranted(int requestCode, List<String> perms, boolean isAllGranted) {
+                SLog.i(TAG, "授权成功" + String.valueOf(perms));
+                ToastUtil.getInstance().showToast("授权成功" );
+                SLog.i(TAG, "授权成功" + String.valueOf(perms));
+            }
+
+            @Override
+            public void onPermissionsDenied(int requestCode, List<String> perms) {
+                ToastUtil.getInstance().showToast("授权失败" + String.valueOf(perms));
+                SLog.i(TAG, "授权失败" + String.valueOf(perms));
+            }
+        });
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
     EditText editName;
     EditText editDesc;
     EditText editStartSpeak;
@@ -137,50 +176,6 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
     Button btnCreate;
     List<String> queryList = new ArrayList<>();
     Button btnCreateHome;
-
-    private void initCreateRobotView() {
-        createRobotDialog = DialogManager.getInstance().initView(this, R.layout.dialog_create_robot, Gravity.BOTTOM);
-        createRobotDialog.setHeightMatchParent();
-        editName = createRobotDialog.findViewById(R.id.edit_name);
-        editDesc = createRobotDialog.findViewById(R.id.edit_desc);
-        editStartSpeak = createRobotDialog.findViewById(R.id.edit_start_spek);
-        editQuery1 = createRobotDialog.findViewById(R.id.edit_query_1);
-        editQuery2 = createRobotDialog.findViewById(R.id.edit_query_2);
-        editQuery3 = createRobotDialog.findViewById(R.id.edit_query_3);
-        btnCreate = createRobotDialog.findViewById(R.id.create_robot_dialog);
-        btnCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RobotModel model = new RobotModel();
-                queryList.add(editQuery1.getText().toString());
-                queryList.add(editQuery2.getText().toString());
-                queryList.add(editQuery3.getText().toString());
-
-                // 设置model属性
-                model.setTitle(editName.getText().toString());
-                model.setDesc(editDesc.getText().toString());
-                model.setRobotId(UUIDUtil.getUUID());
-                model.setOwnerId(BmobManager.getInstance().getObjectId());
-                model.setBeginSay(editStartSpeak.getText().toString());
-                model.setQuestions(queryList);
-                model.setCreateTime(System.currentTimeMillis());
-                model.setUpdateTime(System.currentTimeMillis());
-                model.setImageUrl("");
-                model.setType(ROBOT_MODEL_NORMAL);
-
-                RobotHelper.getInstance().save(model);
-                // 通知SquareFragment刷新社区机器人
-                EventBus.getDefault().postSticky(EventIdCenter.SQUARE_FRAGMENT_UPDATE_DATA);
-                createRobotDialog.hide();
-
-                Bundle bundle = new Bundle();
-                bundle.putString("model", "create");
-                bundle.putSerializable("robot_data", model);
-                ChatActivity.startUp(HomeActivity.this, bundle);
-                // fragmentManagerHelper.switchFragment(chatStartFragment);
-            }
-        });
-    }
 
     private void initFragment() {
         fragmentManagerHelper = new FragmentManagerHelper(getSupportFragmentManager(), R.id.mMainLayout);

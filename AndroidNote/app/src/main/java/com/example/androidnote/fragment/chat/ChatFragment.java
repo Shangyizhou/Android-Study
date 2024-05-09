@@ -1,5 +1,7 @@
 package com.example.androidnote.fragment.chat;
 
+import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_NORMAL;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -251,13 +253,13 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
 
     // TODO: callYiyan callEB
     public void callYiyan() {
-        callEBStream();
+        callEBStream(YIYAN_HANDLER_NORMAL);
     }
 
     // 历史对话，需要按照user,assistant
     static List<Map<String, String>> messages = new ArrayList<>();
 
-    private void callEBStream() {
+    private void callEBStream(String type) {
         SLog.i(TAG, "sendBtn");
         // 获取输入的问题
         String inputText = editText.getText().toString();
@@ -266,7 +268,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         }
         // 清空输入框
         editText.setText("");
-        DirectToServer.callYiYanERNIELiteStream(inputText, new IResponse() {
+        DirectToServer.callYiYanERNIELiteStream(inputText, type, new IResponse() {
             @Override
             public void onSuccess(String originJson) {
                 // 将回复的内容添加到消息中
