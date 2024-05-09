@@ -1,5 +1,6 @@
 package com.example.androidnote.activity;
 
+import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_INTENT;
 import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_NORMAL;
 import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_QUERY;
 
@@ -267,7 +268,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         }
         // 清空输入框
         editText.setText("");
-        callEBStream(inputText, YIYAN_HANDLER_NORMAL);
+        // callEBStream(inputText, YIYAN_HANDLER_NORMAL);
+        callEBStream(inputText, YIYAN_HANDLER_INTENT);
     }
 
     public void callYiyanForQuery() {
@@ -317,6 +319,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                     YiYanHandler.processQuery(getApplication(), assistant.get("content"));
                     ParseActivity.startUp(ChatActivity.this);
                     return;
+                } else if (type.equals(YIYAN_HANDLER_INTENT)) {
+                    res = YiYanHandler.processIntent(getApplication(), assistant.get("content"));
                 }
                 // SLog.i(TAG, String.valueOf(messages));
                 String finalRes = res;
@@ -333,16 +337,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                 SLog.e(TAG, "DirectToServer error");
             }
         });
-    }
-
-    private void process(String type) {
-        if (!TextUtils.isEmpty(type)) {
-            if (type.equals(YIYAN_HANDLER_NORMAL)) {
-
-            } else if (type.equals(YIYAN_HANDLER_QUERY)) {
-
-            }
-        }
     }
 
     private void showResponse(String text) {

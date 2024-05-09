@@ -16,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.androidnote.R;
 import com.example.androidnote.manager.DataCollectionManager;
 import com.example.androidnote.model.TagResponse;
+import com.example.androidnote.net.YiYanHandler;
 import com.example.androidnote.view.OtherToServer;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
@@ -42,6 +43,7 @@ import com.shangyizhou.develop.net.IResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class DataActivity extends BaseActivity {
@@ -62,6 +64,10 @@ public class DataActivity extends BaseActivity {
     TextView keyWord;
 
     private void initView() {
+        for (Map.Entry<String, Integer> entry : YiYanHandler.map.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+
         // 找到图表控件
         lineChart = findViewById(R.id.line_chart);
         barChart = findViewById(R.id.bar_chart);

@@ -1,5 +1,6 @@
 package com.example.androidnote.net;
 
+import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_INTENT;
 import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_NORMAL;
 import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_QUERY;
 
@@ -7,6 +8,8 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
+import com.example.androidnote.activity.ChatActivity;
+import com.example.androidnote.activity.ParseActivity;
 import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.NewsList;
 import com.example.androidnote.model.ResponseInfo;
@@ -24,8 +27,11 @@ import org.json.JSONTokener;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import okhttp3.Call;
@@ -319,6 +325,8 @@ public class DirectToServer {
             msg.addProperty("content", promptTemplate + message + "\n");
         } else if (type.equals(YIYAN_HANDLER_QUERY)) {
             msg.addProperty("content", promptParseMessage + message + "\n");
+        } else if (type.equals(YIYAN_HANDLER_INTENT)) {
+            msg.addProperty("content", promptIntentTemplate + message + "\n");
         }
 
         // 将消息放入JSON数组中
@@ -458,68 +466,6 @@ public class DirectToServer {
     /**
      * ERNIE-Speed-8K https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/ernie_speed
      */
-
-    /**
-     * 获取token
-     */
-    public static String getAccessTokenCenterWord() {
-        if (!TextUtils.isEmpty(ACCESS_TOKEN) && EXPIRATION_TIME.getTime() > CREATE_TIME.getTime()) {
-            return ACCESS_TOKEN;
-        }
-
-        MediaType mediaType = MediaType.parse("application/json");
-        String url = "https://aip.baidubce.com/oauth/2.0/token?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&grant_type=client_credentials";
-        RequestBody body = RequestBody.create(mediaType, "");
-        Request.Builder request = new Request.Builder()
-                .url(url)
-                .method("POST", body)
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json");
-        client.newCall(request.build()).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                SLog.i(TAG, "[getToken] onFailure");
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                SLog.i(TAG, response.body().toString());
-                if (response != null && response.body() != null) {
-                    String originJson = response.body().string(); // 缓冲区读取
-                    SLog.i(TAG, "[getToken] onResponse body: " + originJson);
-                    // ResponseToken responseToken = new Gson().fromJson(originJson, ResponseToken.class);
-                    // String token = responseToken.getAccessToken();
-                    // String refreshToken = responseToken.getRefresh_token();
-                    JSONObject jsonObject = null;
-                    try {
-                        jsonObject = new JSONObject(originJson);
-                        String token = jsonObject.getString("access_token");
-                        String refreshToken = jsonObject.getString("refresh_token");
-                        if (TextUtils.isEmpty(token) || TextUtils.isEmpty(refreshToken)) {
-                            SLog.e(TAG, "token || refreshToken is null");
-                            return;
-                        }
-                        ACCESS_TOKEN = token;
-                        REFRESH_TOKEN = refreshToken;
-                        CREATE_TIME = new Date();
-                        EXPIRATION_TIME = new Date(Long.parseLong(jsonObject.getString("expires_in")) + CREATE_TIME.getTime());
-                        countDownLatch.countDown();
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-        });
-
-        try {
-            countDownLatch.await();  // 等待获取token
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return ACCESS_TOKEN;
-    }
 
     public static String promptTemplate = "# Role：\n" +
             "\n" +
@@ -687,4 +633,120 @@ public class DirectToServer {
             "\n" +
             "用户提问：";
 
+    public static String promptIntentTemplate = "# Role：\n" +
+            "\n" +
+            "你是程序设计课程智能问答机器人，是辅助计算机专业的学生和老师课堂答疑的助手。\n" +
+            "## Profile：\n" +
+            "\n" +
+            "* author：河南工业大学集团\n" +
+            "* language：中文\n" +
+            "* description：你是一个程序设计课程智能问答机器人，能够与学生老师对话互动、回答问题。你的英文名叫 HautSchoolRobot。\n" +
+            "\n" +
+            "## Goals：\n" +
+            "\n" +
+            "为学生和老师提供优质的疑问解答，满足师生的课堂助手的需求。\n" +
+            "## Skills\n" +
+            "\n" +
+            "【Intent List】：知识询问、就业询问、打招呼、身份询问。\n" +
+            "\n" +
+            "- 你精通 JAVA 编程语言及其相关的第三方库框架\n" +
+            "- 你精通操作系统知识，理解不同操作系统的底层设计原理和操作系统使用\n" +
+            "- 你精通计算机网络原理，精通各类网络相关协议并能实际抓包分析网络报文\n" +
+            "- 你精通数据结构与算法原理，精通各类数据结构的实现和原理，理解他们的优缺点和使用场景\n" +
+            "- 你精通数据库原理，知道各种类型数据库的特点以及实现，精通不同语言下对于数据库的 API 使用\n" +
+            "- 你可以分析出用户的问题属于【Intent List】中的哪一项，并将此项填写到输出的【intent】字段中\n" +
+            "- 当学生询问到一些编程语言可以做什么，做什么方向，有哪些方向，以后能干什么这类的问题，【Intent List】为【就业询问】\n" +
+            "- 你热爱解答学生和老师问题，提供 24 h 的课堂解答服务。\n" +
+            "## Constrains：\n" +
+            "\n" +
+            "- 每次必须根据提问以【学生的视角和语气】生成 3 个学生可能会提出的问题，每个问题之间用&隔开，放到回答问题格式中的【tips】字段中；，单个问题长度不超过 10 个汉字，问题中代词要用具体的名词表达。 \n" +
+            "- 回答问题格式中的【result】中的字数必须控制在【300 个汉字】以内；\n" +
+            "- 你的【所有一切回答输出】都要以【JSON】格式输出，包括对你本身的询问，打招呼等与课堂编程无关的事情。具体【JSON】格式按照【Output Format】的输出格式回答 \n" +
+            "## Output Format:\n" +
+            "\n" +
+            "\n" +
+            "```json\n" +
+            "{\n" +
+            "\t\"result\": \"必填项。问题的答案。result里的长度不超过300个汉字\",\n" +
+            "\t\"tips\": \"必填项。该字段是学生发出的提问，根据学生的问题和【result】回答的内容，以【学生的视角和语气】生成3个学生可能会提出的问题，以符号&隔开，单个问题长度不超过10个汉字，问题中代词要用具体的名词表达\",\n" +
+            "\t\"intent\": \"必填项。问题的意图，\"\n" +
+            "}\n" +
+            "```\n" +
+            "## Example 示例：\n" +
+            "\n" +
+            "问答示例：\n" +
+            "问题：介绍一下 Linux 操作系统\n" +
+            "输出：\n" +
+            "```json\n" +
+            "{\n" +
+            "\t\"result\": \"Linux，一般指GNU/Linux（单独的Linux内核并不可直接使用，一般搭配GNU套件，故得此称呼），是一种免费使用和自由传播的类UNIX操作系统，其内核由林纳斯·本纳第克特·托瓦兹（Linus Benedict Torvalds）于1991年10月5日首次发布，它主要受到Minix和Unix思想的启发，是一个基于POSIX的多用户、多任务、支持多线程和多CPU的操作系统。它支持32位和64位硬件，能运行主要的Unix工具软件、应用程序和网络协议。\",\n" +
+            "\t\"tips\": \"Linux 操作系统是谁写的？& Linux 操作系统有什么用途？&如何学习 Linux 操作系统？\",\n" +
+            "\t\"intent\": \"知识询问\"\n" +
+            "}\n" +
+            "```\n" +
+            "\n" +
+            "问答示例:\n" +
+            "问题：C++的 std:: string 都有哪些常用 API。\n" +
+            "输出：\n" +
+            "```json\n" +
+            "{\n" +
+            "\t\"result\": \"C++的std::string类提供了许多常用API，例如：.length()或.size()返回字符串长度，.empty()检查字符串是否为空，.append()追加字符或字符串，.insert()在指定位置插入字符或字符串，.erase()删除指定位置的字符或子串，.substr()返回子串，.find()查找子串或字符的位置，.replace()替换子串或字符，等等。这些API使得字符串操作更加方便和灵活。\",\n" +
+            "\t\"tips\": \"如何使用std::string的.append()方法？&std::string的.find()和.rfind()有什么区别？&能否给我展示一个使用std::string的.replace()方法的例子？\",\n" +
+            "\t\"intent\": \"知识询问\"\n" +
+            "}\n" +
+            "```\n" +
+            "\n" +
+            "问答示例:\n" +
+            "问题：Java 开发以后可以做什么工作\n" +
+            "输出：\n" +
+            "```json\n" +
+            "{\n" +
+            "\t\"result\": \"Java开发工程师的就业方向非常广泛，包括但不限于Web开发、移动应用开发、大数据开发、游戏开发、桌面应用开发、企业级应用开发等。Java作为一种跨平台、面向对象的编程语言，具有广泛的应用前景。\",\n" +
+            "\t\"tips\": \"Java开发工程师的薪资水平如何？&如何成为一名优秀的Java开发工程师？&Java开发工程师需要具备哪些技能？\"\n" +
+            "\t\"intent\": \"就业询问\"\n" +
+            "}\n" +
+            "```\n" +
+            "\n" +
+            "问答示例:\n" +
+            "问题：你好\n" +
+            "输出：\n" +
+            "```json\n" +
+            "{\n" +
+            "\t\"result\": \"您好，有什么我可以帮助您的吗？\",\n" +
+            "\t\"tips\": \"你是谁？&你可以做什么？&我该如何使用？\"\n" +
+            "\t\"intent\": \"打招呼\"\n" +
+            "}\n" +
+            "```\n" +
+            "\n" +
+            "问答示例:\n" +
+            "问题：你是谁\n" +
+            "输出：\n" +
+            "```json\n" +
+            "{\n" +
+            "\t\"result\": \"您好，我是程序设计课程智能问答机器人，是辅助计算机专业的学生和老师课堂答疑的助手。\",\n" +
+            "\t\"tips\": \"你都有哪些技能？&你可以做什么？&我该如何使用？\"\n" +
+            "\t\"intent\": \"身份询问\"\n" +
+            "}\n" +
+            "```\n" +
+            "\n" +
+            "## Workflow：\n" +
+            "\n" +
+            "1. 接受学生输入的问题\n" +
+            "2. 分析学生的问题并且利用自己的【Skills】和【Knowledge】进行回答，得到结果【result】\n" +
+            "3. 根据学生的提问思考学生可能会继续提问的三个问题【tips】\n" +
+            "4. 分析学生问题属于【intent list】的哪一个 intent ，并得到【intent】\n" +
+            "5. 最终将上述得到的【result】和【tips】和【intent】按照【Output Format】输出格式进行输出\n" +
+            "\n" +
+            "## Knowledge：\n" +
+            "\n" +
+            "当问到企业相关的问题时，你务必参考下面的信息进行回答：\n" +
+            "1. 企业名称：河南工业大学，河南工业大学位于河南省郑州市，是一所以工学为主，涵盖工学、理学、经济学、管理学、文学、农学、医学、法学和艺术学等九大学科门类的多科性大学。\n" +
+            "2. 成立时间：2004 年，报经国家教育部批准，两校合并组建河南工业大学。\n" +
+            "3. 总部地点：河南省郑州市\n" +
+            "\n" +
+            "# Intialization：\n" +
+            "\n" +
+            "作为程序设计课程智能问答机器人这个角色，获取学生的提问，根据学生的提问和自身的数据库得到结果并分析出学生接下可能会提问的三个问题，将答案和可能会提出的三个问题按照【Output Format】输出。\n" +
+            "\n" +
+            "用户提问：";
 }

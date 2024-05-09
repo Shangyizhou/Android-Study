@@ -1,12 +1,14 @@
 package com.example.androidnote.net;
 
 import android.content.Context;
+import android.os.Build;
 
 import com.example.androidnote.App;
 import com.shangyizhou.develop.log.SLog;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class YiYanHandler {
     private static final String TAG = YiYanHandler.class.getSimpleName();
@@ -48,8 +50,10 @@ public class YiYanHandler {
         return resultStr;
     }
 
+    public static String mIntent;
+    public static HashMap<String, Integer> map = new HashMap<>();
     public static String processIntent(Context context, String line) {
-        SLog.i(TAG, "process: " + line);
+        SLog.i(TAG, "processIntent: " + line);
         // 清空数据
         mTips.clear();
         // 使用正则表达式替换所有空白字符
@@ -65,7 +69,7 @@ public class YiYanHandler {
         String result = "\"result\"";
         String tips = "\"tips\"";
         String intent = "\"intent\"";
-        if (!res.contains(result) || !res.contains(tips)) {
+        if (!res.contains(result) || !res.contains(tips) || !res.contains(intent)) {
             return "格式不合法";
         }
         String resultStr = res.substring(result.length() + 2, res.indexOf(tips) - 2);
@@ -84,6 +88,10 @@ public class YiYanHandler {
         for (String part : parts) {
             SLog.i(TAG, "process part: " + part);
             mTips.add(part);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            map.put(intentStr, map.getOrDefault(intentStr, 0) + 1);
         }
 
         return resultStr;
