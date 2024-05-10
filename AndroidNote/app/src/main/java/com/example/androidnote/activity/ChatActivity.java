@@ -3,6 +3,7 @@ package com.example.androidnote.activity;
 import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_INTENT;
 import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_NORMAL;
 import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_QUERY;
+import static com.example.androidnote.net.YiYanHandler.mIntent;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidnote.db.helper.SessionHelper;
+import com.example.androidnote.model.MessageExtern;
 import com.example.androidnote.net.DirectToServer;
 import com.example.androidnote.R;
 import com.example.androidnote.adapter.ChatAdapterMessage;
@@ -321,6 +323,12 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                     return;
                 } else if (type.equals(YIYAN_HANDLER_INTENT)) {
                     res = YiYanHandler.processIntent(getApplication(), assistant.get("content"));
+                    if (mMessageList != null) {
+                        Message message = mMessageList.get(mMessageList.size() - 2);
+                        MessageExtern extern = new MessageExtern();
+                        extern.setIntent(YiYanHandler.mIntent);
+                        message.setExt(new Gson().toJson(extern));
+                    }
                 }
                 // SLog.i(TAG, String.valueOf(messages));
                 String finalRes = res;

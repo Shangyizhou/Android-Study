@@ -3,7 +3,9 @@ package com.example.androidnote.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,11 +17,16 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.androidnote.R;
 import com.example.androidnote.manager.DataCollectionManager;
+import com.example.androidnote.manager.SessionManager;
+import com.example.androidnote.model.Message;
+import com.example.androidnote.model.MessageExtern;
+import com.example.androidnote.model.Session;
 import com.example.androidnote.model.TagResponse;
 import com.example.androidnote.net.YiYanHandler;
 import com.example.androidnote.view.OtherToServer;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
@@ -31,10 +38,14 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.gson.Gson;
 import com.shangyizhou.develop.base.BaseActivity;
 import com.shangyizhou.develop.helper.ToastUtil;
@@ -42,6 +53,8 @@ import com.shangyizhou.develop.log.SLog;
 import com.shangyizhou.develop.net.IResponse;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -63,11 +76,9 @@ public class DataActivity extends BaseActivity {
     BarChart barChart;
     TextView keyWord;
 
-    private void initView() {
-        for (Map.Entry<String, Integer> entry : YiYanHandler.map.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        }
+    PieChart pieChart;
 
+    private void initView() {
         // 找到图表控件
         lineChart = findViewById(R.id.line_chart);
         barChart = findViewById(R.id.bar_chart);
@@ -76,6 +87,7 @@ public class DataActivity extends BaseActivity {
         initLineChart();
         initBarChart();
         initKeyWord();
+        initPieChart();
     }
 
     private void initLineChart() {
@@ -268,5 +280,63 @@ public class DataActivity extends BaseActivity {
 
             }
         });
+    }
+
+    private HashMap<String, Integer> intentMap = new HashMap<>();
+    private void getIntentData() {
+        Gson json = new Gson();
+        for (Session session : SessionManager.getInstance().getSessionList()) {
+            List<Message> messageList = SessionManager.getInstance().getSessionMessages(session);
+            for (Message message : messageList) {
+                String ext = message.getExt();
+                MessageExtern messageExtern = json.fromJson(ext, MessageExtern.class);
+                if (messageExtern != null) {
+                    String intent = messageExtern.getIntent();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        intentMap.put(intent, intentMap.getOrDefault(intent, 0) + 1);
+                    }
+                }
+            }
+        }
+    }
+
+    private void initPieChart() {
+        getIntentData();
+        SLog.i(TAG, "initPieChart");
+
+        pieChart = findViewById(R.id.pie_chart);
+        // 禁用图表上半部分的绘制
+        pieChart.setUsePercentValues(true);
+        pieChart.getDescription().setEnabled(false);
+        pieChart.setExtraOffsets(5, 10, 5, 5);
+
+        pieChart.setDragDecelerationFrictionCoef(0.95f);
+
+        ArrayList<PieEntry> yValues = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : intentMap.entrySet()) {
+            if (entry == null || TextUtils.isEmpty(entry.getKey())) {
+                continue;
+            }
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+            yValues.add(new PieEntry(entry.getValue(), entry.getKey())); // 添加数据和对应的标签
+        }
+
+        PieDataSet dataSet = new PieDataSet(yValues, "询问类型");
+        dataSet.setSliceSpace(3f);
+        dataSet.setSelectionShift(5f);
+
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(ColorTemplate.VORDIPLOM_COLORS[0]);
+        colors.add(ColorTemplate.VORDIPLOM_COLORS[1]);
+        colors.add(ColorTemplate.VORDIPLOM_COLORS[2]);
+        colors.add(ColorTemplate.VORDIPLOM_COLORS[3]);
+
+        dataSet.setColors(colors);
+
+        PieData data = new PieData(dataSet);
+        pieChart.setData(data);
+
+        // 刷新图表
+        pieChart.invalidate();
     }
 }

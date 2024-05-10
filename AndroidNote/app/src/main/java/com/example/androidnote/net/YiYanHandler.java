@@ -90,6 +90,7 @@ public class YiYanHandler {
             mTips.add(part);
         }
 
+        mIntent = intentStr;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             map.put(intentStr, map.getOrDefault(intentStr, 0) + 1);
         }

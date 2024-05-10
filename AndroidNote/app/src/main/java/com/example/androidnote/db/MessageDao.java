@@ -30,7 +30,8 @@ public class MessageDao extends AbstractDao<Message, Long> {
         public final static Property SessionId = new Property(3, String.class, "sessionId", false, "SESSION_ID");
         public final static Property Message = new Property(4, String.class, "message", false, "MESSAGE");
         public final static Property SendTime = new Property(5, long.class, "sendTime", false, "SEND_TIME");
-        public final static Property Status = new Property(6, int.class, "status", false, "STATUS");
+        public final static Property Ext = new Property(6, String.class, "ext", false, "EXT");
+        public final static Property Status = new Property(7, int.class, "status", false, "STATUS");
     }
 
 
@@ -52,7 +53,8 @@ public class MessageDao extends AbstractDao<Message, Long> {
                 "\"SESSION_ID\" TEXT NOT NULL ," + // 3: sessionId
                 "\"MESSAGE\" TEXT NOT NULL ," + // 4: message
                 "\"SEND_TIME\" INTEGER NOT NULL ," + // 5: sendTime
-                "\"STATUS\" INTEGER NOT NULL );"); // 6: status
+                "\"EXT\" TEXT NOT NULL ," + // 6: ext
+                "\"STATUS\" INTEGER NOT NULL );"); // 7: status
     }
 
     /** Drops the underlying database table. */
@@ -74,7 +76,8 @@ public class MessageDao extends AbstractDao<Message, Long> {
         stmt.bindString(4, entity.getSessionId());
         stmt.bindString(5, entity.getMessage());
         stmt.bindLong(6, entity.getSendTime());
-        stmt.bindLong(7, entity.getStatus());
+        stmt.bindString(7, entity.getExt());
+        stmt.bindLong(8, entity.getStatus());
     }
 
     @Override
@@ -90,7 +93,8 @@ public class MessageDao extends AbstractDao<Message, Long> {
         stmt.bindString(4, entity.getSessionId());
         stmt.bindString(5, entity.getMessage());
         stmt.bindLong(6, entity.getSendTime());
-        stmt.bindLong(7, entity.getStatus());
+        stmt.bindString(7, entity.getExt());
+        stmt.bindLong(8, entity.getStatus());
     }
 
     @Override
@@ -107,7 +111,8 @@ public class MessageDao extends AbstractDao<Message, Long> {
             cursor.getString(offset + 3), // sessionId
             cursor.getString(offset + 4), // message
             cursor.getLong(offset + 5), // sendTime
-            cursor.getInt(offset + 6) // status
+            cursor.getString(offset + 6), // ext
+            cursor.getInt(offset + 7) // status
         );
         return entity;
     }
@@ -120,7 +125,8 @@ public class MessageDao extends AbstractDao<Message, Long> {
         entity.setSessionId(cursor.getString(offset + 3));
         entity.setMessage(cursor.getString(offset + 4));
         entity.setSendTime(cursor.getLong(offset + 5));
-        entity.setStatus(cursor.getInt(offset + 6));
+        entity.setExt(cursor.getString(offset + 6));
+        entity.setStatus(cursor.getInt(offset + 7));
      }
     
     @Override

@@ -31,6 +31,8 @@ public class Message {
     String message;
     @NotNull
     long sendTime;
+    @NotNull
+    String ext = "";
 
     /**
      * LOADING = 0;
@@ -40,16 +42,17 @@ public class Message {
     @NotNull
     int status;
 
-    @Generated(hash = 349459025)
+    @Generated(hash = 795839842)
     public Message(Long id, int type, @NotNull String messageId,
             @NotNull String sessionId, @NotNull String message, long sendTime,
-            int status) {
+            @NotNull String ext, int status) {
         this.id = id;
         this.type = type;
         this.messageId = messageId;
         this.sessionId = sessionId;
         this.message = message;
         this.sendTime = sendTime;
+        this.ext = ext;
         this.status = status;
     }
     @Generated(hash = 637306882)
@@ -98,6 +101,14 @@ public class Message {
         this.status = status;
     }
 
+
+    public String getExt() {
+        return this.ext;
+    }
+    public void setExt(String ext) {
+        this.ext = ext;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
@@ -107,6 +118,7 @@ public class Message {
                 ", sessionId='" + sessionId + '\'' +
                 ", message='" + message + '\'' +
                 ", sendTime=" + sendTime +
+                ", ext='" + ext + '\'' +
                 ", status=" + status +
                 '}';
     }
