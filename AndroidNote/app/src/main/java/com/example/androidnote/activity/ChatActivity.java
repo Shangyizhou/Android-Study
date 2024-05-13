@@ -126,6 +126,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onItemClick(String text) {
                 editText.setText(text);
+                editText.setSelection(editText.length());
             }
         });
     }

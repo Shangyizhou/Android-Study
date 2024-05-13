@@ -16,6 +16,7 @@
 
     <!--  HomeActivity  -->
     <color name="grey">#808080</color>
+    <color name="thin_grey">#F6F6F6</color>
 
 
     <!--  ChatFragment  -->

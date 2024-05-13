@@ -28,4 +28,8 @@
         <item name="android:textColorHint">@color/gray</item>
     </style>
 
+    <style name="greyCircleTheme">
+        <item name="android:background">@drawable/shape_edit_grey_bg</item>
+    </style>
+
 </resources>

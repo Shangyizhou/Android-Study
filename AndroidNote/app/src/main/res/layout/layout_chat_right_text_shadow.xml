@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:text="Null"
+                android:text="如何更高效的掌握Go语言的基本语法D:\shangyizhou\code\code-android\Android-Study\AndroidNote\app\src\main\res\layout\layout_chat_right_text_shadow.xml"
                 android:textColor="@color/chat_person_text_color"
                 android:background="@color/chat_person_text_bg_color"
                 android:textSize="16sp"

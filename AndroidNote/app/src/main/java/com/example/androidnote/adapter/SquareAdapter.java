@@ -40,7 +40,7 @@ public class SquareAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof RobotViewHolder) {
-            ((RobotViewHolder) holder).mImageView.setImageResource(R.drawable.robot);
+            ((RobotViewHolder) holder).mImageView.setImageResource(R.drawable.ai_image_2);
             ((RobotViewHolder) holder).title.setText(mData.get(position).getTitle());
             ((RobotViewHolder) holder).desc.setText(mData.get(position).getDesc());
         }
