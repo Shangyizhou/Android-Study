@@ -12,6 +12,7 @@ import com.example.androidnote.model.Advice;
 import com.example.androidnote.model.Book;
 import com.example.androidnote.model.Comment;
 import com.example.androidnote.model.Message;
+import com.example.androidnote.model.PromptModel;
 import com.example.androidnote.model.ResponseInfo;
 import com.example.androidnote.model.RobotModel;
 import com.example.androidnote.model.Session;
@@ -22,6 +23,7 @@ import com.example.androidnote.db.AdviceDao;
 import com.example.androidnote.db.BookDao;
 import com.example.androidnote.db.CommentDao;
 import com.example.androidnote.db.MessageDao;
+import com.example.androidnote.db.PromptModelDao;
 import com.example.androidnote.db.ResponseInfoDao;
 import com.example.androidnote.db.RobotModelDao;
 import com.example.androidnote.db.SessionDao;
@@ -41,6 +43,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig bookDaoConfig;
     private final DaoConfig commentDaoConfig;
     private final DaoConfig messageDaoConfig;
+    private final DaoConfig promptModelDaoConfig;
     private final DaoConfig responseInfoDaoConfig;
     private final DaoConfig robotModelDaoConfig;
     private final DaoConfig sessionDaoConfig;
@@ -51,6 +54,7 @@ public class DaoSession extends AbstractDaoSession {
     private final BookDao bookDao;
     private final CommentDao commentDao;
     private final MessageDao messageDao;
+    private final PromptModelDao promptModelDao;
     private final ResponseInfoDao responseInfoDao;
     private final RobotModelDao robotModelDao;
     private final SessionDao sessionDao;
@@ -73,6 +77,9 @@ public class DaoSession extends AbstractDaoSession {
         messageDaoConfig = daoConfigMap.get(MessageDao.class).clone();
         messageDaoConfig.initIdentityScope(type);
 
+        promptModelDaoConfig = daoConfigMap.get(PromptModelDao.class).clone();
+        promptModelDaoConfig.initIdentityScope(type);
+
         responseInfoDaoConfig = daoConfigMap.get(ResponseInfoDao.class).clone();
         responseInfoDaoConfig.initIdentityScope(type);
 
@@ -92,6 +99,7 @@ public class DaoSession extends AbstractDaoSession {
         bookDao = new BookDao(bookDaoConfig, this);
         commentDao = new CommentDao(commentDaoConfig, this);
         messageDao = new MessageDao(messageDaoConfig, this);
+        promptModelDao = new PromptModelDao(promptModelDaoConfig, this);
         responseInfoDao = new ResponseInfoDao(responseInfoDaoConfig, this);
         robotModelDao = new RobotModelDao(robotModelDaoConfig, this);
         sessionDao = new SessionDao(sessionDaoConfig, this);
@@ -102,6 +110,7 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(Book.class, bookDao);
         registerDao(Comment.class, commentDao);
         registerDao(Message.class, messageDao);
+        registerDao(PromptModel.class, promptModelDao);
         registerDao(ResponseInfo.class, responseInfoDao);
         registerDao(RobotModel.class, robotModelDao);
         registerDao(Session.class, sessionDao);
@@ -114,6 +123,7 @@ public class DaoSession extends AbstractDaoSession {
         bookDaoConfig.clearIdentityScope();
         commentDaoConfig.clearIdentityScope();
         messageDaoConfig.clearIdentityScope();
+        promptModelDaoConfig.clearIdentityScope();
         responseInfoDaoConfig.clearIdentityScope();
         robotModelDaoConfig.clearIdentityScope();
         sessionDaoConfig.clearIdentityScope();
@@ -135,6 +145,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public MessageDao getMessageDao() {
         return messageDao;
+    }
+
+    public PromptModelDao getPromptModelDao() {
+        return promptModelDao;
     }
 
     public ResponseInfoDao getResponseInfoDao() {

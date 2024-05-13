@@ -134,7 +134,9 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         recyclerView.setAdapter(mChatAdapter);
         sendBtn.setOnClickListener(this);
         Button button = view.findViewById(R.id.ai_parse);
+        Button comment = view.findViewById(R.id.comment);
         button.setVisibility(View.GONE);
+        comment.setVisibility(View.GONE);
 
         mChatAdapter.setOnItemClickListener(new ChatAdapterMessage.OnItemClickListener() {
             @Override

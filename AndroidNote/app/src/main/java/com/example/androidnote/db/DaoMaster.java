@@ -25,6 +25,7 @@ public class DaoMaster extends AbstractDaoMaster {
         BookDao.createTable(db, ifNotExists);
         CommentDao.createTable(db, ifNotExists);
         MessageDao.createTable(db, ifNotExists);
+        PromptModelDao.createTable(db, ifNotExists);
         ResponseInfoDao.createTable(db, ifNotExists);
         RobotModelDao.createTable(db, ifNotExists);
         SessionDao.createTable(db, ifNotExists);
@@ -38,6 +39,7 @@ public class DaoMaster extends AbstractDaoMaster {
         BookDao.dropTable(db, ifExists);
         CommentDao.dropTable(db, ifExists);
         MessageDao.dropTable(db, ifExists);
+        PromptModelDao.dropTable(db, ifExists);
         ResponseInfoDao.dropTable(db, ifExists);
         RobotModelDao.dropTable(db, ifExists);
         SessionDao.dropTable(db, ifExists);
@@ -65,6 +67,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(BookDao.class);
         registerDaoClass(CommentDao.class);
         registerDaoClass(MessageDao.class);
+        registerDaoClass(PromptModelDao.class);
         registerDaoClass(ResponseInfoDao.class);
         registerDaoClass(RobotModelDao.class);
         registerDaoClass(SessionDao.class);

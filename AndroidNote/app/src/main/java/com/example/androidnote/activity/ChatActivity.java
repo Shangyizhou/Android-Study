@@ -124,6 +124,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         sendBtn.setOnClickListener(this);
         parseBtn.setOnClickListener(this);
         commentBtn.setOnClickListener(this);
+        commentBtn.setVisibility(View.VISIBLE);
         parseBtn.setVisibility(View.VISIBLE);
 
         mChatAdapter.setOnItemClickListener(new ChatAdapterMessage.OnItemClickListener() {
