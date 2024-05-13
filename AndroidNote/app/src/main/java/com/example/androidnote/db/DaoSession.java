@@ -8,6 +8,9 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
+import com.example.androidnote.model.Advice;
+import com.example.androidnote.model.Book;
+import com.example.androidnote.model.Comment;
 import com.example.androidnote.model.Message;
 import com.example.androidnote.model.ResponseInfo;
 import com.example.androidnote.model.RobotModel;
@@ -15,6 +18,9 @@ import com.example.androidnote.model.Session;
 import com.example.androidnote.model.User;
 import com.example.androidnote.model.UserInfo;
 
+import com.example.androidnote.db.AdviceDao;
+import com.example.androidnote.db.BookDao;
+import com.example.androidnote.db.CommentDao;
 import com.example.androidnote.db.MessageDao;
 import com.example.androidnote.db.ResponseInfoDao;
 import com.example.androidnote.db.RobotModelDao;
@@ -31,6 +37,9 @@ import com.example.androidnote.db.UserInfoDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
+    private final DaoConfig adviceDaoConfig;
+    private final DaoConfig bookDaoConfig;
+    private final DaoConfig commentDaoConfig;
     private final DaoConfig messageDaoConfig;
     private final DaoConfig responseInfoDaoConfig;
     private final DaoConfig robotModelDaoConfig;
@@ -38,6 +47,9 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig userDaoConfig;
     private final DaoConfig userInfoDaoConfig;
 
+    private final AdviceDao adviceDao;
+    private final BookDao bookDao;
+    private final CommentDao commentDao;
     private final MessageDao messageDao;
     private final ResponseInfoDao responseInfoDao;
     private final RobotModelDao robotModelDao;
@@ -48,6 +60,15 @@ public class DaoSession extends AbstractDaoSession {
     public DaoSession(Database db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
         super(db);
+
+        adviceDaoConfig = daoConfigMap.get(AdviceDao.class).clone();
+        adviceDaoConfig.initIdentityScope(type);
+
+        bookDaoConfig = daoConfigMap.get(BookDao.class).clone();
+        bookDaoConfig.initIdentityScope(type);
+
+        commentDaoConfig = daoConfigMap.get(CommentDao.class).clone();
+        commentDaoConfig.initIdentityScope(type);
 
         messageDaoConfig = daoConfigMap.get(MessageDao.class).clone();
         messageDaoConfig.initIdentityScope(type);
@@ -67,6 +88,9 @@ public class DaoSession extends AbstractDaoSession {
         userInfoDaoConfig = daoConfigMap.get(UserInfoDao.class).clone();
         userInfoDaoConfig.initIdentityScope(type);
 
+        adviceDao = new AdviceDao(adviceDaoConfig, this);
+        bookDao = new BookDao(bookDaoConfig, this);
+        commentDao = new CommentDao(commentDaoConfig, this);
         messageDao = new MessageDao(messageDaoConfig, this);
         responseInfoDao = new ResponseInfoDao(responseInfoDaoConfig, this);
         robotModelDao = new RobotModelDao(robotModelDaoConfig, this);
@@ -74,6 +98,9 @@ public class DaoSession extends AbstractDaoSession {
         userDao = new UserDao(userDaoConfig, this);
         userInfoDao = new UserInfoDao(userInfoDaoConfig, this);
 
+        registerDao(Advice.class, adviceDao);
+        registerDao(Book.class, bookDao);
+        registerDao(Comment.class, commentDao);
         registerDao(Message.class, messageDao);
         registerDao(ResponseInfo.class, responseInfoDao);
         registerDao(RobotModel.class, robotModelDao);
@@ -83,12 +110,27 @@ public class DaoSession extends AbstractDaoSession {
     }
     
     public void clear() {
+        adviceDaoConfig.clearIdentityScope();
+        bookDaoConfig.clearIdentityScope();
+        commentDaoConfig.clearIdentityScope();
         messageDaoConfig.clearIdentityScope();
         responseInfoDaoConfig.clearIdentityScope();
         robotModelDaoConfig.clearIdentityScope();
         sessionDaoConfig.clearIdentityScope();
         userDaoConfig.clearIdentityScope();
         userInfoDaoConfig.clearIdentityScope();
+    }
+
+    public AdviceDao getAdviceDao() {
+        return adviceDao;
+    }
+
+    public BookDao getBookDao() {
+        return bookDao;
+    }
+
+    public CommentDao getCommentDao() {
+        return commentDao;
     }
 
     public MessageDao getMessageDao() {
