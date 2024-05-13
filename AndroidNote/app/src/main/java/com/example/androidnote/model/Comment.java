@@ -3,6 +3,7 @@ package com.example.androidnote.model;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.NotNull;
 
 @Entity
 public class Comment {
@@ -11,12 +12,19 @@ public class Comment {
     private String robotId;
     private String content;
     private String userId;
-    @Generated(hash = 502692624)
-    public Comment(Long id, String robotId, String content, String userId) {
+    @NotNull
+    long createTime;
+    @NotNull
+    long updateTime;
+    @Generated(hash = 6705288)
+    public Comment(Long id, String robotId, String content, String userId,
+            long createTime, long updateTime) {
         this.id = id;
         this.robotId = robotId;
         this.content = content;
         this.userId = userId;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
     }
     @Generated(hash = 1669165771)
     public Comment() {
@@ -44,5 +52,17 @@ public class Comment {
     }
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+    public long getCreateTime() {
+        return this.createTime;
+    }
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+    public long getUpdateTime() {
+        return this.updateTime;
+    }
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
     }
 }

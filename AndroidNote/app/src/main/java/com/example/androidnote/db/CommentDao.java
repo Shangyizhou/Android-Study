@@ -28,6 +28,8 @@ public class CommentDao extends AbstractDao<Comment, Long> {
         public final static Property RobotId = new Property(1, String.class, "robotId", false, "ROBOT_ID");
         public final static Property Content = new Property(2, String.class, "content", false, "CONTENT");
         public final static Property UserId = new Property(3, String.class, "userId", false, "USER_ID");
+        public final static Property CreateTime = new Property(4, long.class, "createTime", false, "CREATE_TIME");
+        public final static Property UpdateTime = new Property(5, long.class, "updateTime", false, "UPDATE_TIME");
     }
 
 
@@ -46,7 +48,9 @@ public class CommentDao extends AbstractDao<Comment, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"ROBOT_ID\" TEXT," + // 1: robotId
                 "\"CONTENT\" TEXT," + // 2: content
-                "\"USER_ID\" TEXT);"); // 3: userId
+                "\"USER_ID\" TEXT," + // 3: userId
+                "\"CREATE_TIME\" INTEGER NOT NULL ," + // 4: createTime
+                "\"UPDATE_TIME\" INTEGER NOT NULL );"); // 5: updateTime
     }
 
     /** Drops the underlying database table. */
@@ -78,6 +82,8 @@ public class CommentDao extends AbstractDao<Comment, Long> {
         if (userId != null) {
             stmt.bindString(4, userId);
         }
+        stmt.bindLong(5, entity.getCreateTime());
+        stmt.bindLong(6, entity.getUpdateTime());
     }
 
     @Override
@@ -103,6 +109,8 @@ public class CommentDao extends AbstractDao<Comment, Long> {
         if (userId != null) {
             stmt.bindString(4, userId);
         }
+        stmt.bindLong(5, entity.getCreateTime());
+        stmt.bindLong(6, entity.getUpdateTime());
     }
 
     @Override
@@ -116,7 +124,9 @@ public class CommentDao extends AbstractDao<Comment, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // robotId
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // content
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // userId
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // userId
+            cursor.getLong(offset + 4), // createTime
+            cursor.getLong(offset + 5) // updateTime
         );
         return entity;
     }
@@ -127,6 +137,8 @@ public class CommentDao extends AbstractDao<Comment, Long> {
         entity.setRobotId(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setContent(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setUserId(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setCreateTime(cursor.getLong(offset + 4));
+        entity.setUpdateTime(cursor.getLong(offset + 5));
      }
     
     @Override

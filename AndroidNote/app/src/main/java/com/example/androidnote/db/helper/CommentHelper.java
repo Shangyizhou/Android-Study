@@ -54,6 +54,10 @@ public class CommentHelper {
         if (!isDataBaseValid()) {
             return null;
         }
-        return mCommentDao.queryBuilder().where(CommentDao.Properties.RobotId.eq(robotId)).list();
+
+        return mCommentDao.queryBuilder()
+                .where(CommentDao.Properties.RobotId.eq(robotId))
+                .orderAsc(CommentDao.Properties.CreateTime)
+                .list();
     }
 }

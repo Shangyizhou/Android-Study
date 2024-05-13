@@ -91,7 +91,6 @@ public class HomeActivity extends BaseUiActivity implements View.OnClickListener
 
     @Override
     protected void onCreateChildren(Bundle bundle) {
-        super.onCreateChildren(bundle);
         setContentView(R.layout.activity_home);
         initView();
     }

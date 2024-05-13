@@ -74,6 +74,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
     private RobotModel mCurrentRobot;
     private List<String> mQueryList;
 
+    private Button commentBtn;
     private Button parseBtn;
 
     @Override
@@ -87,6 +88,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             //     mCurrentRobot = (RobotModel) intent.getSerializableExtra("robot_data");
             // }
             mCurrentRobot = (RobotModel) intent.getSerializableExtra("robot_data");
+            SLog.i(TAG, "onCreateChildren robot_data" + mCurrentRobot);
         }
         initView();
     }
@@ -114,12 +116,14 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         mChatAdapter = new ChatAdapterMessage(mMessageList);
         recyclerView = findViewById(R.id.mChatView);
         parseBtn = findViewById(R.id.ai_parse);
+        commentBtn = findViewById(R.id.comment);
         sendBtn = findViewById(R.id.btn_send_msg);
         editText = findViewById(R.id.et_input_msg);
         recyclerView.setAdapter(mChatAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         sendBtn.setOnClickListener(this);
         parseBtn.setOnClickListener(this);
+        commentBtn.setOnClickListener(this);
         parseBtn.setVisibility(View.VISIBLE);
 
         mChatAdapter.setOnItemClickListener(new ChatAdapterMessage.OnItemClickListener() {
@@ -219,7 +223,16 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
 
         } else if (id == R.id.ai_parse) {
             callYiyanForQuery();
+        } else if (id == R.id.comment) {
+            startComment();
         }
+    }
+
+    private void startComment() {
+        Bundle bundle = new Bundle();
+        bundle.putString("robotId", mCurrentRobot.getRobotId());
+        SLog.i(TAG, "startComment: " + mCurrentRobot.getRobotId());
+        CommentActivity.startUp(this, bundle);
     }
 
     private void addPerson() {
