@@ -1,5 +1,6 @@
 package com.example.androidnote.net;
 
+import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_ACQUIRE_QUERY;
 import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_INTENT;
 import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_NORMAL;
 import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_QUERY;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 
 import com.example.androidnote.activity.ChatActivity;
 import com.example.androidnote.activity.ParseActivity;
+import com.example.androidnote.constant.Prompts;
 import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.NewsList;
 import com.example.androidnote.model.ResponseInfo;
@@ -327,6 +329,8 @@ public class DirectToServer {
             msg.addProperty("content", promptParseMessage + message + "\n");
         } else if (type.equals(YIYAN_HANDLER_INTENT)) {
             msg.addProperty("content", promptIntentTemplate + message + "\n");
+        } else if (type.equals(YIYAN_HANDLER_ACQUIRE_QUERY)) {
+            msg.addProperty("content", Prompts.CREATE_ROBOT_PROMPT + message + "\n");
         }
 
         // 将消息放入JSON数组中

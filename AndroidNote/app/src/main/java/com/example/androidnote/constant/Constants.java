@@ -24,4 +24,5 @@ public class Constants {
     public static final String YIYAN_HANDLER_NORMAL = "yiyan_handler_normal";
     public static final String YIYAN_HANDLER_INTENT = "yiyan_handler_intent";
     public static final String YIYAN_HANDLER_QUERY = "yiyan_handler_query";
+    public static final String YIYAN_HANDLER_ACQUIRE_QUERY = "yiyan_handler_acquire_query_list";
 }

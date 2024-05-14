@@ -39,6 +39,9 @@
         android:theme="@style/Theme.AndroidNote"
         tools:targetApi="31">
         <activity
+            android:name=".activity.AutoCreateRobotActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.CommentActivity"
             android:exported="false" />
         <activity

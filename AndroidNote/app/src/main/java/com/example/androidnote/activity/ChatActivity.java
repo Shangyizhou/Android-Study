@@ -1,5 +1,6 @@
 package com.example.androidnote.activity;
 
+import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_ACQUIRE_QUERY;
 import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_INTENT;
 import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_NORMAL;
 import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_QUERY;
@@ -289,6 +290,11 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         callEBStream(inputText, YIYAN_HANDLER_INTENT);
     }
 
+    public void callYiyanForPrompt(String query) {
+        SLog.i(TAG, "callYiyanForPrompt");
+        callEBStream(query, YIYAN_HANDLER_ACQUIRE_QUERY);
+    }
+
     public void callYiyanForQuery() {
         List<String> queryList = new ArrayList<>();
         List<Message> messageList = SessionManager.getInstance().getSessionMessages(mCurrentSession);
@@ -344,6 +350,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                         extern.setIntent(YiYanHandler.mIntent);
                         message.setExt(new Gson().toJson(extern));
                     }
+                } else if (type.equals(YIYAN_HANDLER_ACQUIRE_QUERY)) {
+                    YiYanHandler.processCreateRobot(getApplication(), assistant.get("content"));
                 }
                 // SLog.i(TAG, String.valueOf(messages));
                 String finalRes = res;
