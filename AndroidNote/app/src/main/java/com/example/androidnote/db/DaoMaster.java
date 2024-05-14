@@ -24,11 +24,14 @@ public class DaoMaster extends AbstractDaoMaster {
         AdviceDao.createTable(db, ifNotExists);
         BookDao.createTable(db, ifNotExists);
         CommentDao.createTable(db, ifNotExists);
+        FansDao.createTable(db, ifNotExists);
+        IMUserDao.createTable(db, ifNotExists);
         MessageDao.createTable(db, ifNotExists);
         PromptModelDao.createTable(db, ifNotExists);
         ResponseInfoDao.createTable(db, ifNotExists);
         RobotModelDao.createTable(db, ifNotExists);
         SessionDao.createTable(db, ifNotExists);
+        StarDao.createTable(db, ifNotExists);
         UserDao.createTable(db, ifNotExists);
         UserInfoDao.createTable(db, ifNotExists);
     }
@@ -38,11 +41,14 @@ public class DaoMaster extends AbstractDaoMaster {
         AdviceDao.dropTable(db, ifExists);
         BookDao.dropTable(db, ifExists);
         CommentDao.dropTable(db, ifExists);
+        FansDao.dropTable(db, ifExists);
+        IMUserDao.dropTable(db, ifExists);
         MessageDao.dropTable(db, ifExists);
         PromptModelDao.dropTable(db, ifExists);
         ResponseInfoDao.dropTable(db, ifExists);
         RobotModelDao.dropTable(db, ifExists);
         SessionDao.dropTable(db, ifExists);
+        StarDao.dropTable(db, ifExists);
         UserDao.dropTable(db, ifExists);
         UserInfoDao.dropTable(db, ifExists);
     }
@@ -66,11 +72,14 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(AdviceDao.class);
         registerDaoClass(BookDao.class);
         registerDaoClass(CommentDao.class);
+        registerDaoClass(FansDao.class);
+        registerDaoClass(IMUserDao.class);
         registerDaoClass(MessageDao.class);
         registerDaoClass(PromptModelDao.class);
         registerDaoClass(ResponseInfoDao.class);
         registerDaoClass(RobotModelDao.class);
         registerDaoClass(SessionDao.class);
+        registerDaoClass(StarDao.class);
         registerDaoClass(UserDao.class);
         registerDaoClass(UserInfoDao.class);
     }

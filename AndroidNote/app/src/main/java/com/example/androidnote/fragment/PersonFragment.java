@@ -21,11 +21,20 @@ import com.example.androidnote.activity.AboutActivity;
 import com.example.androidnote.activity.DataActivity;
 import com.example.androidnote.activity.LoginActivity;
 import com.example.androidnote.activity.user.UserInfoActivity;
+import com.example.androidnote.db.helper.FansHelper;
+import com.example.androidnote.db.helper.RobotHelper;
+import com.example.androidnote.db.helper.StarHelper;
 import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.manager.SessionManager;
+import com.example.androidnote.model.Fans;
 import com.example.androidnote.model.IMUser;
+import com.example.androidnote.model.RobotModel;
+import com.example.androidnote.model.Star;
 import com.shangyizhou.develop.helper.ToastUtil;
 import com.shangyizhou.develop.log.SLog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.bmob.v3.BmobUser;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -83,6 +92,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.activity_user, container, false);
         initView(view);
+        getData();
         return view;
     }
 
@@ -95,9 +105,18 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
     private LinearLayout ll_notice;
     private LinearLayout ll_logout;
     private LinearLayout ll_data;
+    private ViewGroup includedLayout;
     TextView tvVersion;
+    TextView tvShoucang;
+    TextView tvPublic;
+    TextView tvFancs;
 
     private void initView(View view) {
+        includedLayout = view.findViewById(R.id.person_title);
+        tvShoucang = includedLayout.findViewById(R.id.tv_shoucang);
+        tvPublic = includedLayout.findViewById(R.id.tv_public);
+        tvFancs = includedLayout.findViewById(R.id.tv_fans);
+
         ll_me_info = view.findViewById(R.id.ll_me_info);
         ll_share = view.findViewById(R.id.ll_share);
         ll_setting = view.findViewById(R.id.ll_setting);
@@ -123,6 +142,17 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
             tvVersion.setText(version);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    List<Star> mStarList = new ArrayList<>();
+    List<Fans> mFansList = new ArrayList<>();
+    List<RobotModel> mPublicList = new ArrayList<>();
+    private void getData() {
+        mStarList =  StarHelper.getInstance().getStarByUser(BmobManager.getInstance().getObjectId());
+        mPublicList = RobotHelper.getInstance().takeAllByUser(BmobManager.getInstance().getObjectId());
+        for (RobotModel model : mPublicList) {
+            mFansList.addAll(FansHelper.getInstance().getFansListByRobot(model.getRobotId()));
         }
     }
 

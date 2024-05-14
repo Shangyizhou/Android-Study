@@ -3,6 +3,8 @@ package com.example.androidnote.adapter;
 import static com.example.androidnote.constant.Constants.DEFAULT_ROBOT_ID;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,6 +68,10 @@ public class CommentAdapter extends RecyclerView.Adapter{
         if (holder instanceof CommentViewHolder) {
             final Comment comment = mData.get(position);
             final CommentViewHolder commentViewHolder = (CommentViewHolder) holder;
+            // if (!imUser.getPhoto().equals("")) {
+            //     Bitmap bitmap = BitmapFactory.decodeFile(imUser.getPhoto());
+            //     iv_me_photo.setImageBitmap(bitmap);
+            // }
             // commentViewHolder.setImageView();
             // commentViewHolder.sendTime();
             // commentViewHolder.setContent();

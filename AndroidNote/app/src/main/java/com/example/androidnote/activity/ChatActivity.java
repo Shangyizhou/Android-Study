@@ -13,13 +13,19 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.androidnote.db.helper.FansHelper;
 import com.example.androidnote.db.helper.SessionHelper;
+import com.example.androidnote.db.helper.StarHelper;
+import com.example.androidnote.model.Fans;
 import com.example.androidnote.model.MessageExtern;
+import com.example.androidnote.model.Star;
 import com.example.androidnote.net.DirectToServer;
 import com.example.androidnote.R;
 import com.example.androidnote.adapter.ChatAdapterMessage;
@@ -77,6 +83,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
 
     private Button commentBtn;
     private Button parseBtn;
+    private ImageView starBtn;
 
     @Override
     protected void onCreateChildren(Bundle bundle) {
@@ -118,6 +125,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         recyclerView = findViewById(R.id.mChatView);
         parseBtn = findViewById(R.id.ai_parse);
         commentBtn = findViewById(R.id.comment);
+        starBtn = findViewById(R.id.star);
         sendBtn = findViewById(R.id.btn_send_msg);
         editText = findViewById(R.id.et_input_msg);
         recyclerView.setAdapter(mChatAdapter);
@@ -125,6 +133,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         sendBtn.setOnClickListener(this);
         parseBtn.setOnClickListener(this);
         commentBtn.setOnClickListener(this);
+        starBtn.setOnClickListener(this);
         commentBtn.setVisibility(View.VISIBLE);
         parseBtn.setVisibility(View.VISIBLE);
 
@@ -137,6 +146,9 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         });
     }
     private boolean isInit = false;
+    private boolean isFans = false;
+    private Fans mFans;
+    private Star mStar;
     private void getData() {
         SLog.i(TAG, "getData");
         if (isInit) {
@@ -186,6 +198,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             }
             isInit = true;
         }
+
+        mFans = FansHelper.getInstance().getFansByUserAndRobot(BmobManager.getInstance().getObjectId(), mCurrentRobot.getRobotId());
     }
 
     @Override
@@ -193,6 +207,10 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         super.onDestroy();
         SLog.i(TAG, "onDestroy");
         SessionManager.getInstance().saveHistoryMessage();
+        if (mFans != null && mStar != null) {
+            FansHelper.getInstance().save(mFans);
+            StarHelper.getInstance().save(mStar);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -227,6 +245,29 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             callYiyanForQuery();
         } else if (id == R.id.comment) {
             startComment();
+        } else if (id == R.id.star) {
+            if (mFans == null && mStar == null) {
+                mFans = new Fans();
+                mFans.setUserId(BmobManager.getInstance().getObjectId());
+                mFans.setRobotId(mCurrentRobot.getRobotId());
+                mFans.setIsFans(true);
+
+                mStar = new Star();
+                mStar.setUserId(BmobManager.getInstance().getObjectId());
+                mStar.setRobotId(mCurrentRobot.getRobotId());
+                mStar.setIsStar(true);
+                return;
+            }
+
+            if (mFans.getIsFans()) {
+                starBtn.setImageResource(R.drawable.love);
+                mFans.setIsFans(false);
+                mStar.setIsStar(false);
+            } else {
+                starBtn.setImageResource(R.drawable.love_red);
+                mFans.setIsFans(true);
+                mStar.setIsStar(true);
+            }
         }
     }
 

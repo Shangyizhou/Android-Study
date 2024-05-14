@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.androidnote.R;
 import com.example.androidnote.adapter.CommentAdapter;
 import com.example.androidnote.db.helper.CommentHelper;
+import com.example.androidnote.db.helper.UserHelper;
 import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.Comment;
 import com.example.androidnote.model.RobotModel;
@@ -84,6 +85,13 @@ public class CommentActivity extends BaseActivity implements View.OnClickListene
             sendComment(content);
         } else if (id == R.id.leave_btn) {
             finish();
+        }
+    }
+
+    private void getUser() {
+        for (Comment comment : mCommentList) {
+            String userId = comment.getUserId();
+
         }
     }
 

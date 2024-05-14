@@ -35,7 +35,9 @@
             android:layout_marginTop="5dp"
             android:layout_marginRight="10dp"
             android:textSize="12sp"
-            android:text="孔子模型"/>
+            android:text="孔子模型"
+            android:maxLines="1"
+            android:ellipsize="end"/>
 
     </LinearLayout>
 

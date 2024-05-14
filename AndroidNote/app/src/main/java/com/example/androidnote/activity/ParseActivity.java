@@ -6,6 +6,9 @@ import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_QUERY;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -16,10 +19,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.androidnote.R;
+import com.example.androidnote.db.helper.BookHelper;
+import com.example.androidnote.manager.BmobManager;
+import com.example.androidnote.model.Book;
 import com.example.androidnote.model.RobotModel;
 import com.example.androidnote.net.DirectToServer;
 import com.example.androidnote.net.YiYanHandler;
 import com.shangyizhou.develop.base.BaseActivity;
+import com.shangyizhou.develop.helper.ToastUtil;
 import com.shangyizhou.develop.log.SLog;
 import com.shangyizhou.develop.net.IResponse;
 
@@ -33,7 +40,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ParseActivity extends BaseActivity {
+public class ParseActivity extends BaseActivity implements View.OnClickListener{
     private static final String TAG = ParseActivity.class.getSimpleName();
 
     public static void startUp(Context context, Bundle bundle) {
@@ -69,6 +76,7 @@ public class ParseActivity extends BaseActivity {
     TextView editBook1;
     TextView editBook2;
     TextView editBook3;
+    Button bookBtn;
 
     private void initView() {
         editQuery = findViewById(R.id.edit_query);
@@ -76,8 +84,10 @@ public class ParseActivity extends BaseActivity {
         editBook1 = findViewById(R.id.edit_book_1);
         editBook2 = findViewById(R.id.edit_book_2);
         editBook3 = findViewById(R.id.edit_book_3);
+        bookBtn = findViewById(R.id.book_btn);
     }
 
+    List<TextView> editTexts = new ArrayList<>();
     private void setUi() {
         SLog.i(TAG, "setUi");
         editQuery.setText(YiYanHandler.mQueryStr);
@@ -94,7 +104,7 @@ public class ParseActivity extends BaseActivity {
         Matcher matcher = pattern.matcher(books);
 
         List<String> bookList = new ArrayList<>();
-        List<TextView> editTexts = new ArrayList<>();
+        editTexts = new ArrayList<>();
         editTexts.add(editBook1);
         editTexts.add(editBook2);
         editTexts.add(editBook3);
@@ -109,31 +119,14 @@ public class ParseActivity extends BaseActivity {
         }
     }
 
-    static List<Map<String, String>> messages = new ArrayList<>();
     private void getData() {
         String text = mQueryStr;
         String type = YIYAN_HANDLER_QUERY;
         DirectToServer.callYiYanERNIELiteStream(text, type, new IResponse() {
             @Override
-            public void onSuccess(String originJson) {
-                // 将回复的内容添加到消息中
-                HashMap<String, String> assistant = new HashMap<>();
-                assistant.put("role", "assistant");
-                assistant.put("content", "");
-                // 取出我们需要的内容,也就是result部分
-                String[] answerArray = originJson.split("data: ");
-                for (int i = 1; i < answerArray.length; ++i) {
-                    answerArray[i] = answerArray[i].substring(0, answerArray[i].length() - 2);
-                    SLog.i(TAG, "answerArray: " + answerArray[i]);
-                    try {
-                        assistant.put("content", assistant.get("content") + new JSONObject(answerArray[i]).getString("result"));
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                messages.add(assistant);
+            public void onSuccess(String content) {
                 if (type.equals(YIYAN_HANDLER_QUERY)) {
-                    YiYanHandler.processQuery(getApplication(), assistant.get("content"));
+                    YiYanHandler.processQuery(getApplication(), content);
                 }
                 runOnUiThread(new Runnable() {
                     @Override
@@ -150,6 +143,22 @@ public class ParseActivity extends BaseActivity {
         });
     }
 
-
-
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.book_btn) {
+            for (TextView editText : editTexts) {
+                String text = editText.getText().toString();
+                if (!TextUtils.isEmpty(text)) {
+                    continue;
+                }
+                text = text.replace("《", "").replace("》", "");
+                Book book = new Book();
+                book.setName(text);
+                book.setUserId(BmobManager.getInstance().getObjectId());
+                BookHelper.getInstance().save(book);
+                ToastUtil.getInstance().showToast("已加入书库");
+            }
+        }
+    }
 }

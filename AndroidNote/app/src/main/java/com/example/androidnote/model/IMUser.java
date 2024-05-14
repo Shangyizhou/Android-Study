@@ -1,8 +1,15 @@
 package com.example.androidnote.model;
 
-import cn.bmob.v3.BmobUser;
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
 
+import cn.bmob.v3.BmobUser;
+import org.greenrobot.greendao.annotation.Generated;
+
+@Entity
 public class IMUser extends BmobUser {
+    @Id
+    Long id;
     //昵称
     private String userName = "";
     //头像
@@ -22,6 +29,27 @@ public class IMUser extends BmobUser {
     private String constellation = "";
     //爱好
     private String hobby = "";
+
+    @Generated(hash = 1272465326)
+    public IMUser(Long id, String userName, String photo, String schoolName,
+            String className, boolean sex, String desc, int age, String birthday,
+            String constellation, String hobby) {
+        this.id = id;
+        this.userName = userName;
+        this.photo = photo;
+        this.schoolName = schoolName;
+        this.className = className;
+        this.sex = sex;
+        this.desc = desc;
+        this.age = age;
+        this.birthday = birthday;
+        this.constellation = constellation;
+        this.hobby = hobby;
+    }
+
+    @Generated(hash = 931211978)
+    public IMUser() {
+    }
 
     public String getUserName() {
         return userName;
@@ -117,5 +145,17 @@ public class IMUser extends BmobUser {
                 ", constellation='" + constellation + '\'' +
                 ", hobby='" + hobby + '\'' +
                 '}';
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public boolean getSex() {
+        return this.sex;
     }
 }
