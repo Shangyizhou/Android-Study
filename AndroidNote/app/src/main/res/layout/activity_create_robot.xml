@@ -121,16 +121,20 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/edit_desc"
-                style="@style/EditTextTheme"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginTop="10dp"
-                android:gravity="top|left"
-                android:hint="@string/desc_hint"
-                android:inputType="textMultiLine"
-                android:maxLines="3"/>
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
+                <EditText
+                    android:id="@+id/edit_desc"
+                    style="@style/EditTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="top|left"
+                    android:hint="@string/desc_hint"
+                    android:inputType="textMultiLine"/>
+            </ScrollView>
 
         </LinearLayout>
 

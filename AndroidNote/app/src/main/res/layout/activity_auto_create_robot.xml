@@ -40,7 +40,7 @@
         <LinearLayout
             style="@style/EditTextTheme"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="483dp"
             android:layout_margin="15dp"
             android:orientation="vertical"
             android:padding="10dp">
@@ -55,16 +55,22 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/edit_desc"
-                style="@style/EditTextTheme"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="350dp"
-                android:layout_marginTop="10dp"
-                android:gravity="top|left"
-                android:hint="@string/desc_hint"
-                android:inputType="textMultiLine"
-                android:maxLines="3"/>
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
+                <TextView
+                    android:id="@+id/prompt_text"
+                    style="@style/EditTextTheme"
+                    android:padding="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:gravity="top|left"
+                    android:hint="@string/desc_hint"
+                    android:inputType="textMultiLine" />
+            </ScrollView>
+
 
         </LinearLayout>
 

@@ -290,11 +290,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         callEBStream(inputText, YIYAN_HANDLER_INTENT);
     }
 
-    public void callYiyanForPrompt(String query) {
-        SLog.i(TAG, "callYiyanForPrompt");
-        callEBStream(query, YIYAN_HANDLER_ACQUIRE_QUERY);
-    }
-
     public void callYiyanForQuery() {
         List<String> queryList = new ArrayList<>();
         List<Message> messageList = SessionManager.getInstance().getSessionMessages(mCurrentSession);
@@ -312,46 +307,25 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         ParseActivity.startUp(this, bundle);
     }
 
-    // 历史对话，需要按照user,assistant
-    static List<Map<String, String>> messages = new ArrayList<>();
-
     private void callEBStream(String text, String type) {
         DirectToServer.callYiYanERNIELiteStream(text, type, new IResponse() {
             @Override
-            public void onSuccess(String originJson) {
-                // 将回复的内容添加到消息中
-                HashMap<String, String> assistant = new HashMap<>();
-                assistant.put("role", "assistant");
-                assistant.put("content", "");
-                // 取出我们需要的内容,也就是result部分
-                String[] answerArray = originJson.split("data: ");
-                for (int i = 1; i < answerArray.length; ++i) {
-                    answerArray[i] = answerArray[i].substring(0, answerArray[i].length() - 2);
-                    SLog.i(TAG, "answerArray: " + answerArray[i]);
-                    try {
-                        assistant.put("content", assistant.get("content") + new JSONObject(answerArray[i]).getString("result"));
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                messages.add(assistant);
+            public void onSuccess(String content) {
                 String res = "";
                 if (type.equals(YIYAN_HANDLER_NORMAL)) {
-                     res = YiYanHandler.process(getApplication(), assistant.get("content"));
+                     res = YiYanHandler.process(getApplication(), content);
                 } else if (type.equals(YIYAN_HANDLER_QUERY)) {
-                    YiYanHandler.processQuery(getApplication(), assistant.get("content"));
+                    YiYanHandler.processQuery(getApplication(), content);
                     ParseActivity.startUp(ChatActivity.this);
                     return;
                 } else if (type.equals(YIYAN_HANDLER_INTENT)) {
-                    res = YiYanHandler.processIntent(getApplication(), assistant.get("content"));
+                    res = YiYanHandler.processIntent(getApplication(), content);
                     if (mMessageList != null) {
                         Message message = mMessageList.get(mMessageList.size() - 2);
                         MessageExtern extern = new MessageExtern();
                         extern.setIntent(YiYanHandler.mIntent);
                         message.setExt(new Gson().toJson(extern));
                     }
-                } else if (type.equals(YIYAN_HANDLER_ACQUIRE_QUERY)) {
-                    YiYanHandler.processCreateRobot(getApplication(), assistant.get("content"));
                 }
                 // SLog.i(TAG, String.valueOf(messages));
                 String finalRes = res;

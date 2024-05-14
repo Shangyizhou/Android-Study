@@ -36,16 +36,25 @@ import java.util.List;
 
 public class CreateRobotActivity extends BaseActivity {
     private static final String TAG = CreateRobotActivity.class.getSimpleName();
-    public static void startUp(Context context) {
+    public static void startUp(Context context, Bundle bundle) {
         SLog.i(TAG, "[CreateRobotActivity] startUp");
         Intent intent = new Intent(context, CreateRobotActivity.class);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
         context.startActivity(intent);
     }
 
 
+    private String prompt;
     @Override
     protected void onCreateChildren(Bundle bundle) {
         setContentView(R.layout.activity_create_robot);
+        Intent intent = getIntent();
+        if (intent != null) {
+            bundle = intent.getExtras();
+            prompt = bundle.getString("prompt");
+        }
         initView();
     }
 
@@ -65,6 +74,9 @@ public class CreateRobotActivity extends BaseActivity {
         editQuery2 = findViewById(R.id.edit_query_2);
         editQuery3 = findViewById(R.id.edit_query_3);
         btnCreate = findViewById(R.id.create_robot_dialog);
+        if (prompt != null) {
+            editDesc.setText(prompt);
+        }
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

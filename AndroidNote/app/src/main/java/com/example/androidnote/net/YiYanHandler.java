@@ -140,19 +140,16 @@ public class YiYanHandler {
         mBookStr = bookStr;
     }
 
-    public static String mCreateRobotStr;
-    public static void processCreateRobot(Context context, String line) {
+    // public static String mCreateRobotStr;
+    public static String processCreateRobot(Context context, String line) {
         SLog.i(TAG, "processQuery: " + line);
 
         // 使用正则表达式替换所有空白字符
-        String res = line.replaceAll("\\s", "");
-        res = res.replace("```json", "");
-        res = res.replace(" ", "");
-        res = res.replace("\n\n", "\n");
+        String res = line.replace("```json", "");
         res = res.replace("```", "");
         SLog.i(TAG, "process res: " + res);
 
-        mCreateRobotStr = res;
+        return res;
     }
 
     public static ArrayList<String> getTips() {

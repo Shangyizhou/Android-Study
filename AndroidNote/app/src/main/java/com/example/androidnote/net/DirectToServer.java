@@ -304,6 +304,8 @@ public class DirectToServer {
         });
     }
 
+    static List<Map<String, String>> messages = new ArrayList<>();
+
     /**
      * ERNIE-Lite-8K-0922 https://cloud.baidu.com/doc/WENXINWORKSHOP/s/4lilb2lpf
      *
@@ -381,7 +383,24 @@ public class DirectToServer {
                         }
                     }
                     SLog.i(TAG, answer.toString());
-                    callback.onSuccess(String.valueOf(answer));
+                    // callback.onSuccess(String.valueOf(answer));
+                    String originJson = String.valueOf(answer);
+                    HashMap<String, String> assistant = new HashMap<>();
+                    assistant.put("role", "assistant");
+                    assistant.put("content", "");
+                    // 取出我们需要的内容,也就是result部分
+                    String[] answerArray = originJson.split("data: ");
+                    for (int i = 1; i < answerArray.length; ++i) {
+                        answerArray[i] = answerArray[i].substring(0, answerArray[i].length() - 2);
+                        SLog.i(TAG, "answerArray: " + answerArray[i]);
+                        try {
+                            assistant.put("content", assistant.get("content") + new JSONObject(answerArray[i]).getString("result"));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    messages.add(assistant);
+                    callback.onSuccess(assistant.get("content"));
                 }
 
             }
