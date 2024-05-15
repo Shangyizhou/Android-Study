@@ -7,10 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +28,7 @@ import com.example.androidnote.model.RobotModel;
 import com.example.androidnote.net.DirectToServer;
 import com.example.androidnote.net.YiYanHandler;
 import com.shangyizhou.develop.base.BaseActivity;
+import com.shangyizhou.develop.helper.SimpleTaskExecutor;
 import com.shangyizhou.develop.helper.ToastUtil;
 import com.shangyizhou.develop.log.SLog;
 import com.shangyizhou.develop.net.IResponse;
@@ -37,6 +40,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,6 +81,7 @@ public class ParseActivity extends BaseActivity implements View.OnClickListener{
     TextView editBook2;
     TextView editBook3;
     Button bookBtn;
+    boolean isGetData = false;
 
     private void initView() {
         editQuery = findViewById(R.id.edit_query);
@@ -85,6 +90,7 @@ public class ParseActivity extends BaseActivity implements View.OnClickListener{
         editBook2 = findViewById(R.id.edit_book_2);
         editBook3 = findViewById(R.id.edit_book_3);
         bookBtn = findViewById(R.id.book_btn);
+        bookBtn.setOnClickListener(this);
     }
 
     List<TextView> editTexts = new ArrayList<>();
@@ -117,6 +123,7 @@ public class ParseActivity extends BaseActivity implements View.OnClickListener{
         for (int i = 0; i < bookList.size(); i++) {
             editTexts.get(i).setText(bookList.get(i));
         }
+        isGetData = true;
     }
 
     private void getData() {
@@ -147,8 +154,13 @@ public class ParseActivity extends BaseActivity implements View.OnClickListener{
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.book_btn) {
+            if (!isGetData) {
+                ToastUtil.getInstance().showToast("还未结束");
+                return;
+            }
             for (TextView editText : editTexts) {
                 String text = editText.getText().toString();
+                Log.i(TAG, "shoucang book: " + text);
                 if (!TextUtils.isEmpty(text)) {
                     continue;
                 }
@@ -157,8 +169,9 @@ public class ParseActivity extends BaseActivity implements View.OnClickListener{
                 book.setName(text);
                 book.setUserId(BmobManager.getInstance().getObjectId());
                 BookHelper.getInstance().save(book);
-                ToastUtil.getInstance().showToast("已加入书库");
             }
+            ToastUtil.getInstance().showToast("已加入书库");
+            finish();
         }
     }
 }

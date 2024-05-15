@@ -158,6 +158,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             updateAdapterAll();
         }
         if (startMode.equals("create")) {
+            SLog.i(TAG, "create");
             /**
              * 新建会话
              */
@@ -178,6 +179,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             addRobotStartSpeak();
             isInit = true;
         } else if (startMode.equals("load")) {
+            SLog.i(TAG, "load");
             /**
              * 加载会话
              * 内部封装了会话列表的获取

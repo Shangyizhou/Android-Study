@@ -12,7 +12,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.androidnote.R;
+import com.example.androidnote.db.helper.MessageHelper;
 import com.example.androidnote.manager.DataCollectionManager;
+import com.example.androidnote.manager.SessionManager;
+import com.example.androidnote.model.Message;
+import com.example.androidnote.model.Session;
 import com.example.androidnote.model.TagResponse;
 import com.example.androidnote.view.OtherToServer;
 import com.github.mikephil.charting.charts.BarChart;
@@ -117,13 +121,21 @@ public class DataFragment extends Fragment {
         initKeyWord();
     }
 
+
+    private void getLineChartData() {
+        List<Session> sessionList = SessionManager.getInstance().getSessionList();
+        for (Session session : sessionList) {
+            MessageHelper.getInstance().getMessageListBySession(session.getSessionId());
+        }
+    }
+
     private void initLineChart() {
         // 准备数据. 比如我们创建一个有10个数据点的图表
         int[] invokeData = DataCollectionManager.getYesterdayInvokeInfo();
         Random random = new Random(); // 创建Random实例
 
         ArrayList<Entry> values = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 24; i++) {
             // values.add(new Entry(i, invokeData[i]));
             values.add(new Entry(i, random.nextInt(100)));
         }

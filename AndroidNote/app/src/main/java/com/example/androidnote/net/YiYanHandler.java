@@ -123,21 +123,26 @@ public class YiYanHandler {
         if (!res.contains(query) || !res.contains(advice) || !res.contains(book))  {
             return;
         }
-        String queryStr = res.substring(query.length() + 2, res.indexOf(advice) - 2);
-        String adviceStr = res.substring(res.indexOf(advice) + advice.length() + 2, res.indexOf(book) - 2);
-        String bookStr = res.substring(res.indexOf(book) + book.length() + 2, res.length() - 1);
 
-        queryStr = queryStr.replaceAll("\\s", "");
-        adviceStr = adviceStr.replaceAll("\\s", "");
-        bookStr = bookStr.replaceAll("\\s", "");
+        try {
+            String queryStr = res.substring(query.length() + 2, res.indexOf(advice) - 2);
+            String adviceStr = res.substring(res.indexOf(advice) + advice.length() + 2, res.indexOf(book) - 2);
+            String bookStr = res.substring(res.indexOf(book) + book.length() + 2, res.length() - 1);
 
-        SLog.i(TAG, "process queryStr: " + queryStr);
-        SLog.i(TAG, "process adviceStr: " + adviceStr);
-        SLog.i(TAG, "process bookStr: " + bookStr);
+            queryStr = queryStr.replaceAll("\\s", "");
+            adviceStr = adviceStr.replaceAll("\\s", "");
+            bookStr = bookStr.replaceAll("\\s", "");
 
-        mQueryStr = queryStr;
-        mAdviceStr = adviceStr;
-        mBookStr = bookStr;
+            SLog.i(TAG, "process queryStr: " + queryStr);
+            SLog.i(TAG, "process adviceStr: " + adviceStr);
+            SLog.i(TAG, "process bookStr: " + bookStr);
+
+            mQueryStr = queryStr;
+            mAdviceStr = adviceStr;
+            mBookStr = bookStr;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // public static String mCreateRobotStr;

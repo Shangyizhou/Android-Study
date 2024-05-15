@@ -49,6 +49,8 @@ dependencies {
     api rootProject.ext.dependencies["easypermissions"]
     api rootProject.ext.dependencies["ShadowDrawable"]
     api rootProject.ext.dependencies["zxing"]
+    api rootProject.ext.dependencies["base-adapter"]
+
 
 
 

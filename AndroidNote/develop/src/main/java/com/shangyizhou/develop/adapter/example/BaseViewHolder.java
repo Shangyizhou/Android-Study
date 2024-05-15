@@ -33,7 +33,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         mViews = new SparseArray<View>();
     }
 
-
     public static BaseViewHolder createViewHolder(Context context, View itemView) {
         BaseViewHolder holder = new BaseViewHolder(context, itemView);
         return holder;

@@ -53,7 +53,9 @@ public class CreateRobotActivity extends BaseActivity {
         Intent intent = getIntent();
         if (intent != null) {
             bundle = intent.getExtras();
-            prompt = bundle.getString("prompt");
+            if (bundle != null) {
+                prompt = bundle.getString("prompt");
+            }
         }
         initView();
     }

@@ -44,6 +44,7 @@ ext {
             "zxing"          : 'cn.yipianfengye.android:zxing-library:2.2',
 //            "videoplayer"    : 'cn.jzvd:jiaozivideoplayer:7.0.5'
             "ShadowDrawable"   : 'com.github.Liberuman:ShadowDrawable:0.1',
+            "base-adapter"   : 'com.zhy:base-rvadapter:3.0.3'
 
     ]
     //仓库

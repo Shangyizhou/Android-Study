@@ -5,6 +5,7 @@ import static com.example.androidnote.constant.Constants.YIYAN_HANDLER_ACQUIRE_Q
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ import com.example.androidnote.net.DirectToServer;
 import com.example.androidnote.net.YiYanHandler;
 import com.example.androidnote.view.LoadingDialog;
 import com.shangyizhou.develop.base.BaseActivity;
+import com.shangyizhou.develop.helper.ToastUtil;
 import com.shangyizhou.develop.log.SLog;
 import com.shangyizhou.develop.net.IResponse;
 
@@ -64,10 +66,14 @@ public class AutoCreateRobotActivity extends BaseActivity implements View.OnClic
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.free_btn) {
-
+            CreateRobotActivity.startUp(AutoCreateRobotActivity.this, null);
+            finish();
         } else if (id == R.id.ai_btn) {
             SLog.i(TAG, "call ai for prompt");
-            String text = "你是一个JAVA编程专家";
+            String text = prompt.getText().toString().trim();
+            if (TextUtils.isEmpty(text)) {
+                ToastUtil.getInstance().showToast("设定为空");
+            }
             mLoadingDialog.show();
             DirectToServer.callYiYanERNIELiteStream(text, YIYAN_HANDLER_ACQUIRE_QUERY, new IResponse() {
                 @Override

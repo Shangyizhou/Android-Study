@@ -59,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp">
-                <TextView
+                <EditText
                     android:id="@+id/prompt_text"
                     style="@style/EditTextTheme"
                     android:padding="5dp"
