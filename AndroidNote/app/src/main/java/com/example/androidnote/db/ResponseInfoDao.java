@@ -28,8 +28,8 @@ public class ResponseInfoDao extends AbstractDao<ResponseInfo, Long> {
         public final static Property RequestId = new Property(1, String.class, "requestId", false, "REQUEST_ID");
         public final static Property RequestTime = new Property(2, long.class, "requestTime", false, "REQUEST_TIME");
         public final static Property ResponseTime = new Property(3, long.class, "responseTime", false, "RESPONSE_TIME");
-        public final static Property UserName = new Property(4, String.class, "userName", false, "USER_NAME");
-        public final static Property ModelName = new Property(5, String.class, "modelName", false, "MODEL_NAME");
+        public final static Property UserId = new Property(4, String.class, "userId", false, "USER_ID");
+        public final static Property CostToken = new Property(5, long.class, "costToken", false, "COST_TOKEN");
     }
 
 
@@ -49,8 +49,8 @@ public class ResponseInfoDao extends AbstractDao<ResponseInfo, Long> {
                 "\"REQUEST_ID\" TEXT NOT NULL ," + // 1: requestId
                 "\"REQUEST_TIME\" INTEGER NOT NULL ," + // 2: requestTime
                 "\"RESPONSE_TIME\" INTEGER NOT NULL ," + // 3: responseTime
-                "\"USER_NAME\" TEXT NOT NULL ," + // 4: userName
-                "\"MODEL_NAME\" TEXT NOT NULL );"); // 5: modelName
+                "\"USER_ID\" TEXT NOT NULL ," + // 4: userId
+                "\"COST_TOKEN\" INTEGER NOT NULL );"); // 5: costToken
     }
 
     /** Drops the underlying database table. */
@@ -70,8 +70,8 @@ public class ResponseInfoDao extends AbstractDao<ResponseInfo, Long> {
         stmt.bindString(2, entity.getRequestId());
         stmt.bindLong(3, entity.getRequestTime());
         stmt.bindLong(4, entity.getResponseTime());
-        stmt.bindString(5, entity.getUserName());
-        stmt.bindString(6, entity.getModelName());
+        stmt.bindString(5, entity.getUserId());
+        stmt.bindLong(6, entity.getCostToken());
     }
 
     @Override
@@ -85,8 +85,8 @@ public class ResponseInfoDao extends AbstractDao<ResponseInfo, Long> {
         stmt.bindString(2, entity.getRequestId());
         stmt.bindLong(3, entity.getRequestTime());
         stmt.bindLong(4, entity.getResponseTime());
-        stmt.bindString(5, entity.getUserName());
-        stmt.bindString(6, entity.getModelName());
+        stmt.bindString(5, entity.getUserId());
+        stmt.bindLong(6, entity.getCostToken());
     }
 
     @Override
@@ -101,8 +101,8 @@ public class ResponseInfoDao extends AbstractDao<ResponseInfo, Long> {
             cursor.getString(offset + 1), // requestId
             cursor.getLong(offset + 2), // requestTime
             cursor.getLong(offset + 3), // responseTime
-            cursor.getString(offset + 4), // userName
-            cursor.getString(offset + 5) // modelName
+            cursor.getString(offset + 4), // userId
+            cursor.getLong(offset + 5) // costToken
         );
         return entity;
     }
@@ -113,8 +113,8 @@ public class ResponseInfoDao extends AbstractDao<ResponseInfo, Long> {
         entity.setRequestId(cursor.getString(offset + 1));
         entity.setRequestTime(cursor.getLong(offset + 2));
         entity.setResponseTime(cursor.getLong(offset + 3));
-        entity.setUserName(cursor.getString(offset + 4));
-        entity.setModelName(cursor.getString(offset + 5));
+        entity.setUserId(cursor.getString(offset + 4));
+        entity.setCostToken(cursor.getLong(offset + 5));
      }
     
     @Override

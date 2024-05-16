@@ -49,6 +49,8 @@ public class ResponseInfoHelper {
         }
     }
 
+
+
     public void saveHashMap(HashMap<String, List<ResponseInfo>> responseInfos) {
         if (!isDataBaseValid()) {
             SLog.e(TAG, "insert error");
@@ -72,32 +74,11 @@ public class ResponseInfoHelper {
         }
     }
 
-    public List<ResponseInfo> getInfoByUserName(String name) {
+    public List<ResponseInfo> getInfoByUserName(String userId) {
         if (!isDataBaseValid()) {
             return null;
         }
-        return mResponseInfoDao.queryBuilder().where(ResponseInfoDao.Properties.UserName.eq(name)).list();
-    }
-
-    public HashMap<String, List<ResponseInfo>> getAllModelInfoByUserName(String name) {
-        List<ResponseInfo> responseInfos = getInfoByUserName(name);
-        if (responseInfos == null) {
-            return null;
-        }
-        HashMap<String, List<ResponseInfo>> map = new HashMap<>();
-        for (ResponseInfo responseInfo : responseInfos) {
-            String modelName = responseInfo.getModelName();
-            if (map.containsKey(modelName)) {
-                List<ResponseInfo> infos = map.get(modelName);
-                infos.add(responseInfo);
-            } else {
-                List<ResponseInfo> infos = new ArrayList<>();
-                infos.add(responseInfo);
-                map.put(modelName, infos);
-            }
-        }
-
-        return map;
+        return mResponseInfoDao.queryBuilder().where(ResponseInfoDao.Properties.UserId.eq(userId)).list();
     }
 
     public List<ResponseInfo> getDurationInfo(long start, long end) {

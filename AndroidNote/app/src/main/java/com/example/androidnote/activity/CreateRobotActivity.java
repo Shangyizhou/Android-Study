@@ -112,6 +112,7 @@ public class CreateRobotActivity extends BaseActivity {
                 RobotHelper.getInstance().save(model);
                 // 通知SquareFragment刷新社区机器人
                 EventBus.getDefault().postSticky(EventIdCenter.SQUARE_FRAGMENT_UPDATE_DATA);
+                EventBus.getDefault().postSticky(EventIdCenter.HISTORY_FRAGMENT_UPDATE_DATA);
 
                 Bundle bundle = new Bundle();
                 bundle.putString("model", "create");

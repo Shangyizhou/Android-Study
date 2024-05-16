@@ -47,6 +47,7 @@ import com.shangyizhou.develop.model.EventIdCenter;
 import com.shangyizhou.develop.model.MessageEvent;
 import com.shangyizhou.develop.net.IResponse;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
@@ -137,6 +138,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         commentBtn.setVisibility(View.VISIBLE);
         parseBtn.setVisibility(View.VISIBLE);
 
+
         mChatAdapter.setOnItemClickListener(new ChatAdapterMessage.OnItemClickListener() {
             @Override
             public void onItemClick(String text) {
@@ -153,9 +155,14 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         SLog.i(TAG, "getData");
         if (isInit) {
             SLog.i(TAG, "has init");
-            mCurrentSession = SessionManager.getInstance().getSessionByRobotId(mCurrentRobot.getRobotId());
-            mMessageList = SessionManager.getInstance().getSessionMessages(mCurrentSession);
+            if (mCurrentSession == null) {
+                mCurrentSession = SessionManager.getInstance().getSessionByRobotId(mCurrentRobot.getRobotId());
+            }
+            if (mMessageList == null) {
+                mMessageList = SessionManager.getInstance().getSessionMessages(mCurrentSession);
+            }
             updateAdapterAll();
+            return;
         }
         if (startMode.equals("create")) {
             SLog.i(TAG, "create");
@@ -201,7 +208,27 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             isInit = true;
         }
 
+
+        mStar = StarHelper.getInstance().getStarByUserAndRobo(BmobManager.getInstance().getObjectId(), mCurrentRobot.getRobotId());
+        if (mStar == null) {
+            mStar = new Star();
+            mStar.setRobotId(mCurrentRobot.getRobotId());
+            mStar.setUserId(BmobManager.getInstance().getObjectId());
+            mStar.setIsStar(false);
+        }
         mFans = FansHelper.getInstance().getFansByUserAndRobot(BmobManager.getInstance().getObjectId(), mCurrentRobot.getRobotId());
+        if (mFans == null) {
+            mFans = new Fans();
+            mFans.setRobotId(mCurrentRobot.getRobotId());
+            mFans.setUserId(BmobManager.getInstance().getObjectId());
+            mFans.setIsFans(false);
+        } else {
+            if (mFans.getIsFans()) {
+                starBtn.setImageResource(R.drawable.love_red);
+            } else {
+                starBtn.setImageResource(R.drawable.love);
+            }
+        }
     }
 
     @Override
@@ -213,6 +240,13 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             FansHelper.getInstance().save(mFans);
             StarHelper.getInstance().save(mStar);
         }
+        EventBus.getDefault().postSticky(EventIdCenter.PERSON_FRAGMENT_UPDATE_DATA);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SLog.i(TAG, "onStop");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -248,27 +282,14 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         } else if (id == R.id.comment) {
             startComment();
         } else if (id == R.id.star) {
-            if (mFans == null && mStar == null) {
-                mFans = new Fans();
-                mFans.setUserId(BmobManager.getInstance().getObjectId());
-                mFans.setRobotId(mCurrentRobot.getRobotId());
-                mFans.setIsFans(true);
-
-                mStar = new Star();
-                mStar.setUserId(BmobManager.getInstance().getObjectId());
-                mStar.setRobotId(mCurrentRobot.getRobotId());
-                mStar.setIsStar(true);
-                return;
-            }
-
             if (mFans.getIsFans()) {
-                starBtn.setImageResource(R.drawable.love);
                 mFans.setIsFans(false);
                 mStar.setIsStar(false);
+                starBtn.setImageResource(R.drawable.love);
             } else {
-                starBtn.setImageResource(R.drawable.love_red);
                 mFans.setIsFans(true);
                 mStar.setIsStar(true);
+                starBtn.setImageResource(R.drawable.love_red);
             }
         }
     }

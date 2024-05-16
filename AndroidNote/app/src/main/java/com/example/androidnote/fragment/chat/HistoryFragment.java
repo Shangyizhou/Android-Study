@@ -9,12 +9,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.androidnote.R;
 import com.example.androidnote.adapter.HistoryAdapter;
 import com.example.androidnote.manager.SessionManager;
 import com.example.androidnote.model.Session;
+import com.shangyizhou.develop.helper.ToastUtil;
 import com.shangyizhou.develop.log.SLog;
+import com.shangyizhou.develop.model.EventIdCenter;
+import com.shangyizhou.develop.model.MessageEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -64,6 +72,7 @@ public class HistoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -130,7 +139,27 @@ public class HistoryFragment extends Fragment {
         SLog.i(TAG, "onResume: ");
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        SLog.i(TAG, "onDestroy: ");
+        EventBus.getDefault().unregister(this);
+    }
+
     public interface onItemViewClickListener {
         void onItemClick(Session session);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        if (event == null || event.message == null) {
+            SLog.e(TAG, "【onMessageEvent】event is null");
+            return;
+        }
+        switch (event.name) {
+            case EventIdCenter.HISTORY_FRAGMENT_UPDATE_DATA:
+                getData();
+                break;
+        }
     }
 }

@@ -32,6 +32,12 @@ import com.example.androidnote.model.RobotModel;
 import com.example.androidnote.model.Star;
 import com.shangyizhou.develop.helper.ToastUtil;
 import com.shangyizhou.develop.log.SLog;
+import com.shangyizhou.develop.model.EventIdCenter;
+import com.shangyizhou.develop.model.MessageEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,12 +160,36 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         for (RobotModel model : mPublicList) {
             mFansList.addAll(FansHelper.getInstance().getFansListByRobot(model.getRobotId()));
         }
+
+        if (mStarList != null) {
+            tvShoucang.setText(String.valueOf(mStarList.size()));
+        }
+        if (mPublicList != null) {
+            tvPublic.setText(String.valueOf(mPublicList.size()));
+        }
+        if (mFansList != null) {
+            tvFancs.setText(String.valueOf(mFansList.size()));
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        SLog.i(TAG, "[PersonFragment] onResume");
+        EventBus.getDefault().register(this);
         loadMeInfo();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     /**
@@ -209,5 +239,19 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         intent_login.setClass(getActivity(), LoginActivity.class);
         intent_login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent_login);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        if (event == null || event.message == null) {
+            SLog.e(TAG, "【onMessageEvent】event is null");
+            return;
+        }
+        switch (event.name) {
+            case EventIdCenter.PERSON_FRAGMENT_UPDATE_DATA:
+                getData();
+                SLog.i(TAG, "PERSON_FRAGMENT_UPDATE_DATA");
+                break;
+        }
     }
 }

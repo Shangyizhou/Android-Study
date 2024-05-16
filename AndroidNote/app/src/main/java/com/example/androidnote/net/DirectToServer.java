@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import com.example.androidnote.activity.ChatActivity;
 import com.example.androidnote.activity.ParseActivity;
 import com.example.androidnote.constant.Prompts;
+import com.example.androidnote.db.helper.ResponseInfoHelper;
 import com.example.androidnote.manager.BmobManager;
 import com.example.androidnote.model.NewsList;
 import com.example.androidnote.model.ResponseInfo;
@@ -238,8 +239,7 @@ public class DirectToServer {
     public static void callYiYanERNIEStream(String message, IResponse callback) {
         ResponseInfo responseInfo = new ResponseInfo();
         requestId = UUIDUtil.getUUID();
-        responseInfo.setUserName(BmobManager.getInstance().getUser().getUserName());
-        responseInfo.setModelName("ERNIE-4.0-8K");
+        responseInfo.setUserId(BmobManager.getInstance().getObjectId());
         responseInfo.setRequestId(requestId);
         responseInfo.setRequestTime(System.currentTimeMillis());
         MediaType mediaType = MediaType.parse("application/json");
@@ -315,8 +315,7 @@ public class DirectToServer {
     public static void callYiYanERNIELiteStream(String message, String type, IResponse callback) {
         ResponseInfo responseInfo = new ResponseInfo();
         requestId = UUIDUtil.getUUID();
-        responseInfo.setUserName(BmobManager.getInstance().getUser().getUserName());
-        responseInfo.setModelName("ERNIE-Lite-8K-0922");
+        responseInfo.setUserId(BmobManager.getInstance().getObjectId());
         responseInfo.setRequestId(requestId);
         responseInfo.setRequestTime(System.currentTimeMillis());
         MediaType mediaType = MediaType.parse("application/json");
@@ -367,6 +366,7 @@ public class DirectToServer {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response != null) {
                     responseInfo.setResponseTime(System.currentTimeMillis());
+                    long costToken = 0;
                     // ChatFragment.data.get("ERNIE-4.0-8K").add(responseInfo);
                     StringBuilder answer = new StringBuilder();
                     ResponseBody responseBody = response.body();
@@ -395,10 +395,20 @@ public class DirectToServer {
                         SLog.i(TAG, "answerArray: " + answerArray[i]);
                         try {
                             assistant.put("content", assistant.get("content") + new JSONObject(answerArray[i]).getString("result"));
+                            if (new JSONObject(answerArray[i]).has("total_tokens")) {
+                                Object tokenObject = new JSONObject(answerArray[i]).get("total_tokens");
+                                if (tokenObject instanceof Integer) {
+                                    costToken += (Integer) tokenObject;
+                                } else {
+                                    // 处理字段不是整数类型的情况
+                                }
+                            }
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
                     }
+                    responseInfo.setCostToken(costToken);
+                    ResponseInfoHelper.getInstance().save(responseInfo);
                     messages.add(assistant);
                     callback.onSuccess(assistant.get("content"));
                 }

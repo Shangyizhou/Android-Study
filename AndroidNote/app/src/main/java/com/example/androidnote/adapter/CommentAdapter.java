@@ -18,6 +18,8 @@ import com.example.androidnote.R;
 import com.example.androidnote.model.Comment;
 import com.shangyizhou.develop.log.SLog;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -72,10 +74,21 @@ public class CommentAdapter extends RecyclerView.Adapter{
             //     Bitmap bitmap = BitmapFactory.decodeFile(imUser.getPhoto());
             //     iv_me_photo.setImageBitmap(bitmap);
             // }
-            // commentViewHolder.setImageView();
-            // commentViewHolder.sendTime();
-            // commentViewHolder.setContent();
-            // commentViewHolder.setImageView();
+            // 假设这是您要格式化的时间戳（毫秒）
+            long timestamp = mData.get(position).getCreateTime(); // 2022年5月16日 00:00:00 UTC
+
+            // 创建Calendar实例，并设置时间戳
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(timestamp);
+
+            // 创建SimpleDateFormat实例，并定义日期时间格式
+            // 例如："yyyy-MM-dd HH:mm:ss"
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            // 格式化Calendar实例为字符串
+            String formattedDate = dateFormat.format(calendar.getTime());
+            commentViewHolder.sendTime.setText(formattedDate);
+            commentViewHolder.name.setText(mData.get(position).getUserId());
+            commentViewHolder.content.setText(mData.get(position).getContent());
         }
     }
 
@@ -91,10 +104,10 @@ public class CommentAdapter extends RecyclerView.Adapter{
     }
 
     class CommentViewHolder extends RecyclerView.ViewHolder {
-        CircleImageView imageView;
-        TextView name;
-        TextView content;
-        TextView sendTime;
+        public CircleImageView imageView;
+        public TextView name;
+        public TextView content;
+        public TextView sendTime;
 
         public CommentViewHolder(View itemView) {
             super(itemView);

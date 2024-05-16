@@ -25,12 +25,6 @@ public class DataCollectionManager {
         if (data == null) {
             return 0;
         }
-        // long count = 0;
-        // Set<String> set = data.keySet();
-        // for (String s : set) {
-        //     count += data.get(s).size();
-        // }
-        // return count;
 
         long totalCount = 0;
         // 假设data是一个Map类型

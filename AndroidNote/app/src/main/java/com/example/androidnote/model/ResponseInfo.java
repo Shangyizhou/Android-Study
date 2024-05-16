@@ -18,20 +18,19 @@ public class ResponseInfo {
     @NotNull
     private long responseTime;
     @NotNull
-    private String userName;
+    private String userId;
     @NotNull
-    private String modelName;
+    private long costToken;
 
-    @Generated(hash = 1758000325)
+    @Generated(hash = 118974817)
     public ResponseInfo(Long id, @NotNull String requestId, long requestTime,
-            long responseTime, @NotNull String userName,
-            @NotNull String modelName) {
+            long responseTime, @NotNull String userId, long costToken) {
         this.id = id;
         this.requestId = requestId;
         this.requestTime = requestTime;
         this.responseTime = responseTime;
-        this.userName = userName;
-        this.modelName = modelName;
+        this.userId = userId;
+        this.costToken = costToken;
     }
 
     @Generated(hash = 1558055219)
@@ -70,31 +69,20 @@ public class ResponseInfo {
         this.responseTime = responseTime;
     }
 
-    public String getUserName() {
-        return userName;
+
+    public long getCostToken() {
+        return this.costToken;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setCostToken(long costToken) {
+        this.costToken = costToken;
     }
 
-    public String getModelName() {
-        return modelName;
+    public String getUserId() {
+        return this.userId;
     }
 
-    public void setModelName(String modelName) {
-        this.modelName = modelName;
-    }
-
-    @Override
-    public String toString() {
-        return "ResponseInfo{" +
-                "id=" + id +
-                ", requestId='" + requestId + '\'' +
-                ", requestTime=" + requestTime +
-                ", responseTime=" + responseTime +
-                ", userName='" + userName + '\'' +
-                ", modelName='" + modelName + '\'' +
-                '}';
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

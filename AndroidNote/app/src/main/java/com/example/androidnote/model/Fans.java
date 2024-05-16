@@ -45,4 +45,14 @@ public class Fans {
     public void setIsFans(boolean isFans) {
         this.isFans = isFans;
     }
+
+    @Override
+    public String toString() {
+        return "Fans{" +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
+                ", robotId='" + robotId + '\'' +
+                ", isFans=" + isFans +
+                '}';
+    }
 }

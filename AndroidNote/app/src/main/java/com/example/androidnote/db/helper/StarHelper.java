@@ -49,4 +49,16 @@ public class StarHelper {
                 where(StarDao.Properties.IsStar.eq(true)).
                 list();
     }
+
+    public Star getStarByUserAndRobo(String userId, String robotId) {
+        SLog.i(TAG, "getStarByUser: userId=" + userId);
+        if (!isDataBaseValid()) {
+            return null;
+        }
+        return mStarDao.queryBuilder().
+                where(StarDao.Properties.UserId.eq(userId)).
+                where(StarDao.Properties.RobotId.eq(robotId)).
+                where(StarDao.Properties.IsStar.eq(true)).
+                unique();
+    }
 }

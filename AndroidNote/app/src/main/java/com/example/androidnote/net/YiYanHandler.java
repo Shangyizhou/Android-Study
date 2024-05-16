@@ -17,37 +17,42 @@ public class YiYanHandler {
         SLog.i(TAG, "process: " + line);
         // 清空数据
         mTips.clear();
-        // 使用正则表达式替换所有空白字符
-        String res = line.replaceAll("\\s", "");
-        res = res.replace("```json", "");
-        res = res.replace(" ", "");
-        res = res.replace("{", "");
-        res = res.replace("}", "");
-        res = res.replace("\n", "");
-        res = res.replace("```", "");
-        SLog.i(TAG, "process res: " + res);
+        try {
+            // 使用正则表达式替换所有空白字符
+            String res = line.replaceAll("\\s", "");
+            res = res.replace("```json", "");
+            res = res.replace(" ", "");
+            res = res.replace("{", "");
+            res = res.replace("}", "");
+            res = res.replace("\n", "");
+            res = res.replace("```", "");
+            SLog.i(TAG, "process res: " + res);
 
-        String result = "\"result\"";
-        String tips = "\"tips\"";
-        if (!res.contains(result) || !res.contains(tips)) {
-            return "格式不合法";
+            String result = "\"result\"";
+            String tips = "\"tips\"";
+            if (!res.contains(result) || !res.contains(tips)) {
+                return "格式不合法";
+            }
+            String resultStr = res.substring(result.length() + 2, res.indexOf(tips) - 2);
+            String tipsStr = res.substring(res.indexOf(tips) + tips.length() + 2, res.length() - 1);
+
+            resultStr = resultStr.replaceAll("\\s", "");
+            tipsStr = tipsStr.replaceAll("\\s", "");
+
+            SLog.i(TAG, "process resultStr: " + resultStr);
+            SLog.i(TAG, "process tipsStr: " + tipsStr);
+
+            String[] parts = tipsStr.split("&");
+            for (String part : parts) {
+                SLog.i(TAG, "process part: " + part);
+                mTips.add(part);
+            }
+
+            return resultStr;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        String resultStr = res.substring(result.length() + 2, res.indexOf(tips) - 2);
-        String tipsStr = res.substring(res.indexOf(tips) + tips.length() + 2, res.length() - 1);
-
-        resultStr = resultStr.replaceAll("\\s", "");
-        tipsStr = tipsStr.replaceAll("\\s", "");
-
-        SLog.i(TAG, "process resultStr: " + resultStr);
-        SLog.i(TAG, "process tipsStr: " + tipsStr);
-
-        String[] parts = tipsStr.split("&");
-        for (String part : parts) {
-            SLog.i(TAG, "process part: " + part);
-            mTips.add(part);
-        }
-
-        return resultStr;
+        return null;
     }
 
     public static String mIntent;
@@ -69,33 +74,37 @@ public class YiYanHandler {
         String result = "\"result\"";
         String tips = "\"tips\"";
         String intent = "\"intent\"";
-        if (!res.contains(result) || !res.contains(tips) || !res.contains(intent)) {
-            return "格式不合法";
+        try {
+            if (!res.contains(result) || !res.contains(tips) || !res.contains(intent)) {
+                return "格式不合法";
+            }
+            String resultStr = res.substring(result.length() + 2, res.indexOf(tips) - 2);
+            String tipsStr = res.substring(res.indexOf(tips) + tips.length() + 2, res.indexOf(intent) - 2);
+            String intentStr = res.substring(res.indexOf(intent) + intent.length() + 2, res.length() - 1);
+
+            resultStr = resultStr.replaceAll("\\s", "");
+            tipsStr = tipsStr.replaceAll("\\s", "");
+            intentStr = intentStr.replaceAll("\\s", "");
+
+            SLog.i(TAG, "process resultStr: " + resultStr);
+            SLog.i(TAG, "process tipsStr: " + tipsStr);
+            SLog.i(TAG, "process intentStr: " + intentStr);
+
+            String[] parts = tipsStr.split("&");
+            for (String part : parts) {
+                SLog.i(TAG, "process part: " + part);
+                mTips.add(part);
+            }
+
+            mIntent = intentStr;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                map.put(intentStr, map.getOrDefault(intentStr, 0) + 1);
+            }
+            return resultStr;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        String resultStr = res.substring(result.length() + 2, res.indexOf(tips) - 2);
-        String tipsStr = res.substring(res.indexOf(tips) + tips.length() + 2, res.indexOf(intent) - 2);
-        String intentStr = res.substring(res.indexOf(intent) + intent.length() + 2, res.length() - 1);
-
-        resultStr = resultStr.replaceAll("\\s", "");
-        tipsStr = tipsStr.replaceAll("\\s", "");
-        intentStr = intentStr.replaceAll("\\s", "");
-
-        SLog.i(TAG, "process resultStr: " + resultStr);
-        SLog.i(TAG, "process tipsStr: " + tipsStr);
-        SLog.i(TAG, "process intentStr: " + intentStr);
-
-        String[] parts = tipsStr.split("&");
-        for (String part : parts) {
-            SLog.i(TAG, "process part: " + part);
-            mTips.add(part);
-        }
-
-        mIntent = intentStr;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            map.put(intentStr, map.getOrDefault(intentStr, 0) + 1);
-        }
-
-        return resultStr;
+        return null;
     }
 
     public static String mQueryStr;

@@ -10,5 +10,7 @@ public class EventIdCenter {
     public static final int EVENT_TEXT_CLICK = 1100;
 
     public static final int SQUARE_FRAGMENT_UPDATE_DATA = 1101;
+    public static final int HISTORY_FRAGMENT_UPDATE_DATA = 1102;
+    public static final int PERSON_FRAGMENT_UPDATE_DATA = 1103;
 
 }
