@@ -59,7 +59,7 @@ public class LineChartFragment extends Fragment {
     private void initView(View view) {
         lineChart = view.findViewById(R.id.line_chart);
         // 准备数据. 比如我们创建一个有10个数据点的图表
-        int[] invokeData = DataCollectionManager.getYesterdayInvokeInfo();
+        // int[] invokeData = DataCollectionManager.getYesterdayInvokeInfo();
         Random random = new Random(); // 创建Random实例
 
         ArrayList<Entry> values = new ArrayList<>();
